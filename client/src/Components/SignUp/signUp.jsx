@@ -1,11 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../../assets/images/jobi.png'
 import './si.css'
 
 
 function SignUp() {
   return (
-    <div className='hy'> 
+    <div className='hei'> 
 
       <div className=' grid grid-cols-1 sm:grid-cols-2 h-screen w-full '>
    
@@ -44,7 +45,7 @@ function SignUp() {
               {/* <Link className='text-1xl text-green-900 font-sans text-center ' to="/signup"><p>New User ?</p></Link> */}
              
           </form>
-          <p className='text-center p-2 text-blue-900 font-semibold'> Already in Jobseeker?</p>
+        <Link to='/login'> <p className='text-center p-2 text-blue-900 font-semibold'> Already in Jobseeker?</p></Link> 
       </div>
   </div>
 </div>

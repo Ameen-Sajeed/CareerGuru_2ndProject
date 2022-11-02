@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import logo from '../../assets/images/jobi.png'
 import './login.css'
 
@@ -32,7 +33,7 @@ function Login() {
                 {/* <Link className='text-1xl text-green-900 font-sans text-center ' to="/signup"><p>New User ?</p></Link> */}
                
             </form>
-            <p className='text-center p-2 text-blue-900 font-semibold'>New to Jobseeker?</p>
+           <Link to='/signup'> <p className='text-center p-2 text-blue-900 font-semibold'>New to Jobseeker?</p></Link>
         </div>
     </div>
 </div>

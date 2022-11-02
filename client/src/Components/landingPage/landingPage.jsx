@@ -5,6 +5,7 @@ import ig7 from '../../assets/images/ig7.webp'
 import job from '../../assets/images/jobi.png'
 import { FaSearch, FaUserFriends } from 'react-icons/fa'
 import './lp.css'
+import { Link } from 'react-router-dom'
 export default function Landing() {
   return (
     <div>
@@ -12,10 +13,10 @@ export default function Landing() {
 
       
         
-            <button  type="button" class="inline-block px-6 py-2.5 bg-blue-500 m-3 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Sign in </button>
+            <Link to='/login'><button  type="button" class="inline-block px-6 py-2.5 bg-blue-500 m-3 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Sign in </button></Link>
             <FaSearch className='text-blue-700 m-6 '/>
             <FaUserFriends className='text-blue-700 m-6'/>
-            <button  type="button" class="inline-block px-6 py-2.5 bg-blue-500 m-3 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Join now </button>
+            <Link to='/signup'><button  type="button" class="inline-block px-6 py-2.5 bg-blue-500 m-3 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Join now </button></Link>
 
             </div>
         <div className='flex'>
@@ -66,38 +67,6 @@ export default function Landing() {
                 <img src={ig7}  />
 
                 </div>
-
-
-
-
-
-         
-{/* <footer class="p-2 bg-white rounded-lg shadow md:px-6 md:py-8 dark:bg-blue-100">
-    <div class="sm:flex sm:items-center sm:justify-between">
-        <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0">
-            <img src={job} class="mr-3 h-24" alt="Flowbite Logo"></img>
-        </a>
-        <ul class="flex flex-wrap items-center mb-6 text-sm text-gray-500 sm:mb-0 dark:text-gray-400">
-            <li>
-                <a href="#" class="mr-4 hover:underline md:mr-6 text-blue-900 ">About</a>
-            </li>
-            <li>
-                <a href="#" class="mr-4 hover:underline md:mr-6  text-blue-900 ">Privacy Policy</a>
-            </li>
-            <li>
-                <a href="#" class="mr-4 hover:underline md:mr-6  text-blue-900  ">Licensing</a>
-            </li>
-            <li>
-                <a href="#" class="hover:underline  text-blue-900 ">Contact</a>
-            </li>
-        </ul>
-    </div>
-    <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8"></hr>
-    <span class="block text-sm   sm:text-center  text-blue-900 ">© 2022 <a href="#" class="hover:underline">Jobseeker™</a>. All Rights Reserved.
-    </span>
-</footer> */}
-
-
        
     </div>
   )
