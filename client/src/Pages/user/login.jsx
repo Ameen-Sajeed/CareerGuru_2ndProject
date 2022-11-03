@@ -1,5 +1,6 @@
-import Login from "../../Components/Login/login"
+
 import Footer from "../../Components/footer/footer"
+import Login from "../../Components/Login/login"
 import { Outlet } from "react-router-dom"
 function LoginPage (){
 
@@ -7,8 +8,7 @@ function LoginPage (){
 
 return(
     <div>
-
-<Login/>  
+<Login/>
 <div className="p-1">
 <Footer/>  
 
