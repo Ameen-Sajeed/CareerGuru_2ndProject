@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import logo from '../../assets/images/jobi.png'
+import logo from '../../../assets/images/jobi.png'
 import Swal from 'sweetalert2'
 import './login.css'
 
@@ -47,7 +47,7 @@ const handleSubmit=(e)=>{
         timer: 1500
       }).then(()=>{
         // window.location.href = "/"
-        navigate('/')
+        navigate('/feed')
       })
 
     }
@@ -55,8 +55,9 @@ const handleSubmit=(e)=>{
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Something went wrong!',
-        footer: '<a href="">Why do I have this issue?</a>'
+        text: 'Invalid Login Details!',
+        timer: 1500
+
       })
       console.log("Invalid Credentials");
     }

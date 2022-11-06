@@ -5,7 +5,7 @@ const uri = process.env.DATABASE_ACCESS
   try {
     await mongoose.connect(uri, {
       useNewUrlParser: true,
-    },()=>console.log("Mongo db connected"))
+    },()=>console.log("Mongo db connected "))
   } catch (error) {
     console.log(error.message)
   }

@@ -24,12 +24,11 @@ const UserSchema = new mongoose.Schema({
 
     },
     status:{
-        type:Boolean,
-        default:false
+        type:String,
+        default:"active"
 
     }
 })
 
 const UserModel = mongoose.model('users',UserSchema)
-
 module.exports=UserModel
