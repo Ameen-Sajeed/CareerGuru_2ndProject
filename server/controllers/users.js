@@ -1,6 +1,6 @@
 const User = require('../Models/user/userSchema')
-const bcrypt = require('bcrypt')
-
+const bcrypt = require('bcrypt');
+const Post = require('../Models/user/PostSchema')
 
 
 
@@ -131,6 +131,10 @@ const followUser = async(req,res)=>{
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                UNFOLLOW USER                               */
+/* -------------------------------------------------------------------------- */
+
 const unfollowUser = async (req,res)=>{
 
     if(req.body.userId !== req.params.id){
@@ -155,7 +159,144 @@ const unfollowUser = async (req,res)=>{
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                CREATE A POST                               */
+/* -------------------------------------------------------------------------- */
+
+const createPost = async (req,res)=>{
+    const newPost = new Post(req.body)
+    try {
+
+        const savedPost = await newPost.save();
+        res.status(200).json(savedPost)
+    } catch (err) {
+        res.status(500).json(err)
+        
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               UPDATE  A POST                               */
+/* -------------------------------------------------------------------------- */
+
+const updatePost=async(req,res)=>{
+
+    try {
+
+        const post = await Post.findById(req.params.id);
+        if(post.userId === req.body.userId){
+    
+            await post.updateOne({$set:req.body});
+            res.status(200).json("the post has been updated")
+    
+        }
+        else{
+            res.status(403).json("you can update only your post")
+        }
+        
+    } catch (err) {
+        res.status(500).json(err)
+    }
+
+  
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                DELETE A POST                               */
+/* -------------------------------------------------------------------------- */
+
+const deletePost= async(req,res)=>{
+    try {
+
+        const post = await Post.findById(req.params.id);
+        if(post.userId === req.body.userId){
+    
+            await post.deleteOne();
+            res.status(200).json("the post has been deleted")
+    
+        }
+        else{
+            res.status(403).json("you can delete only your post")
+        }
+        
+    } catch (err) {
+        res.status(500).json(err)
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 LIKE A POST                                */
+/* -------------------------------------------------------------------------- */
+
+const LikePost = async(req,res)=>{
+
+    try {
+
+        const post = await Post.findById(req.params.id)
+        if(!post.likes.includes(req.body.userId)){
+            await post.updateOne({$push:{likes: req.body.userId}});
+            res.status(200).json("The Post has been liked")
+        }
+        else {
+            await post.updateOne({$pull:{likes: req.body.userId}});
+            res.status(200).json("The post has been disliked")
+        }
+        
+    } catch (err) {
+        res.status(500).json(err)
+        
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 GET A POST                                 */
+/* -------------------------------------------------------------------------- */
+
+const getPost=async(req,res)=>{
+
+    try {
+
+        const post =  await Post.findById(req.params.id)
+           res.status(200).json(post)
+        
+    } catch (err) {
+        res.status(500).json(err)
+        
+    }
+
+}
+
+/* -------------------------------------------------------------------------- */
+/*                           GET ALL TIMELINE POSTS                           */
+/* -------------------------------------------------------------------------- */
+
+const getAllPosts = async (req,res)=>{
+
+    try {
+
+        const currentuser = await User.findById(req.body.userId);
+        const userPosts = await Post.find({userid: currentuser._id});
+        const friendPosts = await Promise.all(
+            currentuser.followings.map((friendId)=>{
+              return   Post.find({ userId: friendId})
+            })
+        );
+
+        res.json(userPosts.concat(...friendPosts))
+        
+    } catch (err) {
+
+        res.status(500).json(err)
+        
+    }
+
+}
 
 
 module.exports={PostSignUp,PostLogin,
-    UpdateUser,deleteUser,followUser,unfollowUser}
+    UpdateUser,deleteUser,
+    followUser,
+    unfollowUser,createPost,
+    updatePost,
+    deletePost,LikePost,
+    getPost,getAllPosts}
