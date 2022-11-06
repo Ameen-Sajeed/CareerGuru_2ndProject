@@ -22,12 +22,15 @@
 }
 
 .feed_inputContainer{
-    display: flex;
-    justify-content: space-evenly;
+   background-color: white;
+   padding: 10px;
+   padding-bottom: 20px;
+   border-radius: 10px;
+   margin-bottom: 20px;
 }
 
 .feed_input{
-    border: 1 px solid rgb(157, 57, 57);
+    border: 1px solid lightgray;
     border-radius: 30px;
     display: flex;
     padding: 10px;
@@ -47,4 +50,13 @@
     margin-left: 10px;
     outline-width: 0;
     font-weight: 600;
+}
+
+.feed_input > form > button{
+    display: none;
+}
+
+.feed_inputOptions{
+    display: flex;
+    justify-content: space-evenly;
 }

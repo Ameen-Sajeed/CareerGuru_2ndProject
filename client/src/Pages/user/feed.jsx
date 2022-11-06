@@ -14,7 +14,7 @@ function Feedpg (){
 return(
     <div>
 <Header/>
-<div className='am flex'>
+<div className='am flex p-2'>
 
 <SidebarUser/>
 <Feed/> 

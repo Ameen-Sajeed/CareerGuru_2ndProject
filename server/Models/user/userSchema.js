@@ -27,8 +27,32 @@ const UserSchema = new mongoose.Schema({
         type:String,
         default:"active"
 
-    }
-})
+    },
+        profilePicture:{
+            type:String,
+            default:""
+        },
+        coverPicture:{
+            type:String,
+            default:""
+        },
+        followers:{
+            type:Array,
+            default:[]
+        },
+        followings:{
+            type:Array,
+            default:[]
+        },
+        desc:{
+            type:String
+        }
+        
+    
+},
+{timestamps:true}
+
+)
 
 const UserModel = mongoose.model('users',UserSchema)
 module.exports=UserModel
