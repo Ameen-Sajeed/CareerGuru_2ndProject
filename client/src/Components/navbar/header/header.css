@@ -30,7 +30,8 @@
     height: 22px;
     color: gray;
     background-color: #eef3f8 ;
-    margin-left: 400px;
+    /* margin-left: 400px; */
+    justify-content: center;
     /* justify-content: center; */
     margin-top: auto;
     

@@ -10,7 +10,7 @@ return(
 
 <Signup/>  
 <div className="p-1">
-<Footer/>  
+{/* <Footer/>   */}
 
 </div>
      <Outlet/>

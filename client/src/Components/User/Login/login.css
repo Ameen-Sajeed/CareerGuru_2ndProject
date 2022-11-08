@@ -5,9 +5,17 @@
 } */
 
 .hy{
-    background-image: url('../../../assets/images/rec.webp');
+    background-image: url('../../../assets/images/nn.webp');
     background-size: cover;
 }
 .hu{
-    padding-left: 520px;
+
+    display: flex;
+    justify-content: center;
+}
+
+.admi{
+    background-image: url('https://img.freepik.com/free-vector/wave-background_53876-115944.jpg?w=1060&t=st=1667826950~exp=1667827550~hmac=78441b2633a5e36f457e3ce564128293d02ba8ef07567bf3f61f4b58eee80c0d');
+    background-size: cover;
+    
 }

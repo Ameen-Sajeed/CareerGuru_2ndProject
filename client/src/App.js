@@ -6,6 +6,7 @@ import SignUpPage from './Pages/user/signup';
 import Feedpg from './Pages/user/feed';
 import UsersMan from './Pages/admin/Users';
 import Header from './Components/navbar/header/Header';
+import LoginAdmin from './Components/admin/login/login';
 function App() {
   return (
 
@@ -30,6 +31,8 @@ function App() {
 
 <Routes>
   <Route path='admin/users' element={<UsersMan/>}/>
+  <Route path='admin/login' element={<LoginAdmin/>}/>
+
 </Routes>
 
 </Router>

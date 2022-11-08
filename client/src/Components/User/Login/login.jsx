@@ -10,7 +10,7 @@ import './login.css'
   const [formValues,setFormValues]=useState(initialValues)
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
-
+  const[error,setError]=useState('')
 
 
   const handleChange=(e)=>{
@@ -38,7 +38,13 @@ const handleSubmit=(e)=>{
     
     axios.post('http://localhost:5000/login',{...formValues}).then((response)=>{
 
+
+
+    console.log(response.data);
+
     if(response.data.state=='ok'){
+
+      console.log("heeey");
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -61,8 +67,11 @@ const handleSubmit=(e)=>{
       })
       console.log("Invalid Credentials");
     }
-    })
-  }
+    }).catch(error=>{
+      console.log(error);
+      setError(error.response.data)
+    }
+  )}
   
  } catch (error) {
   console.log(error);
@@ -72,38 +81,102 @@ const handleSubmit=(e)=>{
 
 
   return (
-    <div className='hy'> 
-      <p className='text-blue-900 p-8 font-bold text-center'> Are you bored with life? Then throw yourself into some work you believe in with all your heart, live for it, die for it, and you will find happiness that you had thought could never be yours. <br /> — Dale Carnegie</p>
+//     <div className='hy object-cover '> 
+//       <p className='text-blue-900 p-8 font-bold text-center  '> Are you bored with life? Then throw yourself into some work you believe in with all your heart, live for it, die for it, and you will find happiness that you had thought could never be yours. <br /> — Dale Carnegie</p>
 
-        <div className='hu grid grid-cols-1 sm:grid-cols-2 h-screen w-full '>
+//         <div className='hu grid grid-cols-1 sm:grid-cols-2 h-screen w-full '>
      
-        <div className='bg-light-500 flex flex-col justify-center   '>
-          <center>
-          <img className='hey p-2 ' src={logo} alt="" />
+//         <div className='bg-light-500 flex flex-col justify-center   '>
+//           <img className='hey p-4 mx-auto  ' src={logo} alt="" />
 
-          </center>
 
-          {errorMessage && <div className="p-4  mb-4 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
+//           {errorMessage && <div className="p-4  mb-4 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
+//           {error && <div className="p-4  mb-4 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {error}</div>}
 
-            <form className='max-w-[500px] w-full h-max mx-auto rounded-lg bg-blue-00 p-10 px-16 ' onSubmit={handleSubmit}>
-                <h2 className='text-2xl text-blue-900 font-extrabold text-center'>LOGIN</h2>
+//             <form className='max-w-[480px] w-full h-max mx-auto rounded-lg bg-blue-00 p-2 ' onSubmit={handleSubmit}>
+//                 <h2 className='text-2xl text-blue-900 font-extrabold text-center'>LOGIN</h2>
        
-                <div className='flex flex-col text-blue-900 py-2'>
-                    <label className='text-blue-900 text-bold'>Email</label>
-                    <input className='rounded-lg bg-gray-100 mt-2 p-2 focus:border-blue-500 focus:bg-gray-400 focus:outline-none' type="text" value={formValues.email} onChange={handleChange} name="email" />
-                </div>
-                <div className='flex flex-col text-blue-900 py-2'>
-                    <label className=''>Password</label>
-                    <input className='p-2 rounded-lg bg-gray-100 mt-2 focus:border-blue-200 focus:bg-gray-400 focus:outline-none' type="password" value={formValues.password} onChange={handleChange} name="password" />
-                </div>
+//                 <div className='flex flex-col text-blue-900 py-2 w-[500px]'>
+//                     <label className='text-blue-900 text-bold'>Email</label>
+//                     <input className='rounded-lg bg-gray-100 mt-2 p-2 focus:border-blue-500 focus:bg-gray-400 focus:outline-none' type="text" value={formValues.email} onChange={handleChange} name="email" />
+//                 </div>
+//                 <div className='flex flex-col text-blue-900 py-2 w-[500px]'>
+//                     <label className=''>Password</label>
+//                     <input className='p-2 rounded-lg bg-gray-100 mt-2 focus:border-blue-200 focus:bg-gray-400 focus:outline-none' type="password" value={formValues.password} onChange={handleChange} name="password" />
+//                 </div>
           
-                <button  className='w-full my-5 py-2  bg-blue-700 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg'>LOGIN</button>
+//                 <button  className='w-full my-5 py-2  bg-blue-700 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg  hover:scale-105 duration-300'>LOGIN</button>
                
-            </form>
-           <Link to='/signup'> <p className='text-center p-2 text-blue-900 font-semibold'>New to Jobseeker?</p></Link>
+//             </form>
+//            <Link to='/signup'> <p className='text-center p-2 text-blue-900 font-semibold'>New to Jobseeker?</p></Link>
+//         </div>
+//     </div>
+// </div>
+
+
+
+<section class="admi min-h-screen flex items-center justify-center">
+
+          {/* <p className='text-white font-extralight text-xs md:text-2xl '>Welcome back Admin, <br></br>have a look at your Dashboard!</p> */}
+
+  <div class="bg-green-00 flex rounded-2xl shadow-2xl max-w-3xl p-5 items-center max-h-max">
+  {/* <p className='text-xl text-blue-900'>Hey,Admin Welcome Back!</p> */}
+
+
+    <div class="md:w-1/2 px-8 md:px-16">
+      <img className='h-24 mx-auto '  src={logo} alt="" />
+      <h2 class="font-bold text-2xl text-[#002D74] text-center p-2"> Login</h2>
+
+      <form onSubmit={handleSubmit} class="flex flex-col gap-4">
+        <input class="p-2 mt-8 rounded-xl border" type="email" name="email" placeholder="Email"  value={formValues.email} onChange={handleChange}/>
+        <div class="relative">
+          <input class="p-2 rounded-xl border w-full" type="password" name="password" placeholder="Password" value={formValues.password} onChange={handleChange}/>
         </div>
+        <button class="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300">Login</button>
+      </form>
+  {errorMessage && <div className="p-2 text-center mb-2 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mx-auto" role="alert"> {errorMessage}</div>}
+         {error && <div className="p-2 text-center mb-2 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mx-auto" role="alert"> {error}</div>}
+
+         <div class="mt-6 grid grid-cols-3 items-center text-gray-400">
+        <hr class="border-gray-400"/>
+        <p class="text-center text-sm">OR</p>
+        <hr class="border-gray-400"/>
+      </div> 
+
+       <button class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 text-[#002D74]">
+        <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="25px">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z" />
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
+        </svg>
+        Login with Google
+      </button> 
+
+       <div class="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
+        <a href="#">Forgot your password?</a>
+      </div> 
+
+       <div class="mt-3 text-xs flex justify-between items-center text-[#002D74]">
+        <p>New to JobSeeker ?</p>
+       <Link to="/signup"> <button class="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Register</button></Link>
+      </div>
+
+
+
     </div>
-</div>
+
+    <div class="md:block hidden w-1/2">
+      <img class="rounded-3xl " src="https://img.freepik.com/free-vector/tiny-people-searching-business-opportunities_74855-19928.jpg?w=1380&t=st=1667827093~exp=1667827693~hmac=09f6484512ffdd5ef5a855198b4fca98e1c2a2c5e0ec648a3dd9a34009778ad7"/>
+    </div>
+
+  </div>
+
+
+</section>
+
+
+
   )
 
  }

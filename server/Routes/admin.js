@@ -5,9 +5,9 @@ const router = express.Router()
 
 router.get('/users',getUsers)
 
-router.post('/blockUsers/:id',blockUser)
+router.put('/blockUsers/:id',blockUser)
 
-router.post('/UnblockUsers/:id',UnblockUser)
+router.put('/UnblockUsers/:id',UnblockUser)
 
 
 module.exports = router

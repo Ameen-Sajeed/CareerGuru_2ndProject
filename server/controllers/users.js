@@ -39,13 +39,19 @@ const PostLogin = async (req,res)=>{
     try {
         const {email,password}=req.body;
         const user= await User.findOne({email})
-        !user && res.status(400).json("user not found")
+        console.log(user,"lklklklk");
+        if(!user || user.status==="inactive"){
+         return  res.status(400).json("user not found")
+
+        }
 
 
          const auth = await bcrypt.compare(password,user.password);
-         !auth && res.status(400).json("wrong password")
+
+         if(!auth)
+        return res.status(400).json("wrong password")
       
-         res.status(200).json(user)
+        return res.status(200).json({state:"ok"})
         
     } catch (error) {
         console.log(error);

@@ -17,7 +17,7 @@ function Header() {
       <div className="header_left">
          <img src={job} alt="" />
 
-         <div className="header_search">
+         <div className="header_search mx-auto">
              <SearchIcon/>
             <input type="text" />
          </div>

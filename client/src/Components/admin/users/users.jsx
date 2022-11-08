@@ -28,7 +28,7 @@ useEffect(()=>{
 
 
     const  blockUser = (id) =>{
-        axios.post('http://localhost:5000/admin/blockUsers/'+id).then((result) => {
+        axios.put('http://localhost:5000/admin/blockUsers/'+id).then((result) => {
             if (result.status == 200) {
                 // setStatus(new Date())
                 console.log(result);
@@ -42,7 +42,7 @@ useEffect(()=>{
         })
     }
     const  UnblockUser = (id) =>{
-        axios.post('http://localhost:5000/admin/UnblockUsers/'+id).then((result) => {
+        axios.put('http://localhost:5000/admin/UnblockUsers/'+id).then((result) => {
             if (result.status == 200) {
                 // setStatus(new Date())
                 console.log(result);

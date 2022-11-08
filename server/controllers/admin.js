@@ -24,7 +24,7 @@ const blockUser = async(req,res)=>{
             status:"inactive"
         }
     }).then(response =>{
-        if(response) res.status(200).json({update: true})
+        if(response) res.status(200).json("user has blocked")
     }).catch(error =>{
         res.json(error)
     })
@@ -41,7 +41,7 @@ const UnblockUser = (req,res)=>{
                 status:"active"
             }
         }).then(response =>{
-            if(response) res.status(200).json({update: true})
+            if(response) res.status(200).json("user has Unblocked")
         }).catch(error =>{
             res.json(error)
         })
