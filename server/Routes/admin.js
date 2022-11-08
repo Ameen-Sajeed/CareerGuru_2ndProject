@@ -1,7 +1,11 @@
 const express = require('express')
-const { getUsers, blockUser, UnblockUser } = require('../controllers/admin')
+const { getUsers, blockUser, UnblockUser, adminLogin } = require('../controllers/admin')
 const router = express.Router()
 
+
+
+
+router.post('/login',adminLogin)
 
 router.get('/users',getUsers)
 

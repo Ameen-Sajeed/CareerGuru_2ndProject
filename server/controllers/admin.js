@@ -1,6 +1,41 @@
 const User = require('../Models/user/userSchema')
 
 
+
+/* -------------------------------------------------------------------------- */
+/*                                 ADMIN LOGIN                                */
+/* -------------------------------------------------------------------------- */
+
+
+const adminLogin = (req,res)=>{
+
+   try {
+    
+    const {ADMIN_EMAIL,ADMIN_PWD}=process.env
+    const {email,password}=req.body
+
+    if(email==ADMIN_EMAIL && password==ADMIN_PWD ){
+        console.log("email is matched");
+        res.status(200).json("Login Success")
+}
+else{
+    console.log("incorrect email");
+    res.status(500).json("Invalid Credentials")
+
+}
+
+   } catch (error) {
+    
+    console.log(error);
+   }
+}
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 VIEW USERS                                 */
+/* -------------------------------------------------------------------------- */
+
 const getUsers = (req,res)=>{
     // console.log("hiiiii");
 try {
@@ -16,6 +51,10 @@ try {
 }
 
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                 BLOCK USERS                                */
+/* -------------------------------------------------------------------------- */
 
 const blockUser = async(req,res)=>{
   try {
@@ -33,6 +72,10 @@ const blockUser = async(req,res)=>{
     console.log(error);
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                UNBLOCK USERS                               */
+/* -------------------------------------------------------------------------- */
 
 const UnblockUser = (req,res)=>{
     try {
@@ -52,4 +95,5 @@ const UnblockUser = (req,res)=>{
 }
 
 
-module.exports={getUsers,blockUser,UnblockUser}
+module.exports={getUsers,
+    blockUser,UnblockUser,adminLogin}
