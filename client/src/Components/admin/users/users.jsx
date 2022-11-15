@@ -3,35 +3,60 @@ import moment from 'moment'
 import React, { useReducer } from 'react'
 import { useState } from 'react'
 import { useEffect } from 'react'
-
+import { useNavigate } from 'react-router-dom'
+import {format} from 'timeago.js'
 function Users() {
 
     const [users,SetUsers]=useState('')
     const [forms, setForms]=useState([])
     const [reducerValue, forceUpdate] = useReducer(x => x + 1, 0);
+    const navigate = useNavigate()
 
-
-    
+//  let token = localStorage.getItem("token")   
+//  useEffect(() => {
+//     if (token) {
+//       navigate("/admin/users");
+//     }
+//   }, []);
 
 useEffect(()=>{
-    axios.get("http://localhost:5000/admin/users").then((response)=>{
+
+    const token= localStorage.getItem('token')
+    console.log(token,"hy there");
+    if(!token){
+        navigate('/admin/login')
+    }
+})
+
+
+useEffect(()=>{
+    axios.get("http://localhost:5000/admin/users",{
+        headers:{"x-access-token":localStorage.getItem('token')},
+    }).then((response)=>{
+        
         if(response.data){
+            // console.log(token);
           SetUsers(response.data)
           setForms(response.data)
 
         }
         else{
             console.log("erorr");
+            
         }
+    }).catch((error)=>{
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        console.log(error,"erorr ocurred");
     })
 },[reducerValue])
 
 
     const  blockUser = (id) =>{
-        axios.put('http://localhost:5000/admin/blockUsers/'+id).then((result) => {
+        axios.patch('http://localhost:5000/admin/blockUsers/'+id).then((result) => {
             if (result.status == 200) {
                 // setStatus(new Date())
-                console.log(result);
+                console.log(result);    
                 forceUpdate()
             } else {
                 console.log('Something went wrong')
@@ -58,36 +83,9 @@ useEffect(()=>{
     }
     
 
-
-
-
-// useEffect(()=>{
-//     axios.get("http://localhost:5000/admin/users").then((response)=>{
-//         if(response.data){
-//         //   SetUsers(response.data)
-//         //   setForms(response.data)
-//         console.log(response.data);
-
-//         }
-//         else{
-//             console.log("erorr");
-//         }
-//     })
-// },[])
-
-
-
-
-
-
-
-// console.log("klkjkj");
-// console.log(users);
-// console.log(moment('2016-10-08 10:29:23').format('DD-MM-YYYY h:mm:ss a'));
-
   return (
     <div>
-        <h1 className='text-2xl text-blue-800 p-4 font-extrabold '>User Management</h1>
+        <h1 className='text-4xl text-blue-400 p-4 font-extrabold '>User Management</h1>
         <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <div class="inline-block min-w-full shadow rounded-lg overflow-hidden p-4">
                 <table class="min-w-full leading-normal ">
@@ -119,7 +117,7 @@ useEffect(()=>{
                             </th>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                JOIN-DATE
+                                JOINED-AT
                             </th>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -130,7 +128,7 @@ useEffect(()=>{
                     <tbody>
                         {
                             forms.map((obj,index)=>{
-                                obj.date=moment(obj.date).format(' h:mm:ss a DD-MM-YYYY');
+                                obj.date=format(obj.createdAt)
                                 return (
 
                     

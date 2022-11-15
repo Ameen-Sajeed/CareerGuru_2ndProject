@@ -4,6 +4,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import logo from '../../../assets/images/jobi.png'
 import Swal from 'sweetalert2'
 import './login.css'
+import { userUrl } from '../../../Constants/Constant'
+import { useDispatch, useSelector } from 'react-redux'
+import { update } from '../../../Features/Auth/authSlice'
+
+
 
  function Login() {
   const initialValues ={email:"",password:""}
@@ -11,6 +16,8 @@ import './login.css'
   const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('')
   const[error,setError]=useState('')
+  const dispatch = useDispatch()
+  const userDetails = useSelector((state)=>state.userDetails) 
 
 
   const handleChange=(e)=>{
@@ -36,15 +43,18 @@ const handleSubmit=(e)=>{
   }
   else {
     
-    axios.post('http://localhost:5000/login',{...formValues}).then((response)=>{
+    axios.post(`${userUrl}/login`,{...formValues}).then((response)=>{
 
 
 
-    console.log(response.data);
+    console.log(response.data,"mkjkj");
 
     if(response.data.state=='ok'){
 
       console.log("heeey");
+      localStorage.setItem("usertoken", response.data.usertoken); 
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+       dispatch(update(response.data.user))
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -79,39 +89,17 @@ const handleSubmit=(e)=>{
   }
 }
 
+// const handle = async()=>{
+
+//  await signInwitgGoogle()
+
+//   navigate('/feed')
+// }
+
+
 
   return (
-//     <div className='hy object-cover '> 
-//       <p className='text-blue-900 p-8 font-bold text-center  '> Are you bored with life? Then throw yourself into some work you believe in with all your heart, live for it, die for it, and you will find happiness that you had thought could never be yours. <br /> — Dale Carnegie</p>
 
-//         <div className='hu grid grid-cols-1 sm:grid-cols-2 h-screen w-full '>
-     
-//         <div className='bg-light-500 flex flex-col justify-center   '>
-//           <img className='hey p-4 mx-auto  ' src={logo} alt="" />
-
-
-//           {errorMessage && <div className="p-4  mb-4 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {errorMessage}</div>}
-//           {error && <div className="p-4  mb-4 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert"> {error}</div>}
-
-//             <form className='max-w-[480px] w-full h-max mx-auto rounded-lg bg-blue-00 p-2 ' onSubmit={handleSubmit}>
-//                 <h2 className='text-2xl text-blue-900 font-extrabold text-center'>LOGIN</h2>
-       
-//                 <div className='flex flex-col text-blue-900 py-2 w-[500px]'>
-//                     <label className='text-blue-900 text-bold'>Email</label>
-//                     <input className='rounded-lg bg-gray-100 mt-2 p-2 focus:border-blue-500 focus:bg-gray-400 focus:outline-none' type="text" value={formValues.email} onChange={handleChange} name="email" />
-//                 </div>
-//                 <div className='flex flex-col text-blue-900 py-2 w-[500px]'>
-//                     <label className=''>Password</label>
-//                     <input className='p-2 rounded-lg bg-gray-100 mt-2 focus:border-blue-200 focus:bg-gray-400 focus:outline-none' type="password" value={formValues.password} onChange={handleChange} name="password" />
-//                 </div>
-          
-//                 <button  className='w-full my-5 py-2  bg-blue-700 shadow-lg shadow-teal-500/50 hover:shadow-teal-500/40 text-white font-semibold rounded-lg  hover:scale-105 duration-300'>LOGIN</button>
-               
-//             </form>
-//            <Link to='/signup'> <p className='text-center p-2 text-blue-900 font-semibold'>New to Jobseeker?</p></Link>
-//         </div>
-//     </div>
-// </div>
 
 
 
@@ -124,15 +112,15 @@ const handleSubmit=(e)=>{
 
 
     <div class="md:w-1/2 px-8 md:px-16">
-      <img className='h-24 mx-auto '  src={logo} alt="" />
-      <h2 class="font-bold text-2xl text-[#002D74] text-center p-2"> Login</h2>
+      <img className='w-1/2 mx-auto '  src={logo} alt="" />
+      <h2 class="font-bold text-3xl text-[#002D74] text-center p-2"> Login</h2>
 
-      <form onSubmit={handleSubmit} class="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} class="flex flex-col gap-4 p-2">
         <input class="p-2 mt-8 rounded-xl border" type="email" name="email" placeholder="Email"  value={formValues.email} onChange={handleChange}/>
         <div class="relative">
           <input class="p-2 rounded-xl border w-full" type="password" name="password" placeholder="Password" value={formValues.password} onChange={handleChange}/>
         </div>
-        <button class="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300">Login</button>
+        <button class="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 ">Login</button>
       </form>
   {errorMessage && <div className="p-2 text-center mb-2 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mx-auto" role="alert"> {errorMessage}</div>}
          {error && <div className="p-2 text-center mb-2 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mx-auto" role="alert"> {error}</div>}
@@ -143,7 +131,7 @@ const handleSubmit=(e)=>{
         <hr class="border-gray-400"/>
       </div> 
 
-       <button class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 text-[#002D74]">
+       {/* <button onClick={handle} class="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 text-[#002D74]">
         <svg class="mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="25px">
           <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z" />
           <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z" />
@@ -151,10 +139,11 @@ const handleSubmit=(e)=>{
           <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z" />
         </svg>
         Login with Google
-      </button> 
+      </button>  */}
 
        <div class="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
-        <a href="#">Forgot your password?</a>
+        <a  >Forgot your password?</a>
+        {/* <button onClick={googleSignout} className='bg-green-600'>signout</button> */}
       </div> 
 
        <div class="mt-3 text-xs flex justify-between items-center text-[#002D74]">

@@ -1,5 +1,4 @@
 
-import Footer from "../../Components/footer/footer"
 import Login from "../../Components/User/Login/login"
 import { Outlet } from "react-router-dom"
 function LoginPage (){

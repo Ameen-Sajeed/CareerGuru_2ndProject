@@ -1,5 +1,4 @@
 import { Outlet } from "react-router-dom"
-import Footer from "../../Components/footer/footer"
 import Signup from "../../Components/User/SignUp/signUp"
 function SignUpPage (){
 

@@ -7,6 +7,8 @@ import moment from 'moment'
 
 export default function Sidebar2() {
     const [open, setOpen] = useState(true);
+    const navigate = useNavigate()
+
     const Menus = [
         { Dashboard: "Users", src: "Chart_fill" },
         // { Approve: "Approved List", src: "Chat" },
@@ -18,12 +20,18 @@ export default function Sidebar2() {
       ];
 
    
+      const handleLogout = () => {
+        localStorage.removeItem('token')
+        navigate('/admin/login');
+      }
+
+   
   return (
 <div className="flex">
       <div
         className={` ${
           open ? "w-56" : "w-20 "
-        } bg-teal-400 h-screen p-5  pt-8 relative duration-300`}
+        } bg-teal-200 h-screen p-5  pt-8 relative duration-300`}
       >
         <img
           
@@ -73,6 +81,11 @@ export default function Sidebar2() {
 
           ))}
         </ul>
+        <div className='grid items-center'>
+        <button onClick={handleLogout}  type="button" class="inline-block px-6 py-2.5 bg-green-500 text-dark font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Log Out</button>
+
+        </div>
+
        
       </div>
 

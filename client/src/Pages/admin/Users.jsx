@@ -1,13 +1,14 @@
 import { Outlet } from 'react-router-dom'
 import Users from '../../Components/admin/users/users'
-import Sidebar2 from '../../Components/sidebar/sidebar'
+import SidebarF from '../../Components/sidebar/SidebarF'
 function UsersMan (){
 
 
 
 return(
     <div className='flex'>
-<Sidebar2/>
+
+<SidebarF/>
 <Users/>
   
     

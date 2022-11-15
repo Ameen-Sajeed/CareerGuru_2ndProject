@@ -1,4 +1,6 @@
 const User = require('../Models/user/userSchema')
+const jwt= require('jsonwebtoken')
+const Post = require('../Models/user/PostSchema')
 
 
 
@@ -15,8 +17,18 @@ const adminLogin = (req,res)=>{
     const {email,password}=req.body
 
     if(email==ADMIN_EMAIL && password==ADMIN_PWD ){
+
+
+
+        const id='8394n43x14n384n1njk'
+        const token=jwt.sign({id}, process.env.JWT_KEY,{
+            expiresIn:"365d",
+        })
+
+        console.log(token);
+
         console.log("email is matched");
-        res.status(200).json("Login Success")
+        res.status(200).json({token:token,auth:true,msg:"login success"})
 }
 else{
     console.log("incorrect email");
@@ -36,7 +48,7 @@ else{
 /*                                 VIEW USERS                                 */
 /* -------------------------------------------------------------------------- */
 
-const getUsers = (req,res)=>{
+const getUsers = async (req,res)=>{
     // console.log("hiiiii");
 try {
 
@@ -63,6 +75,7 @@ const blockUser = async(req,res)=>{
             status:"inactive"
         }
     }).then(response =>{
+        console.log(response,"popop");
         if(response) res.status(200).json("user has blocked")
     }).catch(error =>{
         res.json(error)
@@ -95,5 +108,21 @@ const UnblockUser = (req,res)=>{
 }
 
 
+const getAllPost = async (req,res)=>{
+    console.log("hiiiii");
+try {
+
+    Post.find().sort({_id:-1}).then(response =>{
+        res.status(200).json(response)
+    }).catch(error =>{
+        res.json(error)
+    })
+    
+} catch (error) {
+    console.log(error);
+}
+
+}
+
 module.exports={getUsers,
-    blockUser,UnblockUser,adminLogin}
+    blockUser,UnblockUser,adminLogin,getAllPost}

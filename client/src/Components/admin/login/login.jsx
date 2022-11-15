@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import './login.css'
 import logo from '../../../assets/images/jobi.png'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useContext } from 'react'
+import { AdminContext } from '../../../Store/admin/AdminContext'
 
 function LoginAdmin() {
 
@@ -11,9 +13,19 @@ const [email,setEmail]=useState('')
 const [password, setPassword] = useState('')
 const [errorMessage, setErrorMessage] = useState('')
 const[error,setError]=useState('')
+const {adminDetails,setAdminDetails}=useContext(AdminContext)
+
+const navigate=useNavigate()  
 
 
-const navigate=useNavigate()
+
+
+// useEffect(() => {
+//   if(adminDetails){
+//     navigate('/admin/users')
+//   }
+// }, [])
+
 
 
 const handleSubmit = async (e) => {
@@ -33,11 +45,15 @@ const handleSubmit = async (e) => {
          const { data } = await axios.post('http://localhost:5000/admin/login', {
              email: email,
              password: password
+ 
          });
          if (data) {
              if (data) {
 
-              console.log("success");
+              console.log(data);
+              localStorage.setItem("token", data.token);
+              localStorage.setItem('admin', JSON.stringify(data))
+              setAdminDetails(data.admin)
                navigate("/admin/users");           
              } else {
                  setErrorMessage(data)
@@ -63,7 +79,7 @@ const handleSubmit = async (e) => {
   {/* <p className='text-xl text-blue-900'>Hey,Admin Welcome Back!</p> */}
 
     <div class="md:w-1/2 px-8 md:px-16">
-      <img className='h-20 mx-auto '  src={logo} alt="" />
+      <img className='w-1/2 mx-auto '  src={logo} alt="" />
       <h2 class="font-bold text-3xl text-[#002D74] text-center p-2"> Admin Login</h2>
 
       <form action="" class="flex flex-col gap-4">
@@ -72,8 +88,8 @@ const handleSubmit = async (e) => {
           <input class="p-2 rounded-xl border w-full" type="password" name="password" placeholder="Password" onChange={(e)=> {setPassword(e.target.value)}}/>
           
         </div>
-        <button onClick={(e) => handleSubmit(e)} class="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300">Login</button>
-        {errorMessage && <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">{errorMessage}</div>}
+        <button onClick={(e) => handleSubmit(e)} class="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300 ">Login</button>
+        {errorMessage && <div className="p-2 mb-2 text-center text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800" role="alert">{errorMessage}</div>}
         {error && <div className="p-2 text-center mb-2 text-sm w-44 text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800 mx-auto" role="alert"> {error}</div>}
 
       </form>

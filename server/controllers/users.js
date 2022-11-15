@@ -1,6 +1,9 @@
 const User = require('../Models/user/userSchema')
 const bcrypt = require('bcrypt');
 const Post = require('../Models/user/PostSchema')
+const jwt= require('jsonwebtoken')
+const multer = require('multer')
+const nodemailer = require('nodemailer')
 
 
 
@@ -50,8 +53,14 @@ const PostLogin = async (req,res)=>{
 
          if(!auth)
         return res.status(400).json("wrong password")
+
+        const id='8394n43x14n384n1njk'
+        const usertoken=jwt.sign({id}, process.env.JWT_KEY,{
+            expiresIn:"365d",
+        })
+         console.log(usertoken);
       
-        return res.status(200).json({state:"ok"})
+        return res.status(200).json({state:"ok",usertoken:usertoken,user:user})
         
     } catch (error) {
         console.log(error);
@@ -115,13 +124,18 @@ const deleteUser=async(req,res)=>{
 
 const followUser = async(req,res)=>{
 
-    if(req.body.userId !== req.params.id){
+    console.log("heeyey");
+    console.log(req.body.id);
+    console.log(req.params.id);
+
+    if(req.body.id !== req.params.id){
         try{
 
+        
             const user = await User.findById(req.params.id)
-            const currentUser = await User.findById(req.body.userId)
-            if(!user.followers.includes(req.body.userId)){
-                await user.updateOne({ $push: {followers: req.body.userId}});
+            const currentUser = await User.findById(req.body.id)
+            if(!user.followers.includes(req.body.id)){
+                await user.updateOne({ $push: {followers: req.body.id}});
                 await currentUser.updateOne({ $push: {followings: req.params.id}});
                 res.status(200).json("user has been followed")
 
@@ -169,7 +183,29 @@ const unfollowUser = async (req,res)=>{
 /*                                CREATE A POST                               */
 /* -------------------------------------------------------------------------- */
 
+
+
 const createPost = async (req,res)=>{
+    // console.log(req.body);
+    // console.log(req.file);
+    // try{
+    //     const post = new Post({
+    //         userId:req.params.id,
+    //         image: req.file.filename,
+    //         post: req.body.post,
+    //     })
+
+    //     post.save().then(data => {
+    //         console.log(data);
+    //         res.json(data)
+    //     }).catch(error => {
+    //         res.json(error)
+    //     })
+    // } catch (error) {
+    //     console.log(error);
+    // }
+
+    console.log(req.body);
     const newPost = new Post(req.body)
     try {
 
@@ -180,6 +216,8 @@ const createPost = async (req,res)=>{
         
     }
 }
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                               UPDATE  A POST                               */
@@ -279,24 +317,60 @@ const getPost=async(req,res)=>{
 const getAllPosts = async (req,res)=>{
 
     try {
-
-        const currentuser = await User.findById(req.body.userId);
-        const userPosts = await Post.find({userid: currentuser._id});
-        const friendPosts = await Promise.all(
-            currentuser.followings.map((friendId)=>{
-              return   Post.find({ userId: friendId})
+        const currentUser=await User.findById(req.params.userId)
+        const userPosts=await Post.find({userId:currentUser._id}).sort({createdAt:-1})
+        const friendPosts=await Promise.all(
+            currentUser.followings.map((friendId)=>{
+                return Post.find({userId:friendId}).sort({createdAt:-1})
             })
-        );
-
+        )
         res.json(userPosts.concat(...friendPosts))
-        
-    } catch (err) {
-
-        res.status(500).json(err)
+    } catch (error) {
+        res.json(error)
         
     }
 
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                 FIND USERS                                 */
+/* -------------------------------------------------------------------------- */
+
+const findUsers = async(req,res)=>{
+    try {
+
+        User.find().sort({_id:-1}).limit(3).then(response =>{
+            res.status(200).json(response)
+        }).catch(error =>{
+            res.json(error)
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              GET USER BY POST                              */
+/* -------------------------------------------------------------------------- */
+
+const getUserPost=async(req,res)=>{
+    console.log('kkkkkkkkkkkkkkkkkkkkk');
+   
+    const userId = req.query.userId;
+    console.log(userId);
+    const username = req.query.username;
+    try {
+      const user = userId
+        ? await User.findById(userId)
+        : await User.findOne({ username: username });
+      const { password, updatedAt, ...other } = user._doc;
+      res.status(200).json(other);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  }
 
 
 module.exports={PostSignUp,PostLogin,
@@ -305,4 +379,4 @@ module.exports={PostSignUp,PostLogin,
     unfollowUser,createPost,
     updatePost,
     deletePost,LikePost,
-    getPost,getAllPosts}
+    getPost,getAllPosts,findUsers,getUserPost}
