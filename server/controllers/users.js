@@ -3,8 +3,91 @@ const bcrypt = require('bcrypt');
 const Post = require('../Models/user/PostSchema')
 const jwt= require('jsonwebtoken')
 const multer = require('multer')
-const nodemailer = require('nodemailer')
+const nodemailer = require('nodemailer');
+const userVerification = require('../Models/user/userVerification');
+const CommentModel = require('../Models/user/commentSchema');
 
+/* ----------------------------- NODEMAILER INIT ---------------------------- */
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: "jobseekerj010@gmail.com",
+        pass: "onqchtjlalxoxazh",
+    }
+})
+
+/* -------------------------------------------------------------------------- */
+/*                               OTP GERNERATION                              */
+/* -------------------------------------------------------------------------- */
+
+
+const sendOtp = async (result, res) => {
+console.log(result,"hey there");
+    try {
+        const OTP = await (Math.floor(100000 + Math.random() * 900000)).toString()
+        console.log("OTP");
+        console.log(OTP);
+        var senEMail = {
+            from: "jobseekerj010@gmail.com",
+            to: result.email,
+            subject: 'Sending Email My Instagram',
+            text: `Hi ${result.username} Your OTP pin has been generated `,
+            html: `<h1>Hi ${result.username}</h1><p>Your OTP is ${OTP}</p>`
+        }
+
+
+        let hashOTP = await bcrypt.hash(OTP, 10)
+        let verify = await userVerification.findOne({ userId: result._id })
+        if (!verify) {
+            const userverification = new userVerification({
+                userId: result._id,
+                Otp: hashOTP,
+                Created: Date.now(),
+                Expiry: Date.now() + 100000
+            })
+            await userverification.save()
+        } else {
+            await userVerification.updateOne({ userId: result._id }, { otp: hashOTP })
+        }
+
+        transporter.sendMail(senEMail, function (error, info) {
+            console.log("oioioioi");
+            if (error) {
+                console.log(error,"yuyuuy");
+            } else {
+                res.json({
+                    status: "pending",
+                    msg: "Verification otp mail sent",
+                    mail: result.email,
+                    user: result
+                })
+            }
+        });
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 VERIFY OTP                                 */
+/* -------------------------------------------------------------------------- */
+
+
+const verifyOtp= async (req, res) => {
+    // console.log(req.body.OTP);
+    let OtpVerify = await userVerification.findOne({ userId: req.body.user })
+    console.log(OtpVerify,"tttttt");
+    let correctOtp = await bcrypt.compare(req.body.OTP, OtpVerify.Otp)
+    console.log("correctOtp");
+    console.log(correctOtp);
+    if (correctOtp) {
+        await User.updateOne({ _id: req.body.user }, { $set: { verified: 'true' } })
+        res.status(200).json({ verified: true })
+    } else {
+        res.status(200).json({ verified: false, msg: "Incorrect OTP" })
+    }
+}
 
 
 /* -------------------------------------------------------------------------- */
@@ -12,7 +95,7 @@ const nodemailer = require('nodemailer')
 /* -------------------------------------------------------------------------- */
 
 const PostSignUp = async(req,res)=>{
-    console.log(req.body);
+    // console.log(req.body);
 
     try {
         
@@ -25,11 +108,14 @@ const PostSignUp = async(req,res)=>{
         password
       })
       console.log(user);
-      await user.save()
-      res.status(200).json({res:user})
+      await user.save().then((result)=>{
+         sendOtp(result,res)
+        res.status(200).json({res:user})
+
+      })
         
     } catch (error) {
-        console.log("error");
+        console.log(error);
     }
 }
 
@@ -124,9 +210,6 @@ const deleteUser=async(req,res)=>{
 
 const followUser = async(req,res)=>{
 
-    console.log("heeyey");
-    console.log(req.body.id);
-    console.log(req.params.id);
 
     if(req.body.id !== req.params.id){
         try{
@@ -134,10 +217,10 @@ const followUser = async(req,res)=>{
         
             const user = await User.findById(req.params.id)
             const currentUser = await User.findById(req.body.id)
-            if(!user.followers.includes(req.body.id)){
-                await user.updateOne({ $push: {followers: req.body.id}});
-                await currentUser.updateOne({ $push: {followings: req.params.id}});
-                res.status(200).json("user has been followed")
+            if(!user.followings.includes(req.body.id)){
+              const userF= await user.updateOne({ $push: {followings: req.body.id}});
+               const curruser= await currentUser.updateOne({ $push: {followers: req.params.id}});
+                res.status(200).json({msg:"user has been followed",user:userF})
 
             } else{
                 res.status(403).json("you already follow this user")
@@ -157,15 +240,16 @@ const followUser = async(req,res)=>{
 
 const unfollowUser = async (req,res)=>{
 
-    if(req.body.userId !== req.params.id){
+    console.log(req.body.id,'call reached');
+    if(req.body.id !== req.params.id){
         try{
 
             const user = await User.findById(req.params.id)
-            const currentUser = await User.findById(req.body.userId)
-            if(user.followers.includes(req.body.userId)){
-                await user.updateOne({ $pull: {followers: req.body.userId}});
-                await currentUser.updateOne({ $pull: {followings: req.params.id}});
-                res.status(200).json("user has been unfollowed")
+            const currentUser = await User.findById(req.body.id)
+            if(user.followings.includes(req.body.id)){
+             const userData=   await user.updateOne({ $pull: {followings: req.body.id}});
+                await currentUser.updateOne({ $pull: {followers: req.params.id}});
+                res.status(200).json({msg:"user has been unfollowed",user:userData})
 
             } else{
                 res.status(403).json("you don't follow this user")
@@ -186,37 +270,29 @@ const unfollowUser = async (req,res)=>{
 
 
 const createPost = async (req,res)=>{
-    // console.log(req.body);
-    // console.log(req.file);
-    // try{
-    //     const post = new Post({
-    //         userId:req.params.id,
-    //         image: req.file.filename,
-    //         post: req.body.post,
-    //     })
+    console.log(req.body,"ghjk");
+    // console.log(req.files,"ghjk");
+    // const filename = req.files.map(function (file) {
+    //     return file.filename
+    
 
-    //     post.save().then(data => {
-    //         console.log(data);
-    //         res.json(data)
-    //     }).catch(error => {
-    //         res.json(error)
-    //     })
-    // } catch (error) {
-    //     console.log(error);
-    // }
-
-    console.log(req.body);
-    const newPost = new Post(req.body)
     try {
-
-        const savedPost = await newPost.save();
-        res.status(200).json(savedPost)
-    } catch (err) {
-        res.status(500).json(err)
-        
+        const postData = new Post({
+            userId: req.body.User,
+            image: req.files,
+            Created: Date.now(),
+            description: req.body.Caption
+        })
+        let result = postData.save()
+        if (result) {
+            res.status(200).json({ status: true })
+        } else {
+            res.status(200).json({ status: false })
+        }
+    } catch (error) {
+        console.log(error);
     }
 }
-
 
 
 /* -------------------------------------------------------------------------- */
@@ -273,6 +349,9 @@ const deletePost= async(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 const LikePost = async(req,res)=>{
+    console.log("hey reached");
+console.log(req.body.userId,"popopo");
+console.log(req.params.id);
 
     try {
 
@@ -356,7 +435,7 @@ const findUsers = async(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 const getUserPost=async(req,res)=>{
-    console.log('kkkkkkkkkkkkkkkkkkkkk');
+    // console.log('kkkkkkkkkkkkkkkkkkkkk');
    
     const userId = req.query.userId;
     console.log(userId);
@@ -372,6 +451,35 @@ const getUserPost=async(req,res)=>{
     }
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*                               POST A COMMENT                               */
+  /* -------------------------------------------------------------------------- */
+
+  const addComment=async(req,res)=>{
+    const comment=new CommentModel(req.body)
+    try {
+        const comments=await comment.save()
+        res.json(comments)
+    } catch (error) {
+        res.json(error)
+    }
+ }
+
+ /* -------------------------------------------------------------------------- */
+ /*                              GET POST COMMENTS                             */
+ /* -------------------------------------------------------------------------- */
+
+ const getPostComments=async(req,res)=>{
+    console.log(req.params.id);
+    try {
+      const postComment=await CommentModel.find({postId:req.params.id})
+      res.json(postComment)
+        
+    } catch (error) {
+       res.json(error) 
+    }
+ }
+
 
 module.exports={PostSignUp,PostLogin,
     UpdateUser,deleteUser,
@@ -379,4 +487,5 @@ module.exports={PostSignUp,PostLogin,
     unfollowUser,createPost,
     updatePost,
     deletePost,LikePost,
-    getPost,getAllPosts,findUsers,getUserPost}
+    getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,getPostComments
+}

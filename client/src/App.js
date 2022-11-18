@@ -11,6 +11,8 @@ import Dash from './Pages/admin/Dash';
 import User from './Store/user/UserContext';
 import {Provider} from 'react-redux'
 import Store from './Store/Store'
+import ProfilePage from './Pages/user/Profile';
+import Jobpg from './Pages/user/Job';
 function App() {
   return (
 
@@ -30,6 +32,8 @@ function App() {
     <Route path='/login' element={<LoginPage/>}/>
     <Route path='/SignUp' element={<SignUpPage/>}/>
     <Route path='/feed' element={<Feedpg/>}/>
+    <Route path='/profile' element={<ProfilePage/>}/>
+    <Route path='/Job' element={<Jobpg/>}/>
 
   </Routes>
 

@@ -28,7 +28,9 @@ import { update } from '../../../Features/Auth/authSlice'
 
 }
 
-const handleSubmit=(e)=>{
+ 
+
+const handleSubmit= async(e)=>{
   e.preventDefault()
 
   try {
@@ -55,16 +57,18 @@ const handleSubmit=(e)=>{
       localStorage.setItem("usertoken", response.data.usertoken); 
       localStorage.setItem('user', JSON.stringify(response.data.user))
        dispatch(update(response.data.user))
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'You are successfully logged in',
-        showConfirmButton: false,
-        timer: 1500
-      }).then(()=>{
-        // window.location.href = "/"
-        navigate('/feed')
-      })
+      // Swal.fire({
+      //   position: 'top-end',
+      //   icon: 'success',
+      //   title: 'You are successfully logged in',
+      //   showConfirmButton: false,
+      //   timer: 1500
+      // }).then(()=>{
+      //   // window.location.href = "/"
+      //   navigate('/feed')
+      // })
+      navigate('/feed') 
+      
 
     }
     else{
@@ -127,7 +131,7 @@ const handleSubmit=(e)=>{
 
          <div class="mt-6 grid grid-cols-3 items-center text-gray-400">
         <hr class="border-gray-400"/>
-        <p class="text-center text-sm">OR</p>
+        {/* <p class="text-center text-sm">OR</p> */}
         <hr class="border-gray-400"/>
       </div> 
 

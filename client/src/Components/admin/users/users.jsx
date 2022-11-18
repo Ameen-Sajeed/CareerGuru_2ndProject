@@ -113,6 +113,10 @@ useEffect(()=>{
                             </th>
                             <th
                                 class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                             VERIFIED
+                            </th>
+                            <th
+                                class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                 STATUS
                             </th>
                             <th
@@ -140,6 +144,7 @@ useEffect(()=>{
                         <td className="text-center">{obj.username}</td>
                         <td className="text-center">{obj.email}</td>
                         <td className="text-center">{obj.phone}</td>
+                        <td className="text-center">{obj.verified}</td>    
                         <td className="text-center">{obj.status}</td>
                         <td className="text-center">{obj.date}</td>
 
