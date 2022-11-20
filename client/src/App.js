@@ -13,6 +13,7 @@ import {Provider} from 'react-redux'
 import Store from './Store/Store'
 import ProfilePage from './Pages/user/Profile';
 import Jobpg from './Pages/user/Job';
+import Networkpg from './Pages/user/Network';
 function App() {
   return (
 
@@ -34,6 +35,7 @@ function App() {
     <Route path='/feed' element={<Feedpg/>}/>
     <Route path='/profile' element={<ProfilePage/>}/>
     <Route path='/Job' element={<Jobpg/>}/>
+    <Route path='/Network' element={<Networkpg/>}/>
 
   </Routes>
 

@@ -18,6 +18,7 @@ return(
     <Leftbar/>
     <JobFeed/>
     <Rightbar/>
+
         </div>
         </main>
         </div>

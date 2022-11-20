@@ -10,15 +10,9 @@ function Rightbar() {
     const userData = useSelector((state=>state.user))
     const  userId = userData._id
     const [forms,setForms]=useState([])
-    const [check,SetCheck]=useState(false)
-    // console.log(userId,"yuuu");
-
-    useEffect(() => {
-        console.log("hey");
-      }, [check]);
 
     useEffect(()=>{
-        axios.get("http://localhost:5000/findUsers",{
+        axios.get(`http://localhost:5000/closefriends/${userId}`,{
             headers:{"x-access-token":localStorage.getItem('usertoken')},
         }).then((response)=>{
             
@@ -35,61 +29,14 @@ function Rightbar() {
         
             console.log(error,"erorr ocurred");
         })
-    },[check])
+    },[userId])
 
-    // console.log(forms,"tytyty");
+  console.log(userId,"opopopo");
+    console.log(forms,"fghjk");
 
   
-    
 
-    const handleSubmit = async (id)=>{
-        console.log("call");
-        console.log(userData._id);
-       console.log(id);
-      await  axios.put(`http://localhost:5000/follow/${userId}`,{id}).then((result)=>{
-            // console.log(result,'jjjjjjjjjjjjjjjjjjjjjjjjj');
-            if (result.status === 200) {
-                // setStatus(new Date())
-                SetCheck(!check)
-                console.log(result,"success");
-                //  dispatch(update())
-                
-
-            } else {
-                console.log('Something went wrong')
-            }
-        }).catch((err) => {
-            console.log(err)
-            console.log("erorr ocurred");
-    
-        })
-
-        }
-
-        const handleSubmitUndo = async (id)=>{
-            console.log("call");
-            console.log(userData._id);
-           console.log(id);
-          await  axios.put(`http://localhost:5000/unfollow/${userId}`,{id}).then((result)=>{
-                // console.log(result,'jjjjjjjjjjjjjjjjjjjjjjjjj');
-                if (result.status === 200) {
-                    // setStatus(new Date())
-                    SetCheck(!check)
-                    console.log(result,"success");
-                    // dispatch(update())
-
-    
-                } else {
-                    console.log('Something went wrong')
-                }
-            }).catch((err) => {
-                console.log(err)
-                console.log("erorr ocurred");
-        
-            })
-    
-            }
-    
+     
 
   return (
 
@@ -135,15 +82,18 @@ function Rightbar() {
            {/* FRIEND REQUESTS */}
 
            <div className="friend-requests">
-            <h4>Friends</h4>
-            {forms.map((obj)=>{
+            <h4>Close Friends</h4>
+        
+            {
+                        forms.map((obj)=>{
+                            return(
+            <div className="request ">
+          
 
-          return(
-            <div className="request">
-              
-
-             
                 <div className="info">
+                 
+
+              
                     <div className="profile-photo">
                         <img src={me} alt="" />
                     </div>
@@ -154,59 +104,24 @@ function Rightbar() {
                 </p>
                 </div>
                 </div>
-                  
-
-                <div className="action">
-                  {
-                    obj.followers.includes(userId) ?
-
-                    <button className="btn  bg-blue-900 text-white" type='submit' onClick={(e) => { handleSubmitUndo(obj._id) }} >
-                        Unfollow
+                <div className="action pl-10">
+                    <button className="btn  bg-blue-900 text-white" type='submit'  >
+                       View  Profile
                     </button>
-                
-                
-
-                    :<button className="btn btn-primary" type='submit' onClick={(e) => { handleSubmit(obj._id) }} >
-                        Follow
-                    </button>}
-                    {
-                    obj.followers.includes(userId) ?
-                    <button className="btn ">
+                    {/* <button className="btn  bg-blue-900 text-white ">
                      Message
-                    </button>
-                    :    <button className="btn ">
-                    
-                </button>}
+                    </button> */}
+    
                 </div>
+             
             </div>
-                 )
-                })}
-
-            {/* bnbn */}
-
-            {/* <div className="request">
-                <div className="info">
-                    <div className="profile-photo">
-                        <img src={me} alt="" />
-                    </div>
-                <div>
-                <h5>Cristaino Ronaldo</h5>
-                <p className="text-muted">
-                    8 mutual friends
-                </p>
-                </div>
-                </div>
-
-                <div className="action">
-                    <button className="btn btn-primary">
-                        Follow
-                    </button>
-                    <button className="btn ">
-                        Message
-                    </button>
-                </div>
-            </div> */}
-
+                       )
+                    })
+                }
+           
+    
+                     
+              
            </div>
 
           </div>
