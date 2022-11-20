@@ -4,18 +4,18 @@ const jwt = require("jsonwebtoken")
 
 const check =async (req, res, next) => {
     try {
-        console.log("Check middleware")
+        // console.log("Check middleware")
 
         let token = req.headers["x-access-token"]
-        console.log(req.headers,"hey");
+        // console.log(req.headers,"hey");
         if(token){
             // authHeader = authHeader.replaceAll('"',"")
             // const token = authHeader.split(" ")[1]
 
-            console.log(token,"yuyuyuy");
+            // console.log(token,"yuyuyuy");
         }
         const user = jwt.verify(token, process.env.JWT_KEY)
-        console.log(user,"jkjkj");
+        // console.log(user,"jkjkj");
        if(user){
         req.user=user
         next()

@@ -6,6 +6,9 @@ const multer = require('multer')
 const nodemailer = require('nodemailer');
 const userVerification = require('../Models/user/userVerification');
 const CommentModel = require('../Models/user/commentSchema');
+const { create } = require('../Models/user/userSchema');
+const JobModel = require('../Models/user/JobSchema');
+const Jobs = require('../Models/user/JobSchema')
 
 /* ----------------------------- NODEMAILER INIT ---------------------------- */
 
@@ -270,16 +273,13 @@ const unfollowUser = async (req,res)=>{
 
 
 const createPost = async (req,res)=>{
-    console.log(req.body,"ghjk");
-    // console.log(req.files,"ghjk");
-    // const filename = req.files.map(function (file) {
-    //     return file.filename
+    // console.log(req.body,"ghjk")
     
 
     try {
         const postData = new Post({
             userId: req.body.User,
-            image: req.files,
+            image: req.file.filename,
             Created: Date.now(),
             description: req.body.Caption
         })
@@ -349,9 +349,9 @@ const deletePost= async(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 const LikePost = async(req,res)=>{
-    console.log("hey reached");
-console.log(req.body.userId,"popopo");
-console.log(req.params.id);
+//     console.log("hey reached");
+// console.log(req.body.userId,"popopo");
+// console.log(req.params.id);
 
     try {
 
@@ -418,7 +418,7 @@ const getAllPosts = async (req,res)=>{
 const findUsers = async(req,res)=>{
     try {
 
-        User.find().sort({_id:-1}).limit(3).then(response =>{
+        User.find().sort({_id:-1}).then(response =>{
             res.status(200).json(response)
         }).catch(error =>{
             res.json(error)
@@ -430,6 +430,33 @@ const findUsers = async(req,res)=>{
 
 }
 
+
+/* -------------------------------------------------------------------------- */
+/*                             FIND CLOSE FRIENDS                             */
+/* -------------------------------------------------------------------------- */
+
+
+const findCloseUsers = async(req,res)=>{
+console.log("hey");
+console.log(req.params.id,"gvhbjn");
+    const id = req.params.id
+    try {
+
+        User.find({followings
+            :id}).then(response =>{
+            res.status(200).json(response)
+        }).catch(error =>{
+            res.json(error)
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                              GET USER BY POST                              */
 /* -------------------------------------------------------------------------- */
@@ -438,7 +465,7 @@ const getUserPost=async(req,res)=>{
     // console.log('kkkkkkkkkkkkkkkkkkkkk');
    
     const userId = req.query.userId;
-    console.log(userId);
+    // console.log(userId);
     const username = req.query.username;
     try {
       const user = userId
@@ -472,13 +499,49 @@ const getUserPost=async(req,res)=>{
  const getPostComments=async(req,res)=>{
     console.log(req.params.id);
     try {
-      const postComment=await CommentModel.find({postId:req.params.id})
+      const postComment=await CommentModel.find({postId:req.params.id}).populate("userId","username")
       res.json(postComment)
         
     } catch (error) {
        res.json(error) 
     }
  }
+
+ /* -------------------------------------------------------------------------- */
+ /*                                  ADD A JOB                                 */
+ /* -------------------------------------------------------------------------- */
+
+const createjob = async(req,res)=>{
+   console.log( req.body,"hjkl;");
+    try {
+        const newJob = new JobModel(req.body)
+         await newJob.save()
+         res.status(200).json(newJob)
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 FIND A JOB                                 */
+/* -------------------------------------------------------------------------- */
+const findJob = async(req,res)=>{
+    try {
+
+        JobModel.find().sort({_id:-1}).then(response =>{
+            res.status(200).json(response)
+        }).catch(error =>{
+            res.json(error)
+        })
+        
+    } catch (error) {
+        console.log(error);
+    }
+  
+}
+
+
 
 
 module.exports={PostSignUp,PostLogin,
@@ -487,5 +550,5 @@ module.exports={PostSignUp,PostLogin,
     unfollowUser,createPost,
     updatePost,
     deletePost,LikePost,
-    getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,getPostComments
+    getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,getPostComments,createjob,findJob,findCloseUsers
 }
