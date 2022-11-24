@@ -1,13 +1,21 @@
 const express = require('express')
 const multer = require('multer')
 const { PostSignUp, PostLogin, UpdateUser, deleteUser, followUser, unfollowUser, createPost, findJob,
-    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers } = require('../controllers/users');
+    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers, userPost, createVidPost, createChat, userChats, findChats, addMessage, getMessages, getUser } = require('../controllers/users');
 const check = require('../middlewares/verify');
 const router = express.Router()
 var upload = require('../helpers/multer')
 
+//  multer init
 
-
+// router.post('/post/upload', upload.single('file'), (req, res) => {
+//     try {
+//         res.json("success")
+//     } catch (error) {
+//         res.json(error)
+//     }
+//   })
+  
 
 
 // REGISTER AND LOGIN
@@ -25,10 +33,12 @@ router.put('/unfollow/:id',unfollowUser)
 router.get('/findUsers',check,findUsers)
 router.get('/:id',getUserPost)
 router.get('/closefriends/:id',findCloseUsers)
+router.get('/getUser/:id',getUser)
 
 // CRUD OF POSTS
 
 router.post('/createPost',upload.single('image'),createPost)
+// router.post('/createpost',upload.single('video'),createVidPost)
 router.put('/post/:id',updatePost)
 router.delete('/post/:id',deletePost)
 router.put('/post/like/:id',LikePost)
@@ -42,5 +52,21 @@ router.get('/getcomments/:id',getPostComments)
 router.post('/createJob',createjob)
 router.get('/job/getjob',findJob)
 
+
+// PROFILE 
+
+router.get('/profile/:id',userPost)
+
+
+// CHATS
+
+router.post('/createChat',createChat)
+router.get('/chat/:userId',userChats)
+router.post('/findchat/:firstId/:secondId',findChats)
+
+// MESSAGES
+
+router.post('/addMessage',addMessage)
+router.get('/message/:chatId',getMessages)
 
 module.exports = router

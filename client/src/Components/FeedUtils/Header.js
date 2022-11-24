@@ -2,7 +2,8 @@ import React from 'react'
 import './Header.css'
 import me from '../../assets/images/me.jpg'
 import { useNavigate } from 'react-router-dom'
-import { Link } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 function Header() {
 
 
@@ -18,7 +19,7 @@ function Header() {
   return (
 <nav>
     <div className="container">
-        <h2 className='log text-3xl font-extrabold text-blue-400'>JobSeeker</h2>
+       <Link to='/feed'> <h2 className='log text-3xl font-extrabold text-blue-400'>JobSeeker</h2></Link>
         <div className="search-bar">
             <i className='uil uil-search'></i>
             <input type="search" placeholder='Search' />

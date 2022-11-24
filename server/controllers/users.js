@@ -8,7 +8,9 @@ const userVerification = require('../Models/user/userVerification');
 const CommentModel = require('../Models/user/commentSchema');
 const { create } = require('../Models/user/userSchema');
 const JobModel = require('../Models/user/JobSchema');
-const Jobs = require('../Models/user/JobSchema')
+const Jobs = require('../Models/user/JobSchema');
+const ChatModel = require('../Models/user/ChatSchema');
+const MessageModel = require('../Models/user/MessageSchema');
 
 /* ----------------------------- NODEMAILER INIT ---------------------------- */
 
@@ -273,15 +275,21 @@ const unfollowUser = async (req,res)=>{
 
 
 const createPost = async (req,res)=>{
-    // console.log(req.body,"ghjk")
-    
+
+let imagename;
+if(req.file){
+    imagename = req.file.filename
+}
+else{
+    imagename = ""
+}
 
     try {
         const postData = new Post({
             userId: req.body.User,
-            image: req.file.filename,
+            image: imagename,
             Created: Date.now(),
-            description: req.body.Caption
+            desc: req.body.desc,
         })
         let result = postData.save()
         if (result) {
@@ -293,6 +301,41 @@ const createPost = async (req,res)=>{
         console.log(error);
     }
 }
+
+
+/* -------------------------------------------------------------------------- */
+/*                            CREATE VIDEO POST                               */
+/* -------------------------------------------------------------------------- */
+
+
+
+// const createVidPost = async (req,res)=>{
+
+//     let videoname;
+//     if(req.file){
+//         videoname = req.file.filename
+//     }
+//     else{
+//         videoname = ""
+//     }
+    
+//         try {
+//             const postData = new Post({
+//                 userId: req.body.User,
+//                 video: videoname,
+//                 Created: Date.now(),
+//                 desc: req.body.desc,
+//             })
+//             let result = postData.save()
+//             if (result) {
+//                 res.status(200).json({ status: true })
+//             } else {
+//                 res.status(200).json({ status: false })
+//             }
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     }
 
 
 /* -------------------------------------------------------------------------- */
@@ -467,6 +510,7 @@ const getUserPost=async(req,res)=>{
     const userId = req.query.userId;
     // console.log(userId);
     const username = req.query.username;
+    // console.log(username,"hgjk");
     try {
       const user = userId
         ? await User.findById(userId)
@@ -497,7 +541,7 @@ const getUserPost=async(req,res)=>{
  /* -------------------------------------------------------------------------- */
 
  const getPostComments=async(req,res)=>{
-    console.log(req.params.id);
+    // console.log(req.params.id);
     try {
       const postComment=await CommentModel.find({postId:req.params.id}).populate("userId","username")
       res.json(postComment)
@@ -512,7 +556,7 @@ const getUserPost=async(req,res)=>{
  /* -------------------------------------------------------------------------- */
 
 const createjob = async(req,res)=>{
-   console.log( req.body,"hjkl;");
+//    console.log( req.body,"hjkl;");
     try {
         const newJob = new JobModel(req.body)
          await newJob.save()
@@ -541,8 +585,151 @@ const findJob = async(req,res)=>{
   
 }
 
+/* -------------------------------------------------------------------------- */
+/*                                GET USER POST                               */
+/* -------------------------------------------------------------------------- */
 
 
+const userPost=async(req,res)=>{
+    // console.log("fcghvjbknlm");
+    try {
+        const user=await User.findById(req.params.id)
+        const userPosts=await Post.find({userId:user._id}).sort({createdAt:-1})
+        res.json(userPosts)
+    } catch (error) {
+        res.json(error)
+        
+    }
+   }
+
+/* -------------------------------------------------------------------------- */
+/*                                CREATE CHATS                                */
+/* -------------------------------------------------------------------------- */
+
+const createChat = async(req,res)=>{
+
+    const newChat = new ChatModel({
+        members:[req.body.senderId,req.body.recieverId]
+    })
+
+    try {
+
+        const result = await newChat.save()
+        res.status(200).json(result)
+        
+    } catch (error) {
+
+        res.status(500).json(error)
+        
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 USER CHATS                                 */
+/* -------------------------------------------------------------------------- */
+
+const userChats = async(req,res)=>{
+   
+    try {
+
+        const chat = await ChatModel.find({
+            members:{
+                $in: [req.params.userId]
+            }
+        })
+        res.status(200).json(chat)
+        
+    } catch (error) {
+
+        res.status(500).json(error)
+        
+    }
+}
+/* -------------------------------------------------------------------------- */
+/*                          FIND CHATS BETWEEN USERS                          */
+/* -------------------------------------------------------------------------- */
+
+const findChats = async(req,res)=>{
+    try {
+
+        const chat = await ChatModel.findOne({
+            members:{
+                $all:[req.params.firstId,req.params.secondId]
+            }
+        })
+        res.status(200).json(chat)
+
+
+        
+    } catch (error) {
+        res.status(500).json(error)
+  
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 ADD MESSAGE                                */
+/* -------------------------------------------------------------------------- */
+
+const addMessage = async(req,res)=>{
+    const {chatId,senderId,text}=req.body
+    const message = new MessageModel({
+
+        chatId,
+        senderId,
+        text
+    })
+    try {
+        const result = await message.save()
+        res.status(200).json(result)
+        
+    } catch (error) {
+
+        res.status(500).json(error)
+        
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                GET MESSAGES                                */
+/* -------------------------------------------------------------------------- */
+
+const getMessages = async(req,res)=>{
+    const {chatId} = req.params
+
+    try {
+        
+        const result = await MessageModel.find({chatId})
+        res.status(200).json(result)
+
+    } catch (error) {
+        res.status(500).json(error)
+
+        
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               GET USER BY ID                               */
+/* -------------------------------------------------------------------------- */
+
+const getUser =(req,res)=>{
+    console.log("hey");
+    console.log(req.params.id,"gvhbjn");
+        const id = req.params.id
+        try {
+    
+            User.findById(
+                id).then(response =>{
+                res.status(200).json(response)
+            }).catch(error =>{
+                res.json(error)
+            })
+            
+        } catch (error) {
+            console.log(error);
+        }
+}
 
 module.exports={PostSignUp,PostLogin,
     UpdateUser,deleteUser,
@@ -550,5 +737,8 @@ module.exports={PostSignUp,PostLogin,
     unfollowUser,createPost,
     updatePost,
     deletePost,LikePost,
-    getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,getPostComments,createjob,findJob,findCloseUsers
+    getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,
+    getPostComments,createjob,findJob,findCloseUsers,
+    userPost,createChat,
+    userChats,findChats,addMessage,getMessages,getUser
 }

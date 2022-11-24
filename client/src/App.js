@@ -14,6 +14,7 @@ import Store from './Store/Store'
 import ProfilePage from './Pages/user/Profile';
 import Jobpg from './Pages/user/Job';
 import Networkpg from './Pages/user/Network';
+import ChatPage from './Pages/user/Chat';
 function App() {
   return (
 
@@ -34,8 +35,10 @@ function App() {
     <Route path='/SignUp' element={<SignUpPage/>}/>
     <Route path='/feed' element={<Feedpg/>}/>
     <Route path='/profile' element={<ProfilePage/>}/>
+    <Route path='/profile/:username' element={<ProfilePage/>}/>
     <Route path='/Job' element={<Jobpg/>}/>
     <Route path='/Network' element={<Networkpg/>}/>
+    <Route path='/Chat' element={<ChatPage/>}/>
 
   </Routes>
 

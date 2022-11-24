@@ -37,7 +37,7 @@ function Leftbar() {
 
     title:"Chat",
     icon:<ChatBubbleIcon/>,
-    link:"/feed2"},
+    link:"/chat"},
 {
 
   title:"Notifications",

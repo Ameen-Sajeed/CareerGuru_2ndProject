@@ -6,7 +6,7 @@ const PostSchema = new mongoose.Schema({
     type:String,
    //  required:true
    },
-   description:{
+   desc:{
     type:String,
     max:500
    },
@@ -14,9 +14,9 @@ const PostSchema = new mongoose.Schema({
    image:{
     type:String
    },
-   // video:{
-   //    type:String
-   // },
+   video:{
+      type:String
+   },
 
    likes:{
     type:Array,

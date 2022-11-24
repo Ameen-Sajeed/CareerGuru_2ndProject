@@ -3,6 +3,7 @@ import './Header.css'
 import me from '../../assets/images/us.webp'
 import { useSelector } from 'react-redux'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 function Rightbar() {
 
@@ -95,7 +96,7 @@ function Rightbar() {
 
               
                     <div className="profile-photo">
-                        <img src={me} alt="" />
+                   <img className='cursor-pointer' src={me} alt="" />
                     </div>
                 <div>
                 <h5>{obj.username}</h5>
@@ -105,9 +106,9 @@ function Rightbar() {
                 </div>
                 </div>
                 <div className="action pl-10">
-                    <button className="btn  bg-blue-900 text-white" type='submit'  >
+                    <Link to ={`/profile/${obj.username}`}><button className="btn  bg-blue-900 text-white" type='submit'  >
                        View  Profile
-                    </button>
+                    </button></Link>
                     {/* <button className="btn  bg-blue-900 text-white ">
                      Message
                     </button> */}

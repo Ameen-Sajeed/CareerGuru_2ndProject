@@ -1,0 +1,4 @@
+
+  .messagelist::-webkit-scrollbar {
+    display: none;
+    }

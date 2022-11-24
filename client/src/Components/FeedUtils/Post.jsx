@@ -49,16 +49,17 @@ useEffect(() => {
   // console.log(user,"uiiu");
 
   const handleComment=async(e)=>{
-    // console.log(userId);
-    // console.log(post._id);
+ 
      e.preventDefault()
-     Setcomments(!comments)
+   
 
      const res=await axios.post(`http://localhost:5000/addcomment/${post._id}`,{userId:userId,comment:desc,postId:post._id})
      if(res.data){
-      window.location.reload()
+      // window.location.reload()
       SetUpdateComment(!updateComment)
      }
+
+     setDesc("")
   }
   useEffect(() => {
        const fetchComments = async ()=>{
@@ -91,14 +92,19 @@ useEffect(() => {
                             </span>
                     </div>
                     <div className="photo">
-                      {post.image ?  <img src={PF+post.image} alt="" /> : <h1> {post.description}</h1> }
+                    <p className='text-lg font-light'> {post.desc}</p>
+                     <img src={PF+post.image} alt="" /> 
                     </div>
+                       {/* <div className="photo">
+                      {post.image ?  <img src={PF+post.image} alt="" /> : <p> {post.desc}</p> }
+                    </div> */}
+
                     <div className="action-buttons">
                         <div className="interaction-buttons">
 
                         {/* <span> <i className='uil uil-heart'></i></span> */}
                         <span onClick={likeHandler}> { isLiked ? <ThumbUpIcon style={{color:"#003399"}}/>:<ThumbUpIcon/>} </span> 
-                        <span> <i className='uil uil-comment-dots' onClick={Setcomments} ></i></span>
+                        <span> <i className='uil uil-comment-dots' onClick={()=>{Setcomments(!comments)}} ></i></span>
                         <span> <i className='uil uil-share-alt'></i></span>
 
                         </div>
@@ -115,7 +121,7 @@ useEffect(() => {
 
                     </div>
                     <div className="caption">
-                       {post.image ?<p> <b className='p-2'>{user.username}</b>{post.description}<span className='harsh-tag'></span> </p>:null}
+                       {post.image ?<p> <b className='p-2'>{user.username}</b><span className='harsh-tag'></span> </p>:null}
                     </div>
                     <div class="max-w-lg shadow-md">
 
@@ -146,7 +152,7 @@ useEffect(() => {
 
       <form action="" class="w-full p-4">
         <label class="block mb-2">
-          <textarea class="block w-full mt-1 rounded" rows="3" placeholder='Post a Comment'   onChange={(e)=> {setDesc(e.target.value)}} mult></textarea>
+          <textarea class="block w-full mt-1 rounded" rows="3" value={desc} placeholder='Post a Comment'   onChange={(e)=> {setDesc(e.target.value)}} mult></textarea>
         </label>
         <button disabled={!desc} class="px-3 py-2 text-sm text-blue-100 bg-blue-600 rounded"onClick={handleComment} >Comment</button>
       </form>: null }
