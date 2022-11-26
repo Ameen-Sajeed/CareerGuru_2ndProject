@@ -124,7 +124,7 @@ console.log(user,"asdfghjk");
                                    ml-1 mt-px"></i>
               </span> */}
               {/* {
-                user?.followings?.includes(userId) ?
+                user?.followings?.includes(userId) ? 
 
                 <a href="#" class="bg-blue-500 px-2 py-1 
                 text-white font-semibold text-sm rounded block text-center 
@@ -143,7 +143,7 @@ console.log(user,"asdfghjk");
             </div>
             
     
-            <ul class="hidden md:flex space-x-8 mb-4">
+            <ul class="hidden md:flex space-x-8 mb-4"> 
              
                 <li>
                   

@@ -22,6 +22,11 @@ const PostSchema = new mongoose.Schema({
     type:Array,
     default:[],
    },
+   Reports:{
+      type:Array,
+      default:[],
+     },
+
    Created: Date,
 
 

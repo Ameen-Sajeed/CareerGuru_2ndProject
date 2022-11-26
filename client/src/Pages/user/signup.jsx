@@ -1,24 +1,11 @@
-import { Outlet } from "react-router-dom"
-import Signup from "../../Components/User/SignUp/signUp"
-function SignUpPage (){
-
-
-
-return(
+import Signup from "../../Components/User/SignUp/signUp";
+function SignUpPage() {
+  return (
     <div>
-
-<Signup/>  
-<div className="p-1">
-{/* <Footer/>   */}
-
-</div>
-     <Outlet/>
-        
-    
-        </div>
-     
-    
-)
+      <Signup />
+      <div className="p-1"></div>
+    </div>
+  );
 }
 
-export default SignUpPage
+export default SignUpPage;

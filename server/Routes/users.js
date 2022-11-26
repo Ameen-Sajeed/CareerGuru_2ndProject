@@ -1,7 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const { PostSignUp, PostLogin, UpdateUser, deleteUser, followUser, unfollowUser, createPost, findJob,
-    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers, userPost, createVidPost, createChat, userChats, findChats, addMessage, getMessages, getUser } = require('../controllers/users');
+    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers, userPost, createVidPost, createChat, userChats, findChats, addMessage, getMessages, getUser, ReportPost, addReports } = require('../controllers/users');
 const check = require('../middlewares/verify');
 const router = express.Router()
 var upload = require('../helpers/multer')
@@ -38,15 +38,14 @@ router.get('/getUser/:id',getUser)
 // CRUD OF POSTS
 
 router.post('/createPost',upload.single('image'),createPost)
-// router.post('/createpost',upload.single('video'),createVidPost)
 router.put('/post/:id',updatePost)
-router.delete('/post/:id',deletePost)
+router.delete('/delpost/:id',deletePost)
 router.put('/post/like/:id',LikePost)
 router.get('/post/:id',getPost)
 router.get('/post/timeline/:userId',getAllPosts)
 router.post('/addcomment/:id',addComment)
 router.get('/getcomments/:id',getPostComments)
-
+router.post('/reportPost/:id',ReportPost)
 // CRUD OF JOBS
 
 router.post('/createJob',createjob)
@@ -68,5 +67,9 @@ router.post('/findchat/:firstId/:secondId',findChats)
 
 router.post('/addMessage',addMessage)
 router.get('/message/:chatId',getMessages)
+
+// router.post('/addreport/:id',addReports)
+
+
 
 module.exports = router

@@ -11,6 +11,8 @@ const JobModel = require('../Models/user/JobSchema');
 const Jobs = require('../Models/user/JobSchema');
 const ChatModel = require('../Models/user/ChatSchema');
 const MessageModel = require('../Models/user/MessageSchema');
+const ReportModel = require('../Models/user/ReportSchema');
+const PostModel = require('../Models/user/PostSchema');
 
 /* ----------------------------- NODEMAILER INIT ---------------------------- */
 
@@ -369,18 +371,15 @@ const updatePost=async(req,res)=>{
 /* -------------------------------------------------------------------------- */
 
 const deletePost= async(req,res)=>{
+    console.log("reached bvbnm");
+    console.log(req.params.id,"hvbjkl");
     try {
 
         const post = await Post.findById(req.params.id);
-        if(post.userId === req.body.userId){
     
             await post.deleteOne();
+            console.log("post has deleted");
             res.status(200).json("the post has been deleted")
-    
-        }
-        else{
-            res.status(403).json("you can delete only your post")
-        }
         
     } catch (err) {
         res.status(500).json(err)
@@ -591,7 +590,6 @@ const findJob = async(req,res)=>{
 
 
 const userPost=async(req,res)=>{
-    // console.log("fcghvjbknlm");
     try {
         const user=await User.findById(req.params.id)
         const userPosts=await Post.find({userId:user._id}).sort({createdAt:-1})
@@ -731,6 +729,50 @@ const getUser =(req,res)=>{
         }
 }
 
+
+/* -------------------------------------------------------------------------- */
+/*                                 REPORT POST                                */
+/* -------------------------------------------------------------------------- */
+
+const ReportPost = async(req,res)=>{
+    console.log(req.body,"poopo");
+    console.log(req.params.id,"ghjiokl");
+    const ReportPost=new ReportModel(req.body)
+    try {
+        const Reports=await ReportPost.save()
+        res.json(Reports)
+    } catch (error) {
+        res.json(error)
+    }
+ } 
+
+ /* -------------------------------------------------------------------------- */
+ /*                                 ADD REPORT                                 */
+ /* -------------------------------------------------------------------------- */
+
+//  const addReports = async (req,res)=>{
+//     console.log("reee");
+//     // let details ={
+
+//     //     userId:"",
+//     //     content:""
+//     // }
+
+//     try {
+
+//         await PostModel.updateOne({$push:{ReportedBy:req.body}}).then((response)=>{
+//             console.log(response);
+//             res.json(response)
+//         })
+        
+//     } catch (error) {
+//         console.log(error);
+        
+//     }
+ 
+  
+//  }
+
 module.exports={PostSignUp,PostLogin,
     UpdateUser,deleteUser,
     followUser,
@@ -740,5 +782,5 @@ module.exports={PostSignUp,PostLogin,
     getPost,getAllPosts,findUsers,getUserPost,verifyOtp,addComment,
     getPostComments,createjob,findJob,findCloseUsers,
     userPost,createChat,
-    userChats,findChats,addMessage,getMessages,getUser
+    userChats,findChats,addMessage,getMessages,getUser,ReportPost
 }

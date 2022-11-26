@@ -13,9 +13,7 @@ function Rightbar() {
     const [forms,setForms]=useState([])
 
     useEffect(()=>{
-        axios.get(`http://localhost:5000/closefriends/${userId}`,{
-            headers:{"x-access-token":localStorage.getItem('usertoken')},
-        }).then((response)=>{
+        axios.get(`http://localhost:5000/closefriends/${userId}`).then((response)=>{
             
             if(response.data){
                 // console.log(token);

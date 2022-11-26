@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import me from "../../../../assets/images/us.webp";
+import { userRequest } from "../../../../Constants/Constant";
 
 function Network() {
   const userData = useSelector((state) => state.user);
@@ -29,6 +30,23 @@ function Network() {
         console.log(error, "erorr ocurred");
       });
   }, [check]);
+
+
+
+  // useEffect(() => {
+
+  //   let findUsers = async ()=>{
+  //     let response = await userRequest({
+  //       method:"GET",
+  //       url:'/findUsers'
+  //     })
+
+  //     console.log(response.data);
+  //     setForms(response.data);
+
+  //   }
+  //   findUsers()
+  // }, [check]);
 
   /* -------------------------------------------------------------------------- */
   /*                                FOLLOW USERS                                */
@@ -79,6 +97,9 @@ function Network() {
         <div class="max-w-full grid grid-cols-3 gap-4">
           {forms.map((obj) => {
             return (
+              <> {
+                obj.username !== userData.username ?
+              
               <div class="bg-white shadow-xl rounded-lg py-2 ">
                 <div class="photo-wrapper p-2">
                   <img
@@ -121,7 +142,7 @@ function Network() {
                   )}
                 </div>
               </div>
-            );
+              :null}</>);
           })}
         </div>
       </div>

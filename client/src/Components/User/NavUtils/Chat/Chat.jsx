@@ -62,6 +62,12 @@ useEffect(()=>{
   getChats()
 },[user._id])
 
+const checkOnlineStatus = (chat)=>{
+  const chatMember = chat.members.find((member)=> member!==user._id)
+  const online = onlineUsers.find((user)=> user.userId === chatMember)
+  return online ? true : false
+}
+
   return (
     <div class="h-screen chatscreen p-24">
       <section class=" shadow-xl rounded-md w-full lg:w-11/12 lg:mx-auto flex">
@@ -122,7 +128,7 @@ useEffect(()=>{
                   {
                     chats.map((chat)=>(
                       <li onClick={()=>setCurrentChat(chat)}>
-                      <Conversation data = {chat} currentUserId = {user._id}/>
+                      <Conversation data = {chat} currentUserId = {user._id} online = {checkOnlineStatus(chat)}/>
                     </li>
                     ))
                   }
@@ -136,7 +142,7 @@ useEffect(()=>{
         </div>
         {/* <!-- Middle section --> */}
         
-        <ChatBox chat ={currentChat} currentUser = {user._id} setSendMessage={setSendMessage} recieveMessage = {recieveMessage}/>
+        <ChatBox chat ={currentChat} currentUser = {user._id} setSendMessage={setSendMessage} recieveMessage = {recieveMessage} />
     
       </section>
     </div>

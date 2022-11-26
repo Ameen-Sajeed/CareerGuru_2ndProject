@@ -6,7 +6,7 @@ import me from '../../../../assets/images/us.webp'
 
 import './Chat.css'
 
-const Conversation = ({data,currentUserId}) =>{
+const Conversation = ({data,currentUserId,online}) =>{
 
     const [userData,setUserData]=useState(null)
 
@@ -33,12 +33,13 @@ catch(error){
   return (
        <>
       <li class="my-2 p-2 flex flex-row bg-blue-300 rounded-lg cursor-pointer">
-      <FiberManualRecordIcon style={{color:"green"}}/>
+    {online && <FiberManualRecordIcon style={{color:"green"}}/>}
       <img class="w-12 h-12 mr-4 rounded-full" src={me} alt="" />
          <div class="w-full flex flex-col justify-center text-dark">
           <div class="flex flex-row justify-between">
             <h2 class="text-xs  font-bold">{userData?.username}</h2>
-            <span class="text-xs text-green-800">Online</span>
+       { online ?    <span class="text-xs text-green-800">Online</span>:  <span class="text-xs text-red-800">Offline</span>}
+
           </div>
           {/* <div class="flex flex-row justify-between items-center">
             <p class="text-xs">There are many variations of passages...</p>

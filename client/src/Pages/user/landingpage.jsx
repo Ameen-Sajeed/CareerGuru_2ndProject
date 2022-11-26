@@ -1,21 +1,11 @@
-import Landing from '../../Components/User/landingPage/landingPage'
-import { Outlet } from 'react-router-dom'
-function Landingpg (){
-
-
-
-return(
+import Landing from "../../Components/User/landingPage/landingPage";
+import { Outlet } from "react-router-dom";
+function Landingpg() {
+  return (
     <div>
-<Landing/> 
-  
-    
-        <Outlet/>
-        
-    
-        </div>
-     
-    
-)
+      <Landing />
+    </div>
+  );
 }
 
-export default Landingpg
+export default Landingpg;
