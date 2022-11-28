@@ -4,6 +4,7 @@ const Post = require("../Models/user/PostSchema");
 const CommentModel = require("../Models/user/commentSchema");
 const ReportModel = require("../Models/user/ReportSchema");
 const { populate } = require("../Models/user/userSchema");
+const PostModel = require("../Models/user/PostSchema");
 
 /* -------------------------------------------------------------------------- */
 /*                                 ADMIN LOGIN                                */
@@ -110,10 +111,15 @@ const UnblockUser = (req, res) => {
 
 const getAllPost = async (req, res) => {
   try {
-    const report = await ReportModel.find().populate("postId");
-    const comments = await CommentModel.find().populate("postId");
-    console.log(comments, "oioi");
-    res.status(200).json({ data1: report, data2: comments });
+    await PostModel.find({ Reports: { $ne: [] } })
+      .then((response) => {
+        res.status(200).json(response);
+
+        console.log(response, "response");
+      })
+      .catch((error) => {
+        res.status(401).json(error);
+      });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -159,6 +165,22 @@ const getAllReports = async (req, res) => {
   }
 };
 
+/* -------------------------------------------------------------------------- */
+/*                             VIEW SINGLE REPORT                             */
+/* -------------------------------------------------------------------------- */
+
+const ViewSingleReport = async (req, res) => {
+  console.log("reached");
+  const postId = req.params.id;
+  console.log(postId,"kjkjk");
+  try {
+    let reports = await ReportModel.find({ postId: postId }).populate("userId");
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   getUsers,
   blockUser,
@@ -167,4 +189,5 @@ module.exports = {
   getAllPost,
   getAllComments,
   getAllReports,
+  ViewSingleReport,
 };

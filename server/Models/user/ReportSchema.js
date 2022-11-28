@@ -5,13 +5,14 @@ const ReportSchema = new mongoose.Schema({
    userId:{
     type:String,
     required:true,
+    ref:"users"
+
 
    },
 
    postId:{
     type:String,
     required:true,
-    ref:posts
 
    },
 

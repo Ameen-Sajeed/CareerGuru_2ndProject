@@ -56,7 +56,7 @@ function Post({ post }) {
         .post(`http://localhost:5000/reportPost/${post._id}`, { ...report })
         .then((response) => {
           console.log(response);
-          // window.location.reload();
+          window.location.reload();
         });
     } catch (error) {}
   };
