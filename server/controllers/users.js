@@ -2,17 +2,16 @@ const User = require("../Models/user/userSchema");
 const bcrypt = require("bcrypt");
 const Post = require("../Models/user/PostSchema");
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
 const nodemailer = require("nodemailer");
 const userVerification = require("../Models/user/userVerification");
 const CommentModel = require("../Models/user/commentSchema");
-const { create } = require("../Models/user/userSchema");
 const JobModel = require("../Models/user/JobSchema");
-const Jobs = require("../Models/user/JobSchema");
 const ChatModel = require("../Models/user/ChatSchema");
 const MessageModel = require("../Models/user/MessageSchema");
 const ReportModel = require("../Models/user/ReportSchema");
 const PostModel = require("../Models/user/PostSchema");
+const JobReportModel = require("../Models/user/JobReportSchema");
+const JobRequestModel = require("../Models/user/JobRequests");
 
 /* ----------------------------- NODEMAILER INIT ---------------------------- */
 
@@ -288,38 +287,6 @@ const createPost = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                            CREATE VIDEO POST                               */
-/* -------------------------------------------------------------------------- */
-
-// const createVidPost = async (req,res)=>{
-
-//     let videoname;
-//     if(req.file){
-//         videoname = req.file.filename
-//     }
-//     else{
-//         videoname = ""
-//     }
-
-//         try {
-//             const postData = new Post({
-//                 userId: req.body.User,
-//                 video: videoname,
-//                 Created: Date.now(),
-//                 desc: req.body.desc,
-//             })
-//             let result = postData.save()
-//             if (result) {
-//                 res.status(200).json({ status: true })
-//             } else {
-//                 res.status(200).json({ status: false })
-//             }
-//         } catch (error) {
-//             console.log(error);
-//         }
-//     }
-
-/* -------------------------------------------------------------------------- */
 /*                               UPDATE  A POST                               */
 /* -------------------------------------------------------------------------- */
 
@@ -345,9 +312,8 @@ const deletePost = async (req, res) => {
   console.log("reached bvbnm");
   console.log(req.params.id, "hvbjkl");
   try {
-    const post = await Post.findById(req.params.id);
-
-    await post.deleteOne();
+    await Post.deleteOne({ _id: req.params.id });
+    await CommentModel.deleteMany({ postId: req.params.id });
     console.log("post has deleted");
     res.status(200).json("the post has been deleted");
   } catch (err) {
@@ -356,14 +322,37 @@ const deletePost = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                                DELETE A JOB                                */
+/* -------------------------------------------------------------------------- */
+
+const deleteJob = async (req, res) => {
+  try {
+    await JobModel.deleteOne({ _id: req.params.id });
+    res.status(200).json("the job has been deleted");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                             DELETE JOB REQUESTS                            */
+/* -------------------------------------------------------------------------- */
+
+const rejectJobRequests = async (req, res) => {
+  try {
+    await JobRequestModel.deleteOne({ _id: req.params.id });
+    res.status(200).json("the job request has been rejected");
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
 /*                                 LIKE A POST                                */
 /* -------------------------------------------------------------------------- */
 
 const LikePost = async (req, res) => {
-  //     console.log("hey reached");
-  // console.log(req.body.userId,"popopo");
-  // console.log(req.params.id);
-
   try {
     const post = await Post.findById(req.params.id);
     if (!post.likes.includes(req.body.userId)) {
@@ -436,8 +425,6 @@ const findUsers = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const findCloseUsers = async (req, res) => {
-  console.log("hey");
-  console.log(req.params.id, "gvhbjn");
   const id = req.params.id;
   try {
     User.find({ followings: id })
@@ -457,12 +444,8 @@ const findCloseUsers = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const getUserPost = async (req, res) => {
-  // console.log('kkkkkkkkkkkkkkkkkkkkk');
-
   const userId = req.query.userId;
-  // console.log(userId);
   const username = req.query.username;
-  // console.log(username,"hgjk");
   try {
     const user = userId
       ? await User.findById(userId)
@@ -493,7 +476,6 @@ const addComment = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const getPostComments = async (req, res) => {
-  // console.log(req.params.id);
   try {
     const postComment = await CommentModel.find({
       postId: req.params.id,
@@ -509,7 +491,6 @@ const getPostComments = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const createjob = async (req, res) => {
-  //    console.log( req.body,"hjkl;");
   try {
     const newJob = new JobModel(req.body);
     await newJob.save();
@@ -642,8 +623,6 @@ const getMessages = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const getUser = (req, res) => {
-  console.log("hey");
-  console.log(req.params.id, "gvhbjn");
   const id = req.params.id;
   try {
     User.findById(id)
@@ -663,12 +642,13 @@ const getUser = (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const ReportPost = async (req, res) => {
-  console.log(req.body, "poopo");
-  console.log(req.params.id, "ghjiokl");
   const ReportPost = new ReportModel(req.body);
   try {
     const Reports = await ReportPost.save();
-    await PostModel.updateOne({_id:req.body.postId},{$push:{Reports:req.body.userId}})
+    await PostModel.updateOne(
+      { _id: req.body.postId },
+      { $push: { Reports: req.body.userId } }
+    );
     res.json(Reports);
   } catch (error) {
     res.json(error);
@@ -676,38 +656,28 @@ const ReportPost = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
-/*                                 ADD REPORT                                 */
+/*                                 REPORT JOB                                 */
 /* -------------------------------------------------------------------------- */
 
-//  const addReports = async (req,res)=>{
-//     console.log("reee");
-//     // let details ={
-
-//     //     userId:"",
-//     //     content:""
-//     // }
-
-//     try {
-
-//         await PostModel.updateOne({$push:{ReportedBy:req.body}}).then((response)=>{
-//             console.log(response);
-//             res.json(response)
-//         })
-
-//     } catch (error) {
-//         console.log(error);
-
-//     }
-
-//  }
+const ReportJob = async (req, res) => {
+  const ReportJob = new JobReportModel(req.body);
+  try {
+    const Reports = await ReportJob.save();
+    await JobModel.updateOne(
+      { _id: req.body.JobId },
+      { $push: { Reports: req.body.userId } }
+    );
+    res.json(Reports);
+  } catch (error) {
+    res.json(error);
+  }
+};
 
 /* -------------------------------------------------------------------------- */
-/*                              GET REPORT BY ID                              */
+/*                              GET JOB    BY ID                              */
 /* -------------------------------------------------------------------------- */
 
 const getJObs = async (req, res) => {
-  console.log("he");
-  console.log(req.params.id, "ytyty");
   const id = req.params.id;
   try {
     await JobModel.findById(req.params.id)
@@ -727,26 +697,84 @@ const getJObs = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const jobRequests = async (req, res) => {
-    console.log("reached ....");
-    console.log(req.params.id,"jkj");
-    console.log(req.body,"hjhjh");
   try {
     const job = await JobModel.findById(req.params.id);
 
     // if (job.userId !== req.body.id) {
 
-      if (!job.jobRequests.includes(req.body.userId)) {
-        await job.updateOne({ $push: { jobRequests: req.body.userId } });
-        res.status(200).json("The User has applied for Job");
-      } else {
-        res.status(404).json("You have already applied for this Job");
-      }
+    if (!job.jobRequests.includes(req.body.userId)) {
+      await job.updateOne({ $push: { jobRequests: req.body.userId } });
+      res.status(200).json("The User has applied for Job");
+    } else {
+      res.status(404).json("You have already applied for this Job");
+    }
     // } else {
     //     res.status(404).json("You posted this Job, So that You Can't Apply!");
 
     // }
   } catch (err) {
-    res.status(500).json({msg:"error occured"});
+    res.status(500).json({ msg: "error occured" });
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                  JOB APPLY                                 */
+/* -------------------------------------------------------------------------- */
+
+const JobApply = async (req, res) => {
+  try {
+    const JobApplyData = new JobRequestModel({
+      Applicant: req.body.Applicant,
+      Resume: req.file.filename,
+      JobId: req.body.JobId,
+      PostedBy: req.body.postedId,
+      AppliedBy: req.body.AppliedBy,
+      Created: Date.now(),
+    });
+    let result = await JobApplyData.save();
+    if (!JobModel?.jobRequests?.includes(JobApplyData.Applicant)) {
+      let data = await JobModel.updateOne(
+        { _id: req.body.JobId },
+        { $push: { jobRequests: JobApplyData.Applicant } }
+      );
+
+      if (result && data) {
+        res.status(200).json({ status: true });
+      } else {
+        res.status(200).json({ status: false });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              EDIT USER PROFILE                             */
+/* -------------------------------------------------------------------------- */
+
+const EditProfile = (req, res) => {
+  try {
+    const user = User.findByIdAndUpdate(
+      { id: req.params.id },
+      {
+        $set: {},
+      }
+    );
+  } catch (error) {}
+};
+
+/* -------------------------------------------------------------------------- */
+/*                              VIEW JOB REQUESTS                             */
+/* -------------------------------------------------------------------------- */
+
+const viewJobRequests = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    let reports = await JobRequestModel.find({ PostedBy: userId });
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json(error);
   }
 };
 
@@ -781,4 +809,9 @@ module.exports = {
   ReportPost,
   getJObs,
   jobRequests,
+  ReportJob,
+  deleteJob,
+  JobApply,
+  viewJobRequests,
+  rejectJobRequests,
 };

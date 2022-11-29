@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const ReportSchema = new mongoose.Schema({
+const JobReportSchema = new mongoose.Schema({
 
    userId:{
     type:String,
@@ -9,7 +9,7 @@ const ReportSchema = new mongoose.Schema({
 
    },
 
-   postId:{
+   JobId:{
     type:String,
     required:true,
 
@@ -24,5 +24,5 @@ const ReportSchema = new mongoose.Schema({
 
 )
 
-const ReportModel = mongoose.model('Reports',ReportSchema)
-module.exports=ReportModel
+const JobReportModel = mongoose.model('JobReports',JobReportSchema)
+module.exports=JobReportModel

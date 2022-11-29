@@ -21,6 +21,7 @@ import ErrorPage from "./Components/error";
 import AdminAuth from "./Components/AdminAuth";
 import JobDescpg from "./Pages/user/Jobdesc";
 import ReportsMan from "./Pages/admin/Report";
+import JobReqpg from "./Pages/user/JobRequest";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/profile/:username" element={<ProfilePage />} />
                 <Route path="/Job" element={<Jobpg />} />
                 <Route path="/Jobdesc/:id" element={<JobDescpg />} />
+                <Route path="/Jobrequests" element={<JobReqpg />} />
                 <Route path="/Network" element={<Networkpg />} />
                 <Route path="/Chat" element={<ChatPage />} />
                 </Route>

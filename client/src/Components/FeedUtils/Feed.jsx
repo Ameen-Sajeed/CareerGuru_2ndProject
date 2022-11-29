@@ -227,7 +227,8 @@ function Feed() {
 
       <div className="feeds">
         {posts.map((obj) => (
-          <Post key={obj.id} post={obj} />
+          obj.Reports.includes(userId) ? null
+          :<Post key={obj.id} post={obj} />
         ))}
       </div>
     </div>

@@ -5,6 +5,7 @@ const JobSchema = new mongoose.Schema(
     userId: {
       type: String,
       required: true,
+      ref:"JobRequests"
     },
     Company: {
       type: String,
@@ -34,6 +35,15 @@ const JobSchema = new mongoose.Schema(
       type: Array,
       default:[]
     },
+    Reports:{
+      type:Array,
+      default:[],
+     },
+     ReportStatus:{
+      type:String,
+      default:"active"
+
+  },
   },
   { timestamps: true }
 );

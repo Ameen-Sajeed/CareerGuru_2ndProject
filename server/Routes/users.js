@@ -1,7 +1,7 @@
 const express = require('express')
 const multer = require('multer')
 const { PostSignUp, PostLogin, UpdateUser, deleteUser, followUser, unfollowUser, createPost, findJob,
-    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers, userPost, createVidPost, createChat, userChats, findChats, addMessage, getMessages, getUser, ReportPost, addReports, getReport, getJObs, jobRequests } = require('../controllers/users');
+    updatePost, deletePost, LikePost, getPost, getAllPosts, findUsers, getUserPost, verifyOtp, createComment, addComment, getPostComments, createjob, findCloseUsers, userPost, createVidPost, createChat, userChats, findChats, addMessage, getMessages, getUser, ReportPost, addReports, getReport, getJObs, jobRequests, ReportJob, deleteJob, JobApply, viewJobRequests, rejectJobRequests } = require('../controllers/users');
 const check = require('../middlewares/verify');
 const router = express.Router()
 var upload = require('../helpers/multer')
@@ -52,6 +52,14 @@ router.post('/createJob',createjob)
 router.get('/job/getjob',findJob)
 router.get ('/findjob/:id',getJObs)
 router.put('/applyjob/:id',jobRequests)
+router.post('/reportJob/:id',ReportJob)
+router.delete('/deljob/:id',deleteJob)
+router.post('/applyJob',upload.single('file'),JobApply)
+router.get('/viewJobRequests/:id',viewJobRequests)
+router.put('/rejectjob/:id',rejectJobRequests)
+
+
+
 
 
 

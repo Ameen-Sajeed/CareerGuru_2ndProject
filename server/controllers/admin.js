@@ -181,6 +181,32 @@ const ViewSingleReport = async (req, res) => {
   }
 };
 
+/* -------------------------------------------------------------------------- */
+/*                            BLOCK REPORTED POSTS                            */
+/* -------------------------------------------------------------------------- */
+
+const blockReport = async (req,res)=>{
+  try {
+    PostModel.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          ReportStatus: "inactive",
+        },
+      }
+    )
+      .then((response) => {
+        console.log(response, "popop");
+        if (response) res.status(200).json("the post has been blocked");
+      })
+      .catch((error) => {
+        res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getUsers,
   blockUser,
@@ -190,4 +216,5 @@ module.exports = {
   getAllComments,
   getAllReports,
   ViewSingleReport,
+  blockReport
 };

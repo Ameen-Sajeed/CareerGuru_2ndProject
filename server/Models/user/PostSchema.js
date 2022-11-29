@@ -26,6 +26,11 @@ const PostSchema = new mongoose.Schema({
       type:Array,
       default:[],
      },
+     ReportStatus:{
+      type:String,
+      default:"active"
+
+  },
 
    Created: Date,
 

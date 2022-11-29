@@ -1,9 +1,7 @@
 const express = require('express')
-const { getUsers, blockUser, UnblockUser, adminLogin, getAllPosts, getAllPost, getAllComments, getAllReports, ViewSingleReport } = require('../controllers/admin')
+const { getUsers, blockUser, UnblockUser, adminLogin, getAllPosts, getAllPost, getAllComments, getAllReports, ViewSingleReport, blockReport } = require('../controllers/admin')
 const check = require('../middlewares/verify')
 const router = express.Router()
-
-
 
 
 router.post('/login',adminLogin)
@@ -25,5 +23,8 @@ router.get('/allcomments',getAllComments)
 router.get('/allreports',getAllReports)
 
 router.get('/singlereports/:id',ViewSingleReport)
+
+router.patch('/blockPosts/:id',blockReport)
+
 
 module.exports = router
