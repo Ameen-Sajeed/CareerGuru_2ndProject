@@ -3,11 +3,16 @@ import Header from "../../Components/FeedUtils/Header";
 import Leftbar from "../../Components/FeedUtils/Leftbar";
 import Rightbar from "../../Components/FeedUtils/Rightbar";
 import "../../Components/FeedUtils/Header.css";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {io} from 'socket.io-client'
+import { useSelector } from "react-redux";
 
 function Feedpg() {
   const navigate = useNavigate();
+  const socket = useRef()
+  const user  = useSelector((state) => state.user);
+
   useEffect(() => {
     const token = localStorage.getItem("usertoken");
     console.log(token, "hy there");
@@ -16,13 +21,18 @@ function Feedpg() {
     }
   });
 
+useEffect(()=>{
+  socket.current = io('http://localhost:8800');
+  socket.current.emit('new-user-add',user._id)
+},[socket,user])
+
   return (
     <div className="bd">
-      <Header />
+      <Header socket={socket}/>
       <main>
         <div className="container flex">
           <Leftbar />
-          <Feed />
+          <Feed socket={socket} />
           <Rightbar />
         </div>
       </main>

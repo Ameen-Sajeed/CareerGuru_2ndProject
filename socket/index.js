@@ -25,6 +25,16 @@ const io = require("socket.io")(8800, {
       // send all active users to all users
       io.emit("get-users", activeUsers);
     });
+    
+    // notifications
+
+    socket.on("send-notifications",({senderId,receiverId,type})=>{
+     const user = activeUsers.find((user) => user.userId === receiverId);
+      io.to(user.socketId).emit('getNotification',{
+        senderId,
+        type,
+      })
+    })
   
     // send message to a specific user
     socket.on("send-message", (data) => {

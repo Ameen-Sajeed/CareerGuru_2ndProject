@@ -1,7 +1,5 @@
-import axios from "axios";
+import userinstance from "../axios";
 
-const API = axios.create({baseURL:'http://localhost:5000'})
+export const GetMessage = (id) => userinstance.get(`/message/${id}`);
 
-export const GetMessage = (id) => API.get(`/message/${id}`)
-
-export const addMessage = (data) => API.post('/addMessage/',data)
+export const addMessage = (data) => userinstance.post("/addMessage/", data);

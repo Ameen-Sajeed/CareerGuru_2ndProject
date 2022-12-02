@@ -23,7 +23,6 @@ const {
   createjob,
   findCloseUsers,
   userPost,
-  createVidPost,
   createChat,
   userChats,
   findChats,
@@ -31,8 +30,6 @@ const {
   getMessages,
   getUser,
   ReportPost,
-  addReports,
-  getReport,
   getJObs,
   jobRequests,
   ReportJob,
@@ -40,7 +37,6 @@ const {
   JobApply,
   viewJobRequests,
   rejectJobRequests,
-  viewJobDetails,
   EditProfile,
   SearchUsers,
 } = require("../controllers/users");
@@ -56,55 +52,58 @@ router.post("/verifyOtp", verifyOtp);
 
 // CRUD OF USERS
 
-router.put("/:id", UpdateUser);
-router.delete("/:id", deleteUser);
-router.put("/follow/:id", followUser);
-router.put("/unfollow/:id", unfollowUser);
+router.put("/:id", check, UpdateUser);
+router.delete("/:id", check, deleteUser);
+router.put("/follow/:id", check, followUser);
+router.put("/unfollow/:id", check, unfollowUser);
 router.get("/findUsers", check, findUsers);
-router.get("/:id", getUserPost);
-router.get("/closefriends/:id", findCloseUsers);
-router.get("/getUser/:id", getUser);
-router.get("/search/users/:id",SearchUsers)
+router.get("/:id", check, getUserPost);
+router.get("/closefriends/:id", check, findCloseUsers);
+router.get("/getUser/:id", check, getUser);
+router.get("/search/users/:id", check, SearchUsers);
 
 // CRUD OF POSTS
 
-router.post("/createPost", upload.single("image"), createPost);
-router.put("/post/:id", updatePost);
-router.delete("/delpost/:id", deletePost);
-router.put("/post/like/:id", LikePost);
-router.get("/post/:id", getPost);
-router.get("/post/timeline/:userId", getAllPosts);
-router.post("/addcomment/:id", addComment);
-router.get("/getcomments/:id", getPostComments);
-router.post("/reportPost/:id", ReportPost);
+router.post("/createPost", upload.single("image"),createPost);
+router.put("/post/:id", check, updatePost);
+router.delete("/delpost/:id", check, deletePost);
+router.put("/post/like/:id", check, LikePost);
+router.get("/post/:id", check, getPost);
+router.get("/post/timeline/:userId", check, getAllPosts);
+router.post("/addcomment/:id", check, addComment);
+router.get("/getcomments/:id", check, getPostComments);
+router.post("/reportPost/:id", check, ReportPost);
 // CRUD OF JOBS
 
-router.post("/createJob", createjob);
-router.get("/job/getjob", findJob);
-router.get("/findjob/:id", getJObs);
-router.put("/applyjob/:id", jobRequests);
-router.post("/reportJob/:id", ReportJob);
-router.delete("/deljob/:id", deleteJob);
-router.post("/applyJob", upload.single("file"), JobApply);
-router.get("/viewJobRequests/:id", viewJobRequests);
-router.put("/rejectjob/:id", rejectJobRequests);
+router.post("/createJob", check, createjob);
+router.get("/job/getjob", check, findJob);
+router.get("/findjob/:id", check, getJObs);
+router.put("/applyjob/:id", check, jobRequests);
+router.post("/reportJob/:id", check, ReportJob);
+router.delete("/deljob/:id", check, deleteJob);
+router.post("/applyJob", upload.single("file"),JobApply);
+router.get("/viewJobRequests/:id", check, viewJobRequests);
+router.put("/rejectjob/:id", check, rejectJobRequests);
 
 // PROFILE
 
-router.get("/profile/:id", userPost);
-router.post('/editProfile/:id',upload.single("profilePicture"),EditProfile)
+router.get("/profile/:id", check, userPost);
+router.post(
+  "/editProfile/:id",
+  check,
+  upload.single("profilePicture"),
+  EditProfile
+);
 
 // CHATS
 
-router.post("/createChat", createChat);
-router.get("/chat/:userId", userChats);
-router.post("/findchat/:firstId/:secondId", findChats);
+router.post("/createChat", check, createChat);
+router.get("/chat/:userId", check, userChats);
+router.post("/findchat/:firstId/:secondId", check, findChats);
 
 // MESSAGES
 
-router.post("/addMessage", addMessage);
-router.get("/message/:chatId", getMessages);
-
-// router.post('/addreport/:id',addReports)
+router.post("/addMessage", check, addMessage);
+router.get("/message/:chatId", check, getMessages);
 
 module.exports = router;

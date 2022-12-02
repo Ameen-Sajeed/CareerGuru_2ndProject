@@ -1,5 +1,3 @@
-import axios from "axios";
+import userinstance from "../axios";
 
-const API = axios.create({baseURL:'http://localhost:5000'})
-
-export const getUser = (id) => API.get(`/getUser/${id}`)
+export const getUser = (id) => userinstance.get(`/getUser/${id}`);

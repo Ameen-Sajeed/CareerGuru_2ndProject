@@ -824,7 +824,7 @@ const EditProfile = async (req, res) => {
 const viewJobRequests = async (req, res) => {
   const userId = req.params.id;
   try {
-    let reports = await JobRequestModel.find({ PostedBy: userId }).populate(
+    let reports = await JobRequestModel.find({ PostedBy: userId }).sort({_id:-1}).populate(
       "JobId"
     );
     res.status(200).json(reports);

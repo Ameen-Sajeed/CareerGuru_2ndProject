@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import me from "../../../../assets/images/us.webp";
+import userinstance from "../../../../axios";
 import { userRequest } from "../../../../Constants/Constant";
 
 function Network() {
@@ -15,10 +16,8 @@ function Network() {
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/findUsers", {
-        headers: { "x-access-token": localStorage.getItem("usertoken") },
-      })
+    userinstance
+      .get("http://localhost:5000/findUsers")
       .then((response) => {
         if (response.data) {
           setForms(response.data);
@@ -31,29 +30,12 @@ function Network() {
       });
   }, [check]);
 
-
-
-  // useEffect(() => {
-
-  //   let findUsers = async ()=>{
-  //     let response = await userRequest({
-  //       method:"GET",
-  //       url:'/findUsers'
-  //     })
-
-  //     console.log(response.data);
-  //     setForms(response.data);
-
-  //   }
-  //   findUsers()
-  // }, [check]);
-
   /* -------------------------------------------------------------------------- */
   /*                                FOLLOW USERS                                */
   /* -------------------------------------------------------------------------- */
 
   const handleSubmit = async (id) => {
-    await axios
+    await userinstance
       .put(`http://localhost:5000/follow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
@@ -68,14 +50,14 @@ function Network() {
         console.log("erorr ocurred");
       });
   };
-/* -------------------------------------------------------------------------- */
-/*                               UNFOLLOW USERS                               */
-/* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
+  /*                               UNFOLLOW USERS                               */
+  /* -------------------------------------------------------------------------- */
   const handleSubmitUndo = async (id) => {
     console.log("call");
     console.log(userData._id);
     console.log(id);
-    await axios
+    await userinstance
       .put(`http://localhost:5000/unfollow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
@@ -97,52 +79,54 @@ function Network() {
         <div class="max-w-full grid grid-cols-3 gap-4">
           {forms.map((obj) => {
             return (
-              <> {
-                obj.username !== userData.username ?
-              
-              <div class="bg-white shadow-xl rounded-lg py-2 ">
-                <div class="photo-wrapper p-2">
-                  <img
-                    class="w-20 h-20 rounded-full mx-auto"
-                    src={me}
-                    alt="John Doe"
-                  />
-                </div>
-                <div class="p-2">
-                  <h3 class="text-center text-xl text-gray-800 font-extralight leading-8">
-                    {obj.username}
-                  </h3>
-                  <div class="text-center text-gray-400 text-xs font-semibold truncate">
-                    <h6>{obj.email}</h6>
-                  </div>
-                  {/* <a class="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium" href="#">View Profile</a> */}
+              <>
+                {" "}
+                {obj.username !== userData.username ? (
+                  <div class="bg-white shadow-xl rounded-lg py-2 ">
+                    <div class="photo-wrapper p-2">
+                      <img
+                        class="w-20 h-20 rounded-full mx-auto"
+                        src={me}
+                        alt="John Doe"
+                      />
+                    </div>
+                    <div class="p-2">
+                      <h3 class="text-center text-xl text-gray-800 font-extralight leading-8">
+                        {obj.username}
+                      </h3>
+                      <div class="text-center text-gray-400 text-xs font-semibold truncate">
+                        <h6>{obj.email}</h6>
+                      </div>
+                      {/* <a class="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium" href="#">View Profile</a> */}
 
-                  {obj.followers.includes(userId) ? (
-                    <div class="text-center my-3">
-                      <button
-                        className="btn bg-blue-500 text-white"
-                        onClick={(e) => {
-                          handleSubmitUndo(obj._id);
-                        }}
-                      >
-                        UnFollow
-                      </button>
+                      {obj.followers.includes(userId) ? (
+                        <div class="text-center my-3">
+                          <button
+                            className="btn bg-blue-500 text-white"
+                            onClick={(e) => {
+                              handleSubmitUndo(obj._id);
+                            }}
+                          >
+                            UnFollow
+                          </button>
+                        </div>
+                      ) : (
+                        <div class="text-center my-3">
+                          <button
+                            className="btn bg-blue-500 text-white"
+                            onClick={(e) => {
+                              handleSubmit(obj._id);
+                            }}
+                          >
+                            Follow
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div class="text-center my-3">
-                      <button
-                        className="btn bg-blue-500 text-white"
-                        onClick={(e) => {
-                          handleSubmit(obj._id);
-                        }}
-                      >
-                        Follow
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </div>
-              :null}</>);
+                  </div>
+                ) : null}
+              </>
+            );
           })}
         </div>
       </div>

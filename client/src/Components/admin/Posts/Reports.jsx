@@ -3,34 +3,35 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import format from "moment";
 import moment from "moment";
+import adminInstance from "../../../adminaxios";
 
 function Reports() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
- const [forms, setForms] = useState([]);
- const id = useParams().id;
+  const [forms, setForms] = useState([]);
+  const id = useParams().id;
 
- console.log(id, "jhjhjhjh");
+  console.log(id, "jhjhjhjh");
 
-    useEffect(() => {
-        axios
-          .get(`http://localhost:5000/admin/singlereports/${id}`,)
-          .then((response) => {
-            if (response.data) {
-              console.log(response.data, "hjj");
-              setForms(response.data);
-            } else {
-              console.log("erorr");
-            }
-          })
-          .catch((error) => {
-            localStorage.removeItem("token");
-            navigate("/admin/login");
-            console.log(error, "erorr ocurred");
-          });
-      }, []);
+  useEffect(() => {
+    adminInstance
+      .get(`http://localhost:5000/admin/singlereports/${id}`)
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data, "hjj");
+          setForms(response.data);
+        } else {
+          console.log("erorr");
+        }
+      })
+      .catch((error) => {
+        localStorage.removeItem("token");
+        navigate("/admin/login");
+        console.log(error, "erorr ocurred");
+      });
+  }, []);
 
-      console.log(forms,"hjhjh");
+  console.log(forms, "hjhjh");
   return (
     <div>
       <h2 className="text-2xl font-bold text-blue-400 p-10">Reports</h2>
@@ -54,7 +55,6 @@ function Reports() {
                 <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   DATE OF REPORT
                 </th>
-          
               </tr>
             </thead>
             <tbody>
@@ -68,8 +68,6 @@ function Reports() {
 
                     <td className="text-center p-4">{obj.Content}</td>
                     <td className="text-center p-4">{obj.date}</td>
-                    
-                    
                   </tr>
                 );
               })}

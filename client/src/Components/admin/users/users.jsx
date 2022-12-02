@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "timeago.js";
+import adminInstance from "../../../adminaxios";
 function Users() {
   const [users, SetUsers] = useState("");
   const [forms, setForms] = useState([]);
@@ -12,10 +13,8 @@ function Users() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/admin/users", {
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
+    adminInstance
+      .get("http://localhost:5000/admin/users")
       .then((response) => {
         if (response.data) {
           // console.log(token);
@@ -33,7 +32,7 @@ function Users() {
   }, [reducerValue]);
 
   const blockUser = (id) => {
-    axios
+    adminInstance
       .patch("http://localhost:5000/admin/blockUsers/" + id)
       .then((result) => {
         if (result.status == 200) {
@@ -49,7 +48,7 @@ function Users() {
       });
   };
   const UnblockUser = (id) => {
-    axios
+    adminInstance
       .put("http://localhost:5000/admin/UnblockUsers/" + id)
       .then((result) => {
         if (result.status == 200) {

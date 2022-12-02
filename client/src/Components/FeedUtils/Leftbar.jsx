@@ -1,13 +1,10 @@
 import "./Header.css";
-import me from "../../assets/images/me.jpg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Modal } from "@mui/material";
+
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
-import StreetviewIcon from '@mui/icons-material/Streetview';
+import StreetviewIcon from "@mui/icons-material/Streetview";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import WorkIcon from "@mui/icons-material/Work";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
@@ -31,10 +28,10 @@ function Leftbar() {
       link: "/job",
     },
     {
-        title: "JobRequests",
-        icon: <StreetviewIcon />,
-        link: "/Jobrequests",
-      },
+      title: "JobRequests",
+      icon: <StreetviewIcon />,
+      link: "/Jobrequests",
+    },
     {
       title: "Chat",
       icon: <ChatBubbleIcon />,
@@ -66,7 +63,7 @@ function Leftbar() {
     <div className="left ">
       <a className="profile">
         <div className="profile-photo">
-          <img src={PF+userData.profilePicture} alt="" />
+          <img src={PF + userData.profilePicture} alt="" />
         </div>
         <div className="handle">
           <h4>{userData.username}</h4>

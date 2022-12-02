@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { format } from "timeago.js";
 import axios from "axios";
 import { DeleteJob } from "../../../../API/Job";
+import userinstance from "../../../../axios";
 
 function JobBox({ job }) {
   const userData = useSelector((state) => state.user);
@@ -39,7 +40,7 @@ function JobBox({ job }) {
     });
 
     try {
-      axios
+      userinstance
         .post(`http://localhost:5000/reportJob/${job._id}`, { ...report })
         .then((response) => {
           console.log(response);

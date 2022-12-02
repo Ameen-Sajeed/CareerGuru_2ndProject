@@ -2,8 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { profileUpdate } from "../../../Features/Auth/authSlice";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import "./Profile.css";
+import userinstance from "../../../axios";
 
 function Profile() {
   const userData = useSelector((state) => state.user);
@@ -72,7 +73,7 @@ function Profile() {
         formData.append(key, profile[key]);
       }
       console.log(formData);
-      axios
+      userinstance
         .post(`http://localhost:5000/editProfile/${userId}`, formData)
         .then((response) => {
           console.log(response.data.data, "opopop");
@@ -86,11 +87,13 @@ function Profile() {
           }
         });
     }
-  }; 
+  };
 
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await axios.get(`http://localhost:5000/profile/${userId}`);
+      const res = await userinstance.get(
+        `http://localhost:5000/profile/${userId}`
+      );
       setPost(res.data);
     };
     fetchPost();
@@ -169,7 +172,7 @@ function Profile() {
                 <span class="font-semibold text-gray-800 block">136</span>
                 posts
               </li> */}
-{/* 
+              {/* 
               <li>
                 <span class="font-semibold text-gray-800 block">40.5k</span>
                 followers
@@ -217,10 +220,9 @@ function Profile() {
                                         space-x-4 h-full"
                               >
                                 <span class="p-2">
-                                  <ThumbUpIcon/>{obj.likes.length}
+                                  <ThumbUpIcon />
+                                  {obj.likes.length}
                                 </span>
-
-                        
                               </div>
                             </div>
                           </article>

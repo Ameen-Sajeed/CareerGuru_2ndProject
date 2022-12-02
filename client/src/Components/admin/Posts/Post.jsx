@@ -3,19 +3,19 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import format from "moment";
 import moment from "moment";
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css';
+import { confirmAlert } from "react-confirm-alert"; 
+import "react-confirm-alert/src/react-confirm-alert.css";
+import adminInstance from "../../../adminaxios";
 
 function Post() {
   const navigate = useNavigate();
 
   const [forms, setForms] = useState([]);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const [status,SetStatus] = useState(true)
-
+  const [status, SetStatus] = useState(true);
 
   useEffect(() => {
-    axios
+    adminInstance
       .get("http://localhost:5000/admin/allpost", {
         headers: { "x-access-token": localStorage.getItem("token") },
       })
@@ -34,55 +34,47 @@ function Post() {
       });
   }, [status]);
 
-  // const handleblock = async()=>{
-  //   try {
-  //     axios.patch(`http://localhost:5000/admin/blockPosts/${forms._id}`).then((response)=>{
-  //       console.log(response);
-  //     })
-      
-  //   } catch (error) {
-  //     console.log(error);
-      
-  //   }
-  // }
-
-
-  const postBlock = (e,id) => {
-
-    e.preventDefault()
+  const postBlock = (e, id) => {
+    e.preventDefault();
     confirmAlert({
-        customUI: ({ onClose }) => {
-          return (
-            <div className='custom-ui flex flex-col justify-center w-[400px] h-[350px] bg-slate-200 items-center rounded-2xl '>
-              <h1 className='flex justify-center p-2 text-xl font-semibold'>Are you sure?</h1>
-              {/* <p className='flex justify-center p-2 text-xl font-semibold'>You want to delete this file?</p> */}
-              <div className='flex space-x-2 p-2 '>
-              <button className='bg-white w-max h-max p-3 rounded-xl font-medium text-lg' onClick={onClose}>No</button>
-              <button className='bg-red-500 w-max h-max p-3 rounded-xl font-medium text-lg text-white'
+      customUI: ({ onClose }) => {
+        return (
+          <div className="custom-ui flex flex-col justify-center w-[400px] h-[350px] bg-slate-200 items-center rounded-2xl ">
+            <h1 className="flex justify-center p-2 text-xl font-semibold">
+              Are you sure?
+            </h1>
+            {/* <p className='flex justify-center p-2 text-xl font-semibold'>You want to delete this file?</p> */}
+            <div className="flex space-x-2 p-2 ">
+              <button
+                className="bg-white w-max h-max p-3 rounded-xl font-medium text-lg"
+                onClick={onClose}
+              >
+                No
+              </button>
+              <button
+                className="bg-red-500 w-max h-max p-3 rounded-xl font-medium text-lg text-white"
                 onClick={() => {
-                    // this.handleClickDelete();
+                  // this.handleClickDelete();
                   onClose();
-                  axios.patch(`http://localhost:5000/admin/blockPosts/${id}`).then((result => {
-                    console.log(result.status);
-                    // forceUpdate()
-                    SetStatus(!status)
-                    // setShowModal(false)
-                })).catch(error => console.log(error))
-                  
+                  adminInstance
+                    .patch(`http://localhost:5000/admin/blockPosts/${id}`)
+                    .then((result) => {
+                      console.log(result.status);
+                      // forceUpdate()
+                      SetStatus(!status);
+                      // setShowModal(false)
+                    })
+                    .catch((error) => console.log(error));
                 }}
               >
                 Yes, Block
               </button>
-
-              </div>
-            
             </div>
-          );
-        }
-      });
-   
-
-}
+          </div>
+        );
+      },
+    });
+  };
 
   return (
     <div>
@@ -133,7 +125,8 @@ function Post() {
                     <td className="text-center">{index + 1}</td>
                     <td className="text-center">{obj._id}</td>
                     <td className="text-center p-2">
-                      <img src={PF+obj.image} className="w-20 "></img> </td>
+                      <img src={PF + obj.image} className="w-20 "></img>{" "}
+                    </td>
                     <td className="text-center">{obj.desc}</td>
                     <td className="text-center">{obj.Reports.length}</td>
                     <td className="text-center">{obj.date}</td>
@@ -141,24 +134,30 @@ function Post() {
 
                     <td className="text-center">{obj.ReportStatus}</td>
                     <td className="text-center p-6 ">
-                     <Link to={`/admin/reports/${obj._id}`}><button
-                        type="button"
-                        class="  inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-200 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-                      >
-                        VIEW
-                      </button></Link> 
+                      <Link to={`/admin/reports/${obj._id}`}>
+                        <button
+                          type="button"
+                          class="  inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-blue-200 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                        >
+                          VIEW
+                        </button>
+                      </Link>
                     </td>
-                    {
-                      obj.ReportStatus == "active" ?
-                    
-                    <td className="text-center p-6 ">
-                      <button
-                        type="button"
-                        class="  inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-400 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out" onClick={(e)=>{postBlock(e,obj._id)}}
-                      >
-                        BLOCK
-                      </button>
-                    </td>:<p className="text-red-500 p-6 font-mono">Post Blocked</p>}
+                    {obj.ReportStatus == "active" ? (
+                      <td className="text-center p-6 ">
+                        <button
+                          type="button"
+                          class="  inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded-full shadow-md hover:bg-red-400 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
+                          onClick={(e) => {
+                            postBlock(e, obj._id);
+                          }}
+                        >
+                          BLOCK
+                        </button>
+                      </td>
+                    ) : (
+                      <p className="text-red-500 p-6 font-mono">Post Blocked</p>
+                    )}
                   </tr>
                 );
               })}

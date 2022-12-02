@@ -1,7 +1,6 @@
-import axios from "axios";
+import userinstance from "../axios";
 
-const API = axios.create({baseURL:'http://localhost:5000'})
+export const DeleteJob = (id) => userinstance.delete(`/deljob/${id}`);
 
-export const DeleteJob = (id) => API.delete(`/deljob/${id}`)
-
-export const rejectJob = (id,jobId) => API.put(`/rejectjob/${id}`,{jobId})
+export const rejectJob = (id, jobId) =>
+  userinstance.put(`/rejectjob/${id}`, { jobId });

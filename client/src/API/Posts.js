@@ -1,5 +1,3 @@
-import axios from "axios";
+import userinstance from "../axios";
 
-const API = axios.create({baseURL:'http://localhost:5000'})
-
-export const DeletePost = (id) => API.delete(`/delpost/${id}`)
+export const DeletePost = (id) => userinstance.delete(`/delpost/${id}`);

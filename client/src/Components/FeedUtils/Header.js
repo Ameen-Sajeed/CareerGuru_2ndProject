@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import axios from "axios";
-import me from "../../assets/images/us.webp";
+import userinstance from "../../axios";
 function Header() {
   const userData = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
@@ -16,7 +15,6 @@ function Header() {
 
   const handleLogout = () => {
     localStorage.removeItem("usertoken");
-    // localStorage.removeItem('user')
     navigate("/login");
   };
 
@@ -32,7 +30,7 @@ function Header() {
       let SearchInfo = e.target.value;
       console.log(SearchInfo, "hey there");
 
-      await axios
+      await userinstance
         .get(`http://localhost:5000/search/users/${SearchInfo}`)
         .then((response) => {
           console.log(response.data.data);
@@ -124,10 +122,12 @@ function Header() {
                   return (
                     <div className="">
                       <div className="p-4 flex justify-evenly  items-center w-full">
-                       <Link to={`/profile/${obj.username}`}><img
-                          className="w-10 h-10 rounded-full"
-                          src={PF+obj.profilePicture}
-                        ></img></Link> 
+                        <Link to={`/profile/${obj.username}`}>
+                          <img
+                            className="w-10 h-10 rounded-full"
+                            src={PF + obj.profilePicture}
+                          ></img>
+                        </Link>
                         <div>
                           <h2 className="font-bold">{obj.username}</h2>
                         </div>

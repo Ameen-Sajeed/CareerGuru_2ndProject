@@ -5,6 +5,7 @@ import format from "moment";
 import moment from "moment";
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import adminInstance from "../../../adminaxios";
 
 function JobManagement() {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ function JobManagement() {
 
 
   useEffect(() => {
-    axios
+    adminInstance
       .get("http://localhost:5000/admin/allJobs", {
         headers: { "x-access-token": localStorage.getItem("token") },
       })
@@ -49,7 +50,7 @@ function JobManagement() {
                 onClick={() => {
                     // this.handleClickDelete();
                   onClose();
-                  axios.patch(`http://localhost:5000/admin/blockJobs/${id}`).then((result => {
+                  adminInstance.patch(`http://localhost:5000/admin/blockJobs/${id}`).then((result => {
                     console.log(result.status);
                     // forceUpdate()
                     SetStatus(!status)

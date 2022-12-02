@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { DeleteJob } from "../../../../API/Job";
 import JobBox from "./JobBox";
+import userinstance from "../../../../axios";
 
 function JobFeed() {
   const userData = useSelector((state) => state.user);
@@ -43,7 +44,7 @@ function JobFeed() {
     });
 
     try {
-      axios
+      userinstance
         .post("http://localhost:5000/createJob", { ...Job })
         .then((response) => {
           console.log(response);
@@ -60,7 +61,7 @@ function JobFeed() {
 
   useEffect(() => {
     try {
-      axios.get("http://localhost:5000/job/getjob").then((response) => {
+      userinstance.get("http://localhost:5000/job/getjob").then((response) => {
         SetGet(response.data);
       });
     } catch (error) {

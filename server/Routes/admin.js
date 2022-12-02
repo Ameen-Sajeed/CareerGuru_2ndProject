@@ -1,41 +1,49 @@
-const express = require('express')
-const { getUsers, blockUser, UnblockUser, adminLogin, getAllPosts, getAllPost, getAllComments, getAllReports, ViewSingleReport, blockReport, ViewSingleReportJob, getAllJob, blockJob } = require('../controllers/admin')
-const check = require('../middlewares/verify')
-const router = express.Router()
+const express = require("express");
+const {
+  getUsers,
+  blockUser,
+  UnblockUser,
+  adminLogin,
+  getAllPost,
+  getAllComments,
+  getAllReports,
+  ViewSingleReport,
+  blockReport,
+  ViewSingleReportJob,
+  getAllJob,
+  blockJob,
+} = require("../controllers/admin");
+const check = require("../middlewares/verify");
+const router = express.Router();
 
-
-router.post('/login',adminLogin)
+router.post("/login", adminLogin);
 
 // USER MANAGEMENT
 
-router.get('/users',check,getUsers)
+router.get("/users", check, getUsers);
 
-router.patch('/blockUsers/:id',blockUser)
+router.patch("/blockUsers/:id", check, blockUser);
 
-router.put('/UnblockUsers/:id',UnblockUser)
+router.put("/UnblockUsers/:id", check, UnblockUser);
 
 // POST MANAGEMENT
 
-router.get('/allpost',getAllPost)
+router.get("/allpost", check, getAllPost);
 
-router.get('/allcomments',getAllComments)
+router.get("/allcomments", check, getAllComments);
 
-router.get('/allreports',check,getAllReports)
+router.get("/allreports", check, getAllReports);
 
-router.get('/singlereports/:id',ViewSingleReport)
+router.get("/singlereports/:id", check, ViewSingleReport);
 
-router.patch('/blockPosts/:id',blockReport)
+router.patch("/blockPosts/:id", check, blockReport);
 
 // JOB MANAGEMENT
 
-router.get('/singleJobreport/:id',ViewSingleReportJob)
+router.get("/singleJobreport/:id", check, ViewSingleReportJob);
 
-router.get('/allJobs',check,getAllJob)
+router.get("/allJobs", check, getAllJob);
 
-router.patch('/blockJobs/:id',blockJob)
+router.patch("/blockJobs/:id", check, blockJob);
 
-
-
-
-
-module.exports = router
+module.exports = router;

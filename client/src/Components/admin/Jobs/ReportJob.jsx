@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import format from "moment";
 import moment from "moment";
+import adminInstance from "../../../adminaxios";
 
 function JobReports() {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ function JobReports() {
  console.log(id, "jhjhjhjh");
 
     useEffect(() => {
-        axios
+        adminInstance
           .get(`http://localhost:5000/admin/singleJobreport/${id}`,)
           .then((response) => {
             if (response.data) {
