@@ -56,7 +56,7 @@ function Post({ post }) {
         .post(`http://localhost:5000/reportPost/${post._id}`, { ...report })
         .then((response) => {
           console.log(response);
-          window.location.reload();
+          // window.location.reload();
         });
     } catch (error) {}
   };
@@ -116,60 +116,63 @@ function Post({ post }) {
     fetchComments();
   }, [comments, updateComment]);
 
-  const deletepost = async()=>{
+  const deletepost = async(e)=>{
+    e.preventDefault()
    await DeletePost(post._id) 
    alert('post deleted successfully')
 
   }
 
   return (
-    <div>
+    <div> 
       <div className="feed">
-        <div className="head">
-          <div className="user">
-            <div className="profile-photo">
-              <img src={me} alt="" />
-            </div>
-            <div className="ingo">
-              <h3>{user.username}</h3>
-              <small>Dubai, {format(post.createdAt)}</small>
-            </div>
-          </div>
-          <span className="edit">
-            <i
-              className="uil uil-ellipsis-h cursor-pointer"
-              onClick={(e) => {
-                setOpen(!open);
-              }}
-            ></i>
-          </span>
+      
+         <div className="head">
+         <div className="user">
+           <div className="profile-photo">
+             <img src={PF+user.profilePicture} alt="" />
+           </div>
+           <div className="ingo">
+             <h3>{user.username}</h3>
+             <small>Dubai, {format(post.createdAt)}</small>
+           </div>
+         </div>
+         <span className="edit">
+           <i
+             className="uil uil-ellipsis-h cursor-pointer"
+             onClick={(e) => {
+               setOpen(!open);
+             }}
+           ></i>
+         </span>
 
-          {open && (
-            <div class="absolute right-0 z-20 w-22  py-2  overflow-hidden bg-white rounded-md shadow-xl dark:bg-blue-100 mr-80 m-4">
-              {
-                post.userId === userData._id ? 
+         {open && (
+           <div class="absolute right-0 z-20 w-22  py-2  overflow-hidden bg-white rounded-md shadow-xl dark:bg-blue-100 mr-80 m-4">
+             {
+               post.userId === userData._id ? 
+             
+             <a
+               href=""
+               class="block px-2 py-1 text-sm text-gray-600 capitalize font-extrabold  transition-colors duration-200 transform dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white" onClick={deletepost}
+             >
+          
+               <DeleteIcon/>
+               Delete
+             </a>
+
+             :<a
+               href="#"
+               class="block px-2 py-1   text-sm text-gray-600 capitalize  font-extrabold transition-colors duration-200 transform dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-blue-700 dark:hover:text-white" onClick={() => SetShowMod(true)}
+
+             > <FlagIcon/>
+               Report Post
               
-              <a
-                href=""
-                class="block px-2 py-1 text-sm text-gray-600 capitalize font-extrabold  transition-colors duration-200 transform dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white" onClick={deletepost}
-              >
-           
-                <DeleteIcon/>
-                Delete
-              </a>
 
-              :<a
-                href="#"
-                class="block px-2 py-1   text-sm text-gray-600 capitalize  font-extrabold transition-colors duration-200 transform dark:text-gray-900 hover:bg-gray-100 dark:hover:bg-blue-700 dark:hover:text-white" onClick={() => SetShowMod(true)}
-
-              > <FlagIcon/>
-                Report Post
-               
-
-              </a>}
-            </div>
-          )}
-        </div>
+             </a>}
+           </div>
+         )}
+       </div>
+       
         <div className="photo">
           <p className="text-lg font-light"> {post.desc}</p>
           <img src={PF + post.image} alt="" />

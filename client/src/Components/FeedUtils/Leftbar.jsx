@@ -50,6 +50,7 @@ function Leftbar() {
   const Navigate = useNavigate();
 
   const userData = useSelector((state) => state.user);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   // console.log(userData,"hkjhkjh")
 
@@ -65,7 +66,7 @@ function Leftbar() {
     <div className="left ">
       <a className="profile">
         <div className="profile-photo">
-          <img src={me} alt="" />
+          <img src={PF+userData.profilePicture} alt="" />
         </div>
         <div className="handle">
           <h4>{userData.username}</h4>

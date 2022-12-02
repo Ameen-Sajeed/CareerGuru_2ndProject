@@ -22,6 +22,9 @@ import AdminAuth from "./Components/AdminAuth";
 import JobDescpg from "./Pages/user/Jobdesc";
 import ReportsMan from "./Pages/admin/Report";
 import JobReqpg from "./Pages/user/JobRequest";
+import JobsMan from "./Pages/admin/Job";
+import JobReportsMan from "./Pages/admin/JobReport";
+import FriendProfilePage from "./Pages/user/FriendProfile";
 
 function App() {
   return (
@@ -41,7 +44,7 @@ function App() {
                 <Route element={<ProtectedApi/>}>
                 <Route path="/feed" element={<Feedpg />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/profile/:username" element={<ProfilePage />} />
+                <Route path="/profile/:username" element={<FriendProfilePage />} />
                 <Route path="/Job" element={<Jobpg />} />
                 <Route path="/Jobdesc/:id" element={<JobDescpg />} />
                 <Route path="/Jobrequests" element={<JobReqpg />} />
@@ -57,6 +60,8 @@ function App() {
                 <Route path="/admin/users" element={<UsersMan />} />
                 <Route path="/admin/posts" element={<PostsMan />} />
                 <Route path="/admin/reports/:id" element={<ReportsMan/>} />
+                <Route path="/admin/Jobs" element={<JobsMan />} />
+                <Route path="/admin/Jobreports/:id" element={<JobReportsMan/>} />
                 <Route path="/admin/home" element={<Dash />} />
                 </Route>
               </Routes>

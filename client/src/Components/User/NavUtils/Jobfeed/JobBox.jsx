@@ -54,7 +54,8 @@ function JobBox({ job }) {
 
   const deleteJob = async () => {
     await DeleteJob(job._id);
-    alert("post deleted successfully");
+    alert("job deleted successfully");
+    window.location.reload()
   };
 
   return (

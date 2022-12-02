@@ -84,7 +84,10 @@ function JobFeed() {
 
       <div className="feeds p-2">
         {get.map((obj) => (
-          <JobBox key={obj.id} job={obj} />
+          
+            obj.Reports.includes(userId) ? null
+
+          :<JobBox key={obj.id} job={obj} />
         ))}
       </div>
       {showMOd ? (

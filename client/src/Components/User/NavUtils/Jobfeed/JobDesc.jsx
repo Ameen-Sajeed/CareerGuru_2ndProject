@@ -77,24 +77,6 @@ function JobDesc() {
     });
   }, []);
 
-  // /* -------------------------------------------------------------------------- */
-  // /*                                APPY FOR JOB                                */
-  // /* -------------------------------------------------------------------------- */
-
-  // const applyJob = async ()=>{
-   
-  //   try {
-
-  //     await axios.put(`http://localhost:5000/applyjob/${id}`,{userId:userId,id:get.userId}).then((response)=>{
-
-  //     console.log(response);
-  //     alert('success')
-  //     })
-  //   } catch (error) {
-  //      console.log(error); 
-  //      alert(error)
-  //   }
-  // }
 
   return (
     <div className="middle  ">

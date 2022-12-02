@@ -22,6 +22,8 @@ function JobRequest() {
       });
   }, []);
 
+  console.log(get,"jobs");
+
   /* -------------------------------------------------------------------------- */
   /*                        REJECT JOBS REQUESTS                                */
   /* -------------------------------------------------------------------------- */
@@ -56,16 +58,16 @@ function JobRequest() {
                 </div>
                 <div className=" ">
                   <p className="text-blue-400 text-center font-bold">
-                    {obj.AppliedBy}
+                  {obj.AppliedBy}
                   </p>
-                  <a
-                    className="text-blue-400  p-2 font-mono"
-                    href={PF + obj.Resume}
-                    download
-                  >
-                    {" "}
-                    Download Resume
-                  </a>
+                  <p className="text-blue-900 text-center font-bold text-xs">
+                  {obj.JobId.Designation}
+
+                  </p>
+                  <p className="text-blue-900 text-center font-bold text-xs">
+                    {obj.JobId.location}
+                  </p>
+                  
                   <div className="flex p-2 items-center">
                     <span className="text-xs p-2">Applied:</span>
                     <p className="text-blue-400 text-center text-xs font-bold ">
@@ -73,6 +75,14 @@ function JobRequest() {
                       {format(obj.createdAt)}
                     </p>
                   </div>
+                  <a
+                    className="text-blue-400  p-4 font-mono"
+                    href={PF + obj.Resume}
+                    download
+                  >
+                    {" "}
+                    Download Resume
+                  </a>
                 </div>
                 <div class="p-2">
                   <h3 class="text-center text-xl text-gray-800 font-extralight leading-8"></h3>

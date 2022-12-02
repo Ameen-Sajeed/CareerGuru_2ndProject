@@ -32,7 +32,7 @@ export const SidebarData= [
 
     title:"Job Management",
     icon:<WorkIcon/>,
-    link:"/home"
+    link:"/admin/jobs"
 
 },
 {

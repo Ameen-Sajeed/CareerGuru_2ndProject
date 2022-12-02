@@ -17,7 +17,12 @@ const JobReportSchema = new mongoose.Schema({
 
    Content:{
     type:String,
-   },      
+   },  
+   ReportStatus:{
+      type:String,
+      default:"active"
+
+  },    
     
 },
 {timestamps:true}

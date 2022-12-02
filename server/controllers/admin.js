@@ -5,6 +5,9 @@ const CommentModel = require("../Models/user/commentSchema");
 const ReportModel = require("../Models/user/ReportSchema");
 const { populate } = require("../Models/user/userSchema");
 const PostModel = require("../Models/user/PostSchema");
+const JobReportModel = require("../Models/user/JobReportSchema");
+const JobModel = require("../Models/user/JobSchema");
+const JobRequestModel = require("../Models/user/JobRequests");
 
 /* -------------------------------------------------------------------------- */
 /*                                 ADMIN LOGIN                                */
@@ -125,6 +128,9 @@ const getAllPost = async (req, res) => {
   }
 };
 
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                              GET ALL COMMENTS                              */
 /* -------------------------------------------------------------------------- */
@@ -182,6 +188,47 @@ const ViewSingleReport = async (req, res) => {
 };
 
 /* -------------------------------------------------------------------------- */
+/*                                GET ALL JOBS                                */
+/* -------------------------------------------------------------------------- */
+
+const getAllJob = async (req, res) => {
+  try {
+    await JobModel.find({ Reports: { $ne: [] } })
+      .then((response) => {
+        res.status(200).json(response);
+
+        console.log(response, "response");
+      })
+      .catch((error) => {
+        res.status(401).json(error);
+      });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                          VIEW SINGLE REPORT JOB                            */
+/* -------------------------------------------------------------------------- */
+
+const ViewSingleReportJob = async (req, res) => {
+  console.log("reached");
+  const JobId = req.params.id;
+  console.log(JobId,"kjkjk");
+  try {
+    let reports = await JobReportModel.find({ JobId: JobId }).populate("userId");
+    res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+
+
+/* -------------------------------------------------------------------------- */
 /*                            BLOCK REPORTED POSTS                            */
 /* -------------------------------------------------------------------------- */
 
@@ -207,6 +254,33 @@ const blockReport = async (req,res)=>{
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/*                             BLOCK REPORTED JOBS                            */
+/* -------------------------------------------------------------------------- */
+
+const blockJob = async (req,res)=>{
+  try {
+    JobModel.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $set: {
+          ReportStatus: "inactive",
+        },
+      }
+    )
+      .then((response) => {
+        console.log(response, "popop");
+        if (response) res.status(200).json("the job has been blocked");
+      })
+      .catch((error) => {
+        res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 module.exports = {
   getUsers,
   blockUser,
@@ -216,5 +290,8 @@ module.exports = {
   getAllComments,
   getAllReports,
   ViewSingleReport,
-  blockReport
+  blockReport,
+  ViewSingleReportJob,
+  getAllJob,
+  blockJob
 };

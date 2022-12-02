@@ -16,6 +16,7 @@ const JobRequetsSchema = new mongoose.Schema({
    JobId:{
     type:String,
     required:true,
+    ref:"Jobs"
 
    },
 

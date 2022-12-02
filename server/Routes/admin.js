@@ -1,5 +1,5 @@
 const express = require('express')
-const { getUsers, blockUser, UnblockUser, adminLogin, getAllPosts, getAllPost, getAllComments, getAllReports, ViewSingleReport, blockReport } = require('../controllers/admin')
+const { getUsers, blockUser, UnblockUser, adminLogin, getAllPosts, getAllPost, getAllComments, getAllReports, ViewSingleReport, blockReport, ViewSingleReportJob, getAllJob, blockJob } = require('../controllers/admin')
 const check = require('../middlewares/verify')
 const router = express.Router()
 
@@ -20,11 +20,22 @@ router.get('/allpost',getAllPost)
 
 router.get('/allcomments',getAllComments)
 
-router.get('/allreports',getAllReports)
+router.get('/allreports',check,getAllReports)
 
 router.get('/singlereports/:id',ViewSingleReport)
 
 router.patch('/blockPosts/:id',blockReport)
+
+// JOB MANAGEMENT
+
+router.get('/singleJobreport/:id',ViewSingleReportJob)
+
+router.get('/allJobs',check,getAllJob)
+
+router.patch('/blockJobs/:id',blockJob)
+
+
+
 
 
 module.exports = router

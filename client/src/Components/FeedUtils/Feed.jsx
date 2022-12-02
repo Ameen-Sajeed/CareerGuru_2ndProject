@@ -56,7 +56,7 @@ function Feed() {
 
 
   const upload = (e) => {
-    // e.preventDefault()
+    e.preventDefault()
 
   const formData = new FormData()
   for(let key in post){
@@ -76,6 +76,7 @@ function Feed() {
           console.log("something went wrong");
         }
       });
+      setPost({...post,desc:"",image:""})
   };
 
 //   if (imageFile) {
@@ -130,7 +131,7 @@ function Feed() {
       );
     };
     fetchPost();
-  }, [userId]);
+  }, [userId,posts]);
 
   useEffect(() => {
     try {
@@ -171,6 +172,7 @@ function Feed() {
           type="text"
           placeholder="What's on Your Mind,Amien?"
           name="desc" 
+          value={post.desc}
           id="create-post"
           onChange={handleChange}
         />

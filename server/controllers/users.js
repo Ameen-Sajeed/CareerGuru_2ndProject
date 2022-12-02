@@ -163,11 +163,11 @@ const PostLogin = async (req, res) => {
 const UpdateUser = async (req, res) => {
   if (req.body.userId === req.params.id) {
     if (req.body.password) {
-      try {
-        req.body.password = await bcrypt.hash(req.body.password, 10);
-      } catch (err) {
-        return res.status(500).json(err);
-      }
+      // try {
+      //   req.body.password = await bcrypt.hash(req.body.password, 10);
+      // } catch (err) {
+      //   return res.status(500).json(err);
+      // }
     }
     try {
       const user = await User.findByIdAndUpdate(req.params.id, {
@@ -753,15 +753,68 @@ const JobApply = async (req, res) => {
 /*                              EDIT USER PROFILE                             */
 /* -------------------------------------------------------------------------- */
 
-const EditProfile = (req, res) => {
+const EditProfile = async (req, res) => {
+  console.log("reavhed");
+  console.log(req.params.id, "jhjhj");
+  console.log(req.body, "popo");
   try {
-    const user = User.findByIdAndUpdate(
-      { id: req.params.id },
-      {
-        $set: {},
+    console.log("try");
+
+    let editUser = await User.findById(req.params.id);
+    let allUser = await User.find({ _id: { $nin: req.params.id } });
+    let userNameExists = allUser.map((user) => {
+      console.log(user.username);
+      if (user.username == req.body.username) {
+        return false;
       }
-    );
-  } catch (error) {}
+    });
+
+    if (userNameExists.includes(false)) {
+      console.log("usernameindu");
+      res.status(200).json({ Update: false, msg: "User name already Exist" });
+    } else {
+      if (editUser) {
+        console.log("else");
+        if (req.file) {
+          var file = true;
+        } else {
+          var file = false;
+        }
+        let edit = await User.updateOne(
+          { _id: req.params.id },
+          {
+            $set: {
+              profilePicture: file
+                ? req.file.filename
+                : editUser.profilePicture,
+              username: req.body.username
+                ? req.body.username
+                : editUser.username,
+              bio: req.body.bio ? req.body.bio : editUser.bio,
+              phone: req.body.phone ? req.body.phone : editUser.phone,
+            },
+          },
+          { upsert: true }
+        );
+        let user = await User.findOne({ _id: req.params.id });
+        console.log(user, "hey ther");
+        if (edit) {
+          res
+            .status(200)
+            .json({ Update: true, msg: "Updated Successfully ", data: user });
+        } else {
+          res.status(200).json({ Update: false, msg: "Update not done" });
+        }
+      } else {
+        console.log("kerilla");
+        res.status(404).json("something went wrong");
+      }
+    }
+  } catch (error) {
+    res.status(500).json(error);
+    console.log("error");
+    console.log(error.message);
+  }
 };
 
 /* -------------------------------------------------------------------------- */
@@ -771,8 +824,29 @@ const EditProfile = (req, res) => {
 const viewJobRequests = async (req, res) => {
   const userId = req.params.id;
   try {
-    let reports = await JobRequestModel.find({ PostedBy: userId });
+    let reports = await JobRequestModel.find({ PostedBy: userId }).populate(
+      "JobId"
+    );
     res.status(200).json(reports);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+/* -------------------------------------------------------------------------- */
+/*                                SEARCH USERS                                */
+/* -------------------------------------------------------------------------- */
+
+const SearchUsers = async (req, res) => {
+  console.log("search data");
+  let data = req.params.id;
+  console.log(data, "searchusers");
+
+  try {
+    console.log("hey there");
+    let users = await User.find({"username": {$regex: '^' + data, $options: 'i'}})
+    //  let users= await User.find()
+    res.status(200).json({ data: users });
   } catch (error) {
     res.status(500).json(error);
   }
@@ -814,4 +888,6 @@ module.exports = {
   JobApply,
   viewJobRequests,
   rejectJobRequests,
+  EditProfile,
+  SearchUsers,
 };
