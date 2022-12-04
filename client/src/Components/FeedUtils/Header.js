@@ -132,7 +132,7 @@ function Header() {
                           <h2 className="font-bold">{obj.username}</h2>
                         </div>
                         <div>
-                          <span className="text-xs">MERN Stack Developer</span>
+                          <span className="text-xs">{obj.bio}</span>
                         </div>
                       </div>
                     </div>

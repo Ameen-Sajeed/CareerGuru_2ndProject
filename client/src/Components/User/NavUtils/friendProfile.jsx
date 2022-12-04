@@ -32,7 +32,7 @@ function FriendProfile() {
             Setdet(res.data);
           });
       });
-  }, [username]);
+  }, [username,check]);
 
   /* -------------------------------------------------------------------------- */
   /*                                FOLLOW USERS                                */
@@ -95,25 +95,37 @@ function FriendProfile() {
               <h2 class="text-3xl inline-block font-light md:mr-2 mb-2 sm:mb-0">
                 {username}
               </h2>
-              {/* <span class="inline-block fas fa-certificate fa-lg text-blue-500 
-                               relative mr-6 text-xl transform -translate-y-2" aria-hidden="true">
-            <i class="fas fa-check text-white text-xs absolute inset-x-0
-                               ml-1 mt-px"></i>
-          </span> */}
+
+
+{
+  user?.followers?.includes(userId ) ?
 
               <a
                 href="#"
                 class="bg-blue-500 px-2 py-1 
             text-white font-semibold text-sm rounded block text-center 
-            sm:inline-block"
-              >
-                Follow
+            sm:inline-block"  onClick={(e) => {
+              handleSubmitUndo(user._id);
+            }}
+          >
+              
+                UnFollow
               </a>
 
-              {/*     
-            <a href="#" class="bg-blue-500 px-2 py-1 
-                        text-white font-semibold text-sm rounded block text-center 
-                        sm:inline-block" ></a>  */}
+              
+              :<a
+                href="#"
+                class="bg-blue-500 px-2 py-1 
+            text-white font-semibold text-sm rounded block text-center 
+            sm:inline-block"    onClick={(e) => {
+              handleSubmit(user._id);
+            }}
+          >
+              
+                Follow
+              </a>}
+
+              
             </div>
 
             <ul class="hidden md:flex space-x-8 mb-4">

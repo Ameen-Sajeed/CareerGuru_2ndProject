@@ -544,8 +544,18 @@ const createChat = async (req, res) => {
   });
 
   try {
-    const result = await newChat.save();
-    res.status(200).json(result);
+    const findChat = await ChatModel.findOne({
+      members: { $all: [req.body.senderId, req.body.recieverId] },
+    });
+    console.log(findChat, "chat");
+    if (!findChat) {
+      const result = await newChat.save();
+      console.log("here");
+      res.status(200).json(result);
+    } else {
+      console.log("there");
+      res.status(200).json(findChat);
+    }
   } catch (error) {
     res.status(500).json(error);
   }
@@ -754,12 +764,7 @@ const JobApply = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const EditProfile = async (req, res) => {
-  console.log("reavhed");
-  console.log(req.params.id, "jhjhj");
-  console.log(req.body, "popo");
   try {
-    console.log("try");
-
     let editUser = await User.findById(req.params.id);
     let allUser = await User.find({ _id: { $nin: req.params.id } });
     let userNameExists = allUser.map((user) => {
@@ -812,7 +817,6 @@ const EditProfile = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json(error);
-    console.log("error");
     console.log(error.message);
   }
 };
@@ -824,9 +828,9 @@ const EditProfile = async (req, res) => {
 const viewJobRequests = async (req, res) => {
   const userId = req.params.id;
   try {
-    let reports = await JobRequestModel.find({ PostedBy: userId }).sort({_id:-1}).populate(
-      "JobId"
-    );
+    let reports = await JobRequestModel.find({ PostedBy: userId })
+      .sort({ _id: -1 })
+      .populate("JobId");
     res.status(200).json(reports);
   } catch (error) {
     res.status(500).json(error);
@@ -838,14 +842,13 @@ const viewJobRequests = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const SearchUsers = async (req, res) => {
-  console.log("search data");
   let data = req.params.id;
-  console.log(data, "searchusers");
 
   try {
     console.log("hey there");
-    let users = await User.find({"username": {$regex: '^' + data, $options: 'i'}})
-    //  let users= await User.find()
+    let users = await User.find({
+      username: { $regex: "^" + data, $options: "i" },
+    });
     res.status(200).json({ data: users });
   } catch (error) {
     res.status(500).json(error);

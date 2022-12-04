@@ -1,13 +1,10 @@
 const User = require("../Models/user/userSchema");
 const jwt = require("jsonwebtoken");
-const Post = require("../Models/user/PostSchema");
 const CommentModel = require("../Models/user/commentSchema");
 const ReportModel = require("../Models/user/ReportSchema");
-const { populate } = require("../Models/user/userSchema");
 const PostModel = require("../Models/user/PostSchema");
 const JobReportModel = require("../Models/user/JobReportSchema");
 const JobModel = require("../Models/user/JobSchema");
-const JobRequestModel = require("../Models/user/JobRequests");
 
 /* -------------------------------------------------------------------------- */
 /*                                 ADMIN LOGIN                                */
@@ -128,9 +125,6 @@ const getAllPost = async (req, res) => {
   }
 };
 
-
-
-
 /* -------------------------------------------------------------------------- */
 /*                              GET ALL COMMENTS                              */
 /* -------------------------------------------------------------------------- */
@@ -178,7 +172,7 @@ const getAllReports = async (req, res) => {
 const ViewSingleReport = async (req, res) => {
   console.log("reached");
   const postId = req.params.id;
-  console.log(postId,"kjkjk");
+  console.log(postId, "kjkjk");
   try {
     let reports = await ReportModel.find({ postId: postId }).populate("userId");
     res.status(200).json(reports);
@@ -207,9 +201,6 @@ const getAllJob = async (req, res) => {
   }
 };
 
-
-
-
 /* -------------------------------------------------------------------------- */
 /*                          VIEW SINGLE REPORT JOB                            */
 /* -------------------------------------------------------------------------- */
@@ -217,22 +208,22 @@ const getAllJob = async (req, res) => {
 const ViewSingleReportJob = async (req, res) => {
   console.log("reached");
   const JobId = req.params.id;
-  console.log(JobId,"kjkjk");
+  console.log(JobId, "kjkjk");
   try {
-    let reports = await JobReportModel.find({ JobId: JobId }).populate("userId");
+    let reports = await JobReportModel.find({ JobId: JobId }).populate(
+      "userId"
+    );
     res.status(200).json(reports);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
-
-
 /* -------------------------------------------------------------------------- */
 /*                            BLOCK REPORTED POSTS                            */
 /* -------------------------------------------------------------------------- */
 
-const blockReport = async (req,res)=>{
+const blockReport = async (req, res) => {
   try {
     PostModel.findByIdAndUpdate(
       { _id: req.params.id },
@@ -252,13 +243,13 @@ const blockReport = async (req,res)=>{
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 /* -------------------------------------------------------------------------- */
 /*                             BLOCK REPORTED JOBS                            */
 /* -------------------------------------------------------------------------- */
 
-const blockJob = async (req,res)=>{
+const blockJob = async (req, res) => {
   try {
     JobModel.findByIdAndUpdate(
       { _id: req.params.id },
@@ -278,8 +269,7 @@ const blockJob = async (req,res)=>{
   } catch (error) {
     console.log(error);
   }
-}
-
+};
 
 module.exports = {
   getUsers,
@@ -293,5 +283,5 @@ module.exports = {
   blockReport,
   ViewSingleReportJob,
   getAllJob,
-  blockJob
+  blockJob,
 };

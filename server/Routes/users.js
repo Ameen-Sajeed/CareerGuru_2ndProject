@@ -88,11 +88,7 @@ router.put("/rejectjob/:id", check, rejectJobRequests);
 // PROFILE
 
 router.get("/profile/:id", check, userPost);
-router.post(
-  "/editProfile/:id",
-  check,
-  upload.single("profilePicture"),
-  EditProfile
+router.post( "/editProfile/:id",upload.single("profilePicture"),EditProfile
 );
 
 // CHATS

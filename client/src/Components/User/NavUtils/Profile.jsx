@@ -73,7 +73,7 @@ function Profile() {
         formData.append(key, profile[key]);
       }
       console.log(formData);
-      userinstance
+      axios
         .post(`http://localhost:5000/editProfile/${userId}`, formData)
         .then((response) => {
           console.log(response.data.data, "opopop");
