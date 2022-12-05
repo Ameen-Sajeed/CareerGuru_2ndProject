@@ -18,7 +18,7 @@ const router = express.Router();
 
 router.post("/login", adminLogin);
 
-// USER MANAGEMENT
+ /* ----------------------------- USER MANAGEMENT ---------------------------- */
 
 router.get("/users", check, getUsers);
 
@@ -26,7 +26,7 @@ router.patch("/blockUsers/:id", check, blockUser);
 
 router.put("/UnblockUsers/:id", check, UnblockUser);
 
-// POST MANAGEMENT
+ /* ----------------------------- POST MANAGEMENT ---------------------------- */
 
 router.get("/allpost", check, getAllPost);
 
@@ -38,7 +38,7 @@ router.get("/singlereports/:id", check, ViewSingleReport);
 
 router.patch("/blockPosts/:id", check, blockReport);
 
-// JOB MANAGEMENT
+ /* ----------------------------- JOB MANAGEMENT ----------------------------- */
 
 router.get("/singleJobreport/:id", check, ViewSingleReportJob);
 

@@ -39,18 +39,20 @@ const {
   rejectJobRequests,
   EditProfile,
   SearchUsers,
+  getUserLastChats,
+  findNotications,
 } = require("../controllers/users");
 const check = require("../middlewares/verify");
 const router = express.Router();
 var upload = require("../helpers/multer");
 
-// REGISTER AND LOGIN
+ /* --------------------------- REGISTER AND LOGIN --------------------------- */
 
 router.post("/signup", PostSignUp);
 router.post("/login", PostLogin);
 router.post("/verifyOtp", verifyOtp);
 
-// CRUD OF USERS
+ /* ------------------------------ CRUD OF USERS ----------------------------- */
 
 router.put("/:id", check, UpdateUser);
 router.delete("/:id", check, deleteUser);
@@ -62,7 +64,7 @@ router.get("/closefriends/:id", check, findCloseUsers);
 router.get("/getUser/:id", check, getUser);
 router.get("/search/users/:id", check, SearchUsers);
 
-// CRUD OF POSTS
+ /* ------------------------------ CRUD OF POSTS ----------------------------- */
 
 router.post("/createPost", upload.single("image"),createPost);
 router.put("/post/:id", check, updatePost);
@@ -73,7 +75,9 @@ router.get("/post/timeline/:userId", check, getAllPosts);
 router.post("/addcomment/:id", check, addComment);
 router.get("/getcomments/:id", check, getPostComments);
 router.post("/reportPost/:id", check, ReportPost);
-// CRUD OF JOBS
+router.get('/notifications/:id',check,findNotications)
+
+ /* ------------------------------ CRUD OF JOBS ------------------------------ */
 
 router.post("/createJob", check, createjob);
 router.get("/job/getjob", check, findJob);
@@ -82,24 +86,25 @@ router.put("/applyjob/:id", check, jobRequests);
 router.post("/reportJob/:id", check, ReportJob);
 router.delete("/deljob/:id", check, deleteJob);
 router.post("/applyJob", upload.single("file"),JobApply);
-router.get("/viewJobRequests/:id", check, viewJobRequests);
+router.get("/viewJobRequests/:id",check, viewJobRequests);
 router.put("/rejectjob/:id", check, rejectJobRequests);
 
-// PROFILE
+ /* --------------------------------- PROFILE -------------------------------- */
 
 router.get("/profile/:id", check, userPost);
 router.post( "/editProfile/:id",upload.single("profilePicture"),EditProfile
 );
 
-// CHATS
+ /* ---------------------------------- CHATS --------------------------------- */
 
 router.post("/createChat", check, createChat);
-router.get("/chat/:userId", check, userChats);
-router.post("/findchat/:firstId/:secondId", check, findChats);
+router.get("/chat/:userId",check, userChats);
+router.post("/findchat/:firstId/:secondId", findChats);
 
-// MESSAGES
+ /* -------------------------------- MESSAGES -------------------------------- */
 
 router.post("/addMessage", check, addMessage);
 router.get("/message/:chatId", check, getMessages);
+router.get('/usermessages/:id',getUserLastChats)
 
 module.exports = router;

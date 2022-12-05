@@ -1,15 +1,32 @@
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import StreetviewIcon from "@mui/icons-material/Streetview";
 import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import WorkIcon from "@mui/icons-material/Work";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import { useEffect, useState } from "react";
+import userinstance from "../../axios";
 
-function Leftbar() {
+function Leftbar({socket}) {
+// const[notifications,setNotifications]=useState([])
+
+// useEffect(()=>{
+//   socket.on('getNotification',(data)=>{
+//     setNotifications((prev)=> [...prev,data])
+//   })
+// },[])
+const Navigate = useNavigate();
+
+const userData = useSelector((state) => state.user);
+const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
+
+
+
+
   const SidebarData = [
     {
       title: "Home",
@@ -37,17 +54,14 @@ function Leftbar() {
       icon: <ChatBubbleIcon />,
       link: "/chat",
     },
-    {
-      title: "Notifications",
-      icon: <DynamicFeedIcon />,
-      link: "/feed1",
-    },
+    // {
+    //   title: "Notifications",
+    //   icon: <DynamicFeedIcon />,
+    //   // link: "/chat",
+    //   click: notificationHandler ()
+    // },
   ];
 
-  const Navigate = useNavigate();
-
-  const userData = useSelector((state) => state.user);
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   // console.log(userData,"hkjhkjh")
 
@@ -59,11 +73,16 @@ function Leftbar() {
   }
   check();
 
+
+
+  
+
   return (
     <div className="left ">
       <a className="profile">
         <div className="profile-photo">
-          <img src={PF + userData.profilePicture} alt="" />
+          <img src={PF + userData.profilePicture} className="cursor-pointer"
+  alt="" />
         </div>
         <div className="handle">
           <h4>{userData.username}</h4>
@@ -78,13 +97,15 @@ function Leftbar() {
               className="menu-item activ"
               id={window.location.pathname == obj.link ? "active" : ""}
               key={key}
-              onClick={() => (window.location.pathname = obj.link)}
-            >
-              <span>
+              onClick={() => (window.location.pathname = obj.link)}>
+            
+              <span >
                 <i>{obj.icon}</i>
               </span>
               <h3>{obj.title}</h3>
+              
             </a>
+
           );
         })}
 

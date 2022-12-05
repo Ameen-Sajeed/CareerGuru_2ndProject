@@ -12,6 +12,7 @@ const ReportModel = require("../Models/user/ReportSchema");
 const PostModel = require("../Models/user/PostSchema");
 const JobReportModel = require("../Models/user/JobReportSchema");
 const JobRequestModel = require("../Models/user/JobRequests");
+const NotificationModel = require("../Models/user/notificationSchema");
 
 /* ----------------------------- NODEMAILER INIT ---------------------------- */
 
@@ -115,11 +116,13 @@ const PostSignUp = async (req, res) => {
       password,
     });
     console.log(user);
-    await user.save().then((result) => {
+    await user.save().then(async(result) => {
+     await NotificationModel.create({userId:result._id})
       sendOtp(result, res);
       res.status(200).json({ res: user });
     });
   } catch (error) {
+    res.status(500).json({msg:"error occured"})
     console.log(error);
   }
 };
@@ -153,6 +156,8 @@ const PostLogin = async (req, res) => {
       .json({ state: "ok", usertoken: usertoken, user: user });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -283,6 +288,8 @@ const createPost = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -353,16 +360,25 @@ const rejectJobRequests = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const LikePost = async (req, res) => {
+  let details = {
+    user:req.body.userId,
+    desc:"Liked your post",
+
+  }
   try {
     const post = await Post.findById(req.params.id);
+    console.log(post.userId,"post");
     if (!post.likes.includes(req.body.userId)) {
       await post.updateOne({ $push: { likes: req.body.userId } });
+    let note =  await NotificationModel.updateOne({userId:post.userId},{$push:{notification:details}})
+    console.log(note,"opop");
       res.status(200).json("The Post has been liked");
     } else {
       await post.updateOne({ $pull: { likes: req.body.userId } });
       res.status(200).json("The post has been disliked");
     }
   } catch (err) {
+    console.log(err,"jkjk");
     res.status(500).json(err);
   }
 };
@@ -417,6 +433,8 @@ const findUsers = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -435,6 +453,7 @@ const findCloseUsers = async (req, res) => {
         res.json(error);
       });
   } catch (error) {
+    res.status(500).json({msg:"error occured"})
     console.log(error);
   }
 };
@@ -462,9 +481,17 @@ const getUserPost = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const addComment = async (req, res) => {
+  console.log(req.body,"pop");
+  let details = {
+    user:req.body.userId,
+    desc:"Commented on your post",
+
+  }
+
   const comment = new CommentModel(req.body);
   try {
     const comments = await comment.save();
+    let note =  await NotificationModel.updateOne({userId:req.body.postuserId},{$push:{notification:details}})
     res.json(comments);
   } catch (error) {
     res.json(error);
@@ -497,6 +524,8 @@ const createjob = async (req, res) => {
     res.status(200).json(newJob);
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -515,6 +544,8 @@ const findJob = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -594,6 +625,23 @@ const findChats = async (req, res) => {
   }
 };
 
+const getUserLastChats = async (req,res)=>{
+  try {
+    
+    const chat = await ChatModel.find({
+      members:{
+        $in:[req.params.id]
+      }
+    },{multi:true})
+    res.status(200).json(chat);
+
+  } catch (error) {
+    res.status(500).json(error);
+
+  }
+}
+
+
 /* -------------------------------------------------------------------------- */
 /*                                 ADD MESSAGE                                */
 /* -------------------------------------------------------------------------- */
@@ -644,6 +692,8 @@ const getUser = (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -669,7 +719,7 @@ const ReportPost = async (req, res) => {
 /*                                 REPORT JOB                                 */
 /* -------------------------------------------------------------------------- */
 
-const ReportJob = async (req, res) => {
+const ReportJob = async (req, res) => {  
   const ReportJob = new JobReportModel(req.body);
   try {
     const Reports = await ReportJob.save();
@@ -699,6 +749,8 @@ const getJObs = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -732,6 +784,12 @@ const jobRequests = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const JobApply = async (req, res) => {
+
+    let details = {
+    user:req.body.Applicant,
+    desc:"requested for job",
+
+  }
   try {
     const JobApplyData = new JobRequestModel({
       Applicant: req.body.Applicant,
@@ -742,6 +800,8 @@ const JobApply = async (req, res) => {
       Created: Date.now(),
     });
     let result = await JobApplyData.save();
+     let note =  await NotificationModel.updateOne({userId:req.body.postedId},{$push:{notification:details}})
+
     if (!JobModel?.jobRequests?.includes(JobApplyData.Applicant)) {
       let data = await JobModel.updateOne(
         { _id: req.body.JobId },
@@ -756,6 +816,8 @@ const JobApply = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -826,6 +888,7 @@ const EditProfile = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const viewJobRequests = async (req, res) => {
+
   const userId = req.params.id;
   try {
     let reports = await JobRequestModel.find({ PostedBy: userId })
@@ -854,6 +917,58 @@ const SearchUsers = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+/* ---------------------------- GET MY FOLLOWERS ---------------------------- */
+
+const getMyFollowers =async(req,res)=>{
+  console.log(req.params.id,'my followers');
+
+  try {
+      const user = await User.findById(req.params.id)
+      if(user){
+          const followers = await Promise.all(user?.followers?.map((id)=>{
+              return User.findOne({_id:id},{fullName:1,userName:1,profilePic:1,accountType:1})
+          }))
+          console.log(followers,'mmyyyyyyvv');
+          res.status(200).json(followers)
+      }else{
+          console.log('no user');
+          res.status(402).json('Please try again')
+      }
+  } catch (error) {
+      console.log(error);
+      res.status(500).json(error)
+  }
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                             FIND NOTIFICATIONS                             */
+/* -------------------------------------------------------------------------- */
+
+const findNotications =(req,res)=>{
+
+  const id = req.params.id;
+  console.log(id,"poo");
+  try {
+    NotificationModel.findOne({userId:id}).populate("notification.user","username profilePicture ")
+      .then((response) => {
+        console.log(response,"they");
+        res.status(200).json(response);
+      })
+      .catch((error) => {
+        console.log(error,"hey");
+        res.json(error);
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({msg:"error occured"})
+
+  }
+};
+
+
+
 
 module.exports = {
   PostSignUp,
@@ -893,4 +1008,6 @@ module.exports = {
   rejectJobRequests,
   EditProfile,
   SearchUsers,
+  getUserLastChats,
+  findNotications
 };

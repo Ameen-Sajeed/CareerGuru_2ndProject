@@ -28,10 +28,10 @@ useEffect(()=>{
 
   return (
     <div className="bd">
-      <Header socket={socket}/>
+      <Header />
       <main>
         <div className="container flex">
-          <Leftbar />
+          <Leftbar socket={socket} />
           <Feed socket={socket} />
           <Rightbar />
         </div>

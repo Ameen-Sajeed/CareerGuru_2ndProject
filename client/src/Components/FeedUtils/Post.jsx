@@ -10,7 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FlagIcon from "@mui/icons-material/Flag";
 import { DeletePost } from "../../API/Posts";
 import userinstance from "../../axios";
-function Post({ post, socket }) {
+function Post({ post, socket,setChange }) {
   const userData = useSelector((state) => state.user);
   const userId = userData._id;
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -54,7 +54,7 @@ function Post({ post, socket }) {
         .post(`http://localhost:5000/reportPost/${post._id}`, { ...report })
         .then((response) => {
           console.log(response);
-          // window.location.reload();
+          setChange(Date.now())
         });
     } catch (error) {}
   };
@@ -90,7 +90,7 @@ function Post({ post, socket }) {
     e.preventDefault();
     const res = await userinstance.post(
       `http://localhost:5000/addcomment/${post._id}`,
-      { userId: userId, comment: desc, postId: post._id }
+      { userId: userId, comment: desc, postId: post._id ,postuserId:post.userId}
     );
     if (res.data) {
       SetUpdateComment(!updateComment);
@@ -111,9 +111,9 @@ function Post({ post, socket }) {
   }, [comments, updateComment]);
 
   const deletepost = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setChange(Date.now())
     await DeletePost(post._id);
-    alert("post deleted successfully");
   };
 
   return (

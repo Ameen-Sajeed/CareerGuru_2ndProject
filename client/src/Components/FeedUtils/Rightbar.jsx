@@ -2,20 +2,22 @@ import React, { useEffect, useState } from "react";
 import "./Header.css";
 import me from "../../assets/images/us.webp";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import userinstance from "../../axios";
+import TelegramIcon from '@mui/icons-material/Telegram';
 
 function Rightbar() {
   const userData = useSelector((state) => state.user);
   const userId = userData._id;
   const [forms, setForms] = useState([]);
+  // const [chat,setChat] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     userinstance
       .get(`http://localhost:5000/closefriends/${userId}`)
       .then((response) => {
         if (response.data) {
-          // console.log(token);
           setForms(response.data);
         } else {
           console.log("erorr");
@@ -26,18 +28,41 @@ function Rightbar() {
       });
   }, [userId]);
 
-  console.log(userId, "opopopo");
-  console.log(forms, "fghjk");
+  // useEffect(()=>{
+  //   userinstance.get(`http://localhost:5000/chat/${userId}`).then((response)=>{
+  //     console.log(response.data,"chaaaats");
+  //          setChat(response.data)
+
+  //   })
+  // },[])
+
+   /* ------------------------------- CREATE CHAT ------------------------------ */
+
+   const createChat = async (Id) => {
+    try {
+      await userinstance
+        .post("http://localhost:5000/createChat", {
+          senderId: userId,
+          recieverId: Id,
+        })
+        .then((response) => {
+          console.log(response);
+          navigate('/chat')
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="right">
-      <div className="messages">
+      {/* <div className="messages">
         <div className="heading">
           <h4> Messages </h4>
           <i className="uil uil-edit"></i>
         </div>
 
-        {/* SEARCH BAR */}
+        
         <div className="search-bar">
           <i className="uil uil-search"></i>
           <input
@@ -47,7 +72,6 @@ function Rightbar() {
           />
         </div>
 
-        {/* MESSAGES CATEGORY */}
 
         <div className="category">
           <h6 className="active">Primary</h6>
@@ -55,7 +79,6 @@ function Rightbar() {
           <h6 className="messages-requests">Requests(7)</h6>
         </div>
 
-        {/* MESSAGE */}
 
         <div className="message">
           <div className="profile-photo">
@@ -66,14 +89,13 @@ function Rightbar() {
             <p className="text-muted">Evde Muthey!</p>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      {/* END OF MESSAGES */}
 
       {/* FRIEND REQUESTS */}
 
       <div className="friend-requests">
-        <h4>Close Friends</h4>
+        <h4>Connections</h4>
 
         {forms.map((obj) => {
           return (
@@ -87,15 +109,18 @@ function Rightbar() {
                   <p className="text-muted">8 mutual friends</p>
                 </div>
               </div>
-              <div className="action pl-10">
+              <div className="action pl-">
                 <Link to={`/profile/${obj.username}`}>
                   <button className="btn  bg-blue-900 text-white" type="submit">
                     View Profile
                   </button>
                 </Link>
-                {/* <button className="btn  bg-blue-900 text-white ">
-                     Message
-                    </button> */}
+                <button className="btn  bg-blue-900 text-white "    onClick={(e) => {
+                            createChat(obj._id);
+                          }}>
+                     Chat
+                    </button>
+                    {/* <TelegramIcon className="m-2 "/> */}
               </div>
             </div>
           );

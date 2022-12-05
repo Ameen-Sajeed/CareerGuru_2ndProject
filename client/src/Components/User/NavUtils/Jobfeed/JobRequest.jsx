@@ -21,7 +21,7 @@ function JobRequest() {
       .then((response) => {
         SetGet(response.data);
       });
-  }, []);
+  }, []); 
 
   console.log(get, "jobs");
 

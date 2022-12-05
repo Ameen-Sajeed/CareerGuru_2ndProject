@@ -1,34 +1,33 @@
-// const mongoose = require('mongoose')
-// const NotificationSchema = new mongoose.Schema({
+const mongoose = require('mongoose')
+const NotificationSchema = new mongoose.Schema({
 
-//    userId:{
-//     type:String,
-//     required:true,
-//    },
+   userId:{
+    type:String,
+    required:true,
+   },
 
-//    postId:{
-//     type:String,
-//     required:true,
+   notification:[{
 
-//    },
+   user:{
+    type:String,
+    ref:"users",
+   },
+   desc:{
+    type:String
+   },
+   status:{
+      type:String,
+      default:"true"
+   }
 
-//    comment:{
-//     type:String,
-//     max:500,
+   // timestamps:true
 
-//    },
-
-//    likes:{
-//     type:Array,
-//     default:[],
-//    }
-   
-        
+}]
     
-// },
+},
 // {timestamps:true}
 
-// )
+)
 
-// const NotificationModel = mongoose.model('Notifications',NotificationSchema)
-// module.exports=NotificationModel
+const NotificationModel = mongoose.model('Notifications',NotificationSchema)
+module.exports=NotificationModel

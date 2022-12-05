@@ -93,7 +93,7 @@ nav{
     width: 100%;
     background: var(--color-white);
     padding: 0.7rem 0;
-    position: fixed;
+    position: fixed;    
     top: 0;
     z-index: 10;
 }
@@ -137,12 +137,15 @@ nav .create {
 main {
     position: relative;
     top: 5.4rem;
+    min-height: 100vh;
+    /* overflow-y: hidden; */
 }
 main .container {
    display: grid; 
    grid-template-columns: 18vw auto 20vw;
    column-gap: 2rem;
    position: relative;
+
 }
 
 main .container .left{

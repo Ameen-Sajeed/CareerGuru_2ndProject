@@ -31,6 +31,8 @@ const adminLogin = (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -51,6 +53,8 @@ const getUsers = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -77,6 +81,8 @@ const blockUser = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -102,6 +108,8 @@ const UnblockUser = (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -142,6 +150,8 @@ const getAllComments = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -162,6 +172,8 @@ const getAllReports = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -242,6 +254,8 @@ const blockReport = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 
@@ -268,6 +282,8 @@ const blockJob = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({msg:"error occured"})
+
   }
 };
 

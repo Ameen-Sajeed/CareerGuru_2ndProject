@@ -13,6 +13,7 @@ function Feed({ socket }) {
   const [Image, setImage] = useState("");
   const [work, SetWork] = useState([]);
   const [posts, setPosts] = useState([]);
+  const [change,setChange] = useState('')
   const [post, setPost] = useState({
     User: "",
     desc: "",
@@ -81,7 +82,7 @@ function Feed({ socket }) {
       );
     };
     fetchPost();
-  }, [userId]);
+  }, [userId,post,change]);
 
   useEffect(() => {
     try {
@@ -173,7 +174,7 @@ function Feed({ socket }) {
       <div className="feeds">
         {posts.map((obj) =>
           obj.Reports.includes(userId) ? null : (
-            <Post key={obj.id} post={obj} socket={socket} />
+            <Post key={obj.id} post={obj} socket={socket} setChange={setChange}/>
           )
         )}
       </div>
