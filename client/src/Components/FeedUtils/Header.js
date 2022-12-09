@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import userinstance from "../../axios";
 import { IoMdNotifications } from "react-icons/io";
+import { format } from "timeago.js";
+
 function Header() {
   const userData = useSelector((state) => state.user);
   const [open, setOpen] = useState(false);
@@ -12,7 +14,7 @@ function Header() {
   const [searchdata, SetsearchData] = useState([]);
   const [notify, setNotify] = useState([]);
   const [searchnotify, Setsearchnotify] = useState(false);
-
+  const [counts, SetCounts] = useState("");
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -46,23 +48,42 @@ function Header() {
     }
   };
 
-  const notificationHandler = async (e) => {
-    e.preventDefault();
-    // console.log("HERE,");
-    Setsearchnotify(!searchnotify)
+  /* ------------------------------ NOTIFICATIONS ----------------------------- */
+
+  useEffect(() => {
+    const notificationHandler = async (e) => {
+      // e.preventDefault();
+      try {
+        await userinstance
+          .get(`http://localhost:5000/notifications/${userData._id}`)
+          .then((response) => {
+            console.log(response, "poyi");
+            setNotify(response.data.data.notification);
+            SetCounts(response.data.countLength);
+          });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    notificationHandler();
+  }, [counts]);
+
+  /* -------------------------- VIEWED NOTIFICATIONS -------------------------- */
+
+  const notificationhandle = async (e) => {
+    Setsearchnotify(!searchnotify);
     try {
-      await userinstance
-        .get(`http://localhost:5000/notifications/${userData._id}`)
-        .then((response) => {
-          console.log(response.data.notification,"poyi");
-          setNotify(response.data.notification);
-        });
+      const { data } = await userinstance.put(
+        `http://localhost:5000/notification/viewed/${userData._id}`
+      );
+      SetCounts("0");
     } catch (error) {
       console.log(error);
     }
   };
 
-  console.log(notify, "note");
+  console.log(counts, "ooooo");
 
   return (
     <nav>
@@ -77,14 +98,20 @@ function Header() {
           <i className="uil uil-search"></i>
           <input type="search" placeholder="Search" onChange={SearchUsers} />
         </div>
-      <div className="relative">
-      <IoMdNotifications
-          className="text-4xl text-blue-400 cursor-pointer "
-          onClick={notificationHandler}
-        />
-        <span className="absolute top-0 right-0 rounded-full bg-red-500 h-5 w-5 items-center flex justify-center text-white font-bold">{notify.length}</span>
-      </div>
-     
+        <div className="relative">
+          <IoMdNotifications
+            className="text-4xl text-blue-400 cursor-pointer "
+            onClick={(e) => {
+              notificationhandle(e);
+            }}
+          />{
+            notify.length!=0 &&
+          
+          <span className="absolute top-0 right-0 rounded-full bg-red-500 h-5 w-5 items-center flex justify-center text-white font-bold">
+            {counts}
+          </span>}
+        </div>
+
         <div className="create">
           {/* <label className='btn btn-primary' htmlFor="create-post" onClick={handleLogout}>Sign Out</label> */}
           {/* <div className="profile-photo">
@@ -175,40 +202,39 @@ function Header() {
         </>
       ) : null}
 
-{searchnotify ? (
+      {searchnotify ? (
         <>
-      
-       
-          <div class="absolute right-0 z-20 w-56 py-2   bg-white rounded-md shadow-xl dark:bg-blue-200 m-5 mr-52">
-          {
-          notify.map((obj)=>{
-            return (
-              <a
-                href="#"
-                class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-blue-300 dark:hover:text-white"
-              >
-                <img
-                  class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
-                  src={PF+obj.user.profilePicture}
-                  alt="jane avatar"
-                />
-                <div class="mx-1">
-                  <h1 class="text-sm font-semibold text-gray-700 dark:text-gray-900">
-                    {obj.user.username}
-                  </h1>
-                  <p class="text-sm text-gray-900 dark:text-gray-900 ">
-                    {obj.desc}
-                  </p>
-                </div>
-              </a>
-              )
-            })
-          }
-
-          
-            </div>
-                   
-                   
+          <div class="absolute right-0 z-20 w-56 py-2   bg-white rounded-md shadow-xl dark:bg-blue-200 m-5 mr-52 overflow-y-auto max-h-44 no-scrollbar">
+            {notify.length != 0 ? (
+              notify.map((obj) => {
+                return (
+                  <a
+                    href="#"
+                    class="flex items-center p-3 -mt-2 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-blue-300 dark:hover:text-white"
+                  >
+                    <img
+                      class="flex-shrink-0 object-cover mx-1 rounded-full w-9 h-9"
+                      src={PF + obj.user.profilePicture}
+                      alt="jane avatar"
+                    />
+                    <div class="mx-1">
+                      <h1 class="text-sm font-bold text-gray-700 dark:text-gray-900">
+                        {obj.user.username}
+                      </h1>
+                      <p class="text-sm text-gray-900 dark:text-gray-900 ">
+                        {obj.desc}
+                      </p>
+                      <span className="text-xs font-semibold text-gray-900">
+                        {format(obj.time)}
+                      </span>
+                    </div>
+                  </a>
+                );
+              })
+            ) : (
+              <p className="p-2 text-center font-bold">No notifications</p>
+            )}
+          </div>
         </>
       ) : null}
     </nav>

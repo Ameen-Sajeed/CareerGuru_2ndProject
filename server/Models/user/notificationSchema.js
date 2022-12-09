@@ -18,9 +18,12 @@ const NotificationSchema = new mongoose.Schema({
    status:{
       type:String,
       default:"true"
-   }
+   },
 
-   // timestamps:true
+    time:{
+      type:Date,
+      default:new Date()
+    }
 
 }]
     

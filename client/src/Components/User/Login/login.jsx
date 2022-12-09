@@ -146,7 +146,7 @@ const handleSubmit= async(e)=>{
       </button>  */}
 
        <div class="mt-5 text-xs border-b border-[#002D74] py-4 text-[#002D74]">
-        <a  >Forgot your password?</a>
+        {/* <a  >Forgot your password?</a> */}
         {/* <button onClick={googleSignout} className='bg-green-600'>signout</button> */}
       </div> 
 

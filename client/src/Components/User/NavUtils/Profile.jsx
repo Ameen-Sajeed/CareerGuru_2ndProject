@@ -5,6 +5,7 @@ import { profileUpdate } from "../../../Features/Auth/authSlice";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import "./Profile.css";
 import userinstance from "../../../axios";
+import { Link } from "react-router-dom";
 
 function Profile() {
   const userData = useSelector((state) => state.user);
@@ -15,6 +16,10 @@ function Profile() {
   const [showMOd, SetShowMod] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [Image, setImage] = useState("");
+  const [promodal,setPromodal]= useState(false)
+  const [profmodal,setProfmodal]= useState(false)
+  const [follow,setFollow]= useState([])
+  const [following,setFollowing]= useState([])
   const [profile, setProfile] = useState({
     username: userData.username,
     bio: userData.bio,
@@ -99,6 +104,43 @@ function Profile() {
     fetchPost();
   }, [userId]);
 
+
+  /* ----------------------------- FOLLOWERS LIST ----------------------------- */
+
+  const followersHandler = async (e) => {
+    e.preventDefault();
+    setPromodal(!promodal)
+    try {
+      await userinstance
+        .get(`http://localhost:5000/profile/followers/${userId}`)
+        .then((response) => {
+          console.log(response.data,"poyi");
+          setFollow(response.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* ----------------------------- FOLLOWINGS LIST ---------------------------- */
+
+  const followingsHandler = async (e) => {
+    console.log("here");
+    setProfmodal(!profmodal)
+    try {
+      await userinstance
+        .get(`http://localhost:5000/profile/followings/${userId}`)
+        .then((response) => {
+          console.log(response.data,"poyi");
+          setFollowing(response.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+
   return (
     <>
       <main class="bg-gray-100 bg-opacity-25 ">
@@ -129,25 +171,28 @@ function Profile() {
                 </a>
               </div>
 
+<div>
+
               <ul class="hidden md:flex space-x-8 mb-4">
                 <li>
                   <span class="font-semibold">{post.length}</span>
                   post
                 </li>
 
-                <li>
-                  <span class="font-semibold">
+                <li onClick={followersHandler} className="cursor-pointer ">
+                  <span class="font-semibold p-2">
                     {userData?.followers?.length}
                   </span>
                   followers
                 </li>
-                <li>
-                  <span class="font-semibold">
+                <li onClick={followingsHandler} className="cursor-pointer" > 
+                  <span class="font-semibold p-2 ">
                     {userData.followings.length}
                   </span>
                   following
                 </li>
               </ul>
+              </div>
 
               <div class="hidden md:block">
                 <h1 class="font-semibold">{userData.email}</h1>
@@ -155,33 +200,13 @@ function Profile() {
                 <span>{userData.bio}</span>
               </div>
             </div>
-
-            <div class="md:hidden text-sm my-2">
-              <h1 class="font-semibold">Mr Travlerrr...</h1>
-              <span>Travel, Nature and Music</span>
-              <p>Lorem ipsum dolor sit amet consectetur</p>
-            </div>
           </header>
 
           <div class="px-px md:px-3">
             <ul
               class="flex md:hidden justify-around space-x-8 border-t 
                     text-center p-2 text-gray-600 leading-snug text-sm"
-            >
-              {/* <li>
-                <span class="font-semibold text-gray-800 block">136</span>
-                posts
-              </li> */}
-              {/* 
-              <li>
-                <span class="font-semibold text-gray-800 block">40.5k</span>
-                followers
-              </li>
-              <li>
-                <span class="font-semibold text-gray-800 block">302</span>
-                following
-              </li> */}
-            </ul>
+            ></ul>
 
             <ul
               class="flex items-center justify-around md:justify-center space-x-12  
@@ -344,6 +369,76 @@ function Profile() {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
           </>
         ) : null}
+
+{promodal ? (
+        <>
+      
+       
+          <div className="p-10 mr-28 mt-52 justify-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 ">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col min-w-[100px] bg-gray-100   ">
+                {/*body*/}
+                {follow.map((obj) => {
+                  return (
+                    <div className="">
+                      <div className="p-4 flex   items-center w-full">
+                        <Link to={`/profile/${obj.username}`}>
+                          <img
+                            className="w-10 h-10 rounded-full"
+                            src={PF + obj.profilePicture}
+                          ></img>
+                        </Link>
+                        <div>
+                          <h2 className="font-bold p-2">{obj.username}</h2>
+                        </div>
+                      
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+                   
+                   
+        </>
+      ) : null}
+
+{profmodal ? (
+        <>
+      
+       
+          <div className="p-10 ml-36 mt-52 justify-center flex overflow-x-hidden overflow-y-hidden fixed inset-0 z-50 ">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col min-w-[100px] bg-gray-100   ">
+                {/*body*/}
+                {following.map((obj) => {
+                  return (
+                    <div className="">
+                      <div className="p-4 flex   items-center w-full">
+                        <Link to={`/profile/${obj.username}`}>
+                          <img
+                            className="w-10 h-10 rounded-full"
+                            src={PF + obj.profilePicture}
+                          ></img>
+                        </Link>
+                        <div>
+                          <h2 className="font-bold p-2">{obj.username}</h2>
+                        </div>
+                      
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+                   
+                   
+        </>
+      ) : null}
       </main>
     </>
   );

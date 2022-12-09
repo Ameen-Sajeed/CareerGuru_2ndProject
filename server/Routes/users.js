@@ -17,7 +17,6 @@ const {
   findUsers,
   getUserPost,
   verifyOtp,
-  createComment,
   addComment,
   getPostComments,
   createjob,
@@ -41,6 +40,10 @@ const {
   SearchUsers,
   getUserLastChats,
   findNotications,
+  getMyFollowers,
+  getMyFollowings,
+  ReadNotification,
+  resendOTP,
 } = require("../controllers/users");
 const check = require("../middlewares/verify");
 const router = express.Router();
@@ -51,6 +54,8 @@ var upload = require("../helpers/multer");
 router.post("/signup", PostSignUp);
 router.post("/login", PostLogin);
 router.post("/verifyOtp", verifyOtp);
+router.post("/resendOtp", resendOTP);
+
 
  /* ------------------------------ CRUD OF USERS ----------------------------- */
 
@@ -76,6 +81,8 @@ router.post("/addcomment/:id", check, addComment);
 router.get("/getcomments/:id", check, getPostComments);
 router.post("/reportPost/:id", check, ReportPost);
 router.get('/notifications/:id',check,findNotications)
+router.put('/notification/viewed/:userId' , ReadNotification)
+
 
  /* ------------------------------ CRUD OF JOBS ------------------------------ */
 
@@ -92,19 +99,21 @@ router.put("/rejectjob/:id", check, rejectJobRequests);
  /* --------------------------------- PROFILE -------------------------------- */
 
 router.get("/profile/:id", check, userPost);
-router.post( "/editProfile/:id",upload.single("profilePicture"),EditProfile
-);
+router.post( "/editProfile/:id",upload.single("profilePicture"),EditProfile);
+router.get('/profile/followers/:id',check,getMyFollowers)
+router.get('/profile/followings/:id',check,getMyFollowings)
+
 
  /* ---------------------------------- CHATS --------------------------------- */
 
 router.post("/createChat", check, createChat);
 router.get("/chat/:userId",check, userChats);
-router.post("/findchat/:firstId/:secondId", findChats);
+router.post("/findchat/:firstId/:secondId", check,findChats);
 
  /* -------------------------------- MESSAGES -------------------------------- */
 
 router.post("/addMessage", check, addMessage);
 router.get("/message/:chatId", check, getMessages);
-router.get('/usermessages/:id',getUserLastChats)
+router.get('/usermessages/:id',check,getUserLastChats)
 
 module.exports = router;
