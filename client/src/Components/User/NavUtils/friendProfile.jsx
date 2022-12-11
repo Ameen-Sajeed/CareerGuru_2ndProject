@@ -47,7 +47,7 @@ function FriendProfile() {
           console.log(result, "success");
         } else {
           console.log("Something went wrong");
-        }
+        }      
       })
       .catch((err) => {
         console.log(err);
