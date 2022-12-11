@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import me from "../../assets/images/me.jpg";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import { format } from "timeago.js";
@@ -10,7 +10,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FlagIcon from "@mui/icons-material/Flag";
 import { DeletePost } from "../../API/Posts";
 import userinstance from "../../axios";
-function Post({ post, socket,setChange }) {
+import { SocketContext } from "../../Store/user/SocketContext";
+import { Link } from "react-router-dom";
+function Post({ post,setChange }) {
   const userData = useSelector((state) => state.user);
   const userId = userData._id;
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -23,6 +25,8 @@ function Post({ post, socket,setChange }) {
   const [updateComment, SetUpdateComment] = useState([]);
   const [open, setOpen] = useState(false);
   const [showMOd, SetShowMod] = useState(false);
+  const socket = useContext(SocketContext)
+
   const [report, setReport] = useState({
     userId: "",
     Content: "",
@@ -81,10 +85,24 @@ function Post({ post, socket,setChange }) {
         { userId: userId }
       );
       console.log(res);
+      setLike(isLiked ? like - 1 : like + 1);
+      SetIsliked(!isLiked);
+
+    
+console.log(post.userId,"posssss");
+
+      if(post.userId !== userId){
+        socket.emit('send-notifications',{
+ 
+          senderId:userId,
+          recieverId:post.userId,
+          desc:"liked your Post" 
+      })
+    }
+ 
     } catch (err) {}
-    setLike(isLiked ? like - 1 : like + 1);
-    SetIsliked(!isLiked);
   };
+
 
   const handleComment = async (e) => {
     e.preventDefault();
@@ -122,7 +140,7 @@ function Post({ post, socket,setChange }) {
         <div className="head">
           <div className="user">
             <div className="profile-photo">
-              <img src={PF + user.profilePicture} alt="" />
+            <Link to={`/profile/${user.username}`}><img src={PF + user.profilePicture} alt="" /></Link>
             </div>
             <div className="ingo">
               <h3>{user.username}</h3>

@@ -51,8 +51,32 @@ const UserSchema = new mongoose.Schema({
         },
         bio:{
             type:String
+        },
+        Recruits:
+        [{
+           JobId:{
+            type:String
+           },
+           Designation:{
+            type:String
+           },
+           Company:{
+            type:String
+           },
+            location:{
+            type:String
+            },
+            PostedBy:{
+            type:String
+            },
+            time:{
+                type:Date,
+            }
+           
+        }],
+        Selected:{
+            type:Array
         }
-        
     
 },
 {timestamps:true}

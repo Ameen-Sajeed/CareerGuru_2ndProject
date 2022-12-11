@@ -44,6 +44,7 @@ const {
   getMyFollowings,
   ReadNotification,
   resendOTP,
+  acceptJobRequests,
 } = require("../controllers/users");
 const check = require("../middlewares/verify");
 const router = express.Router();
@@ -81,7 +82,7 @@ router.post("/addcomment/:id", check, addComment);
 router.get("/getcomments/:id", check, getPostComments);
 router.post("/reportPost/:id", check, ReportPost);
 router.get('/notifications/:id',check,findNotications)
-router.put('/notification/viewed/:userId' , ReadNotification)
+router.put('/notification/viewed/:userId' ,check ,ReadNotification)
 
 
  /* ------------------------------ CRUD OF JOBS ------------------------------ */
@@ -95,6 +96,7 @@ router.delete("/deljob/:id", check, deleteJob);
 router.post("/applyJob", upload.single("file"),JobApply);
 router.get("/viewJobRequests/:id",check, viewJobRequests);
 router.put("/rejectjob/:id", check, rejectJobRequests);
+router.put('/job/acceptRequest',check,acceptJobRequests)
 
  /* --------------------------------- PROFILE -------------------------------- */
 

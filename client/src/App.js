@@ -25,13 +25,16 @@ import JobReqpg from "./Pages/user/JobRequest";
 import JobsMan from "./Pages/admin/Job";
 import JobReportsMan from "./Pages/admin/JobReport";
 import FriendProfilePage from "./Pages/user/FriendProfile";
+import { socket, SocketContext } from "./Store/user/SocketContext";
 
 function App() {
   return (
     <div className="app">
+        
       <User>
         <Admin>
           <Router>
+        <SocketContext.Provider value={socket}>
             <Provider store={Store}>
               <Routes>
 
@@ -66,6 +69,7 @@ function App() {
                 </Route>
               </Routes>
             </Provider>
+      </SocketContext.Provider>
           </Router>
         </Admin>
       </User>

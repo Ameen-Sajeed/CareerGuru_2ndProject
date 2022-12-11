@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Header.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import userinstance from "../../axios";
 import { IoMdNotifications } from "react-icons/io";
 import { format } from "timeago.js";
+import { SocketContext } from "../../Store/user/SocketContext";
 
 function Header() {
   const userData = useSelector((state) => state.user);
@@ -15,6 +16,8 @@ function Header() {
   const [notify, setNotify] = useState([]);
   const [searchnotify, Setsearchnotify] = useState(false);
   const [counts, SetCounts] = useState("");
+  const [change,Setchange]= useState()
+  const socket = useContext(SocketContext)
 
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
@@ -38,7 +41,7 @@ function Header() {
       console.log(SearchInfo, "hey there");
 
       await userinstance
-        .get(`http://localhost:5000/search/users/${SearchInfo}`)
+        .get(`/search/users/${SearchInfo}`)
         .then((response) => {
           console.log(response.data.data);
           SetsearchData(response.data.data);
@@ -47,6 +50,28 @@ function Header() {
       console.log(error);
     }
   };
+  
+  useEffect(()=>{
+    if(userData){
+      socket.emit('new-user-add',userData._id)
+    }
+  },[])
+
+
+  useEffect(()=>{
+    console.log("jangoooooooooooo");
+    try {
+      socket.on('getNotification',data=>{
+        console.log("hey");
+        Setchange(new Date())
+      })
+      
+    } catch (error) {
+      console.log(error,"vamoooooos");
+      
+    }
+  },[socket])
+
 
   /* ------------------------------ NOTIFICATIONS ----------------------------- */
 
@@ -55,7 +80,7 @@ function Header() {
       // e.preventDefault();
       try {
         await userinstance
-          .get(`http://localhost:5000/notifications/${userData._id}`)
+          .get(`/notifications/${userData._id}`)
           .then((response) => {
             console.log(response, "poyi");
             setNotify(response.data.data.notification);
@@ -67,7 +92,7 @@ function Header() {
     };
 
     notificationHandler();
-  }, [counts]);
+  }, [counts,change,socket]);
 
   /* -------------------------- VIEWED NOTIFICATIONS -------------------------- */
 
@@ -75,7 +100,7 @@ function Header() {
     Setsearchnotify(!searchnotify);
     try {
       const { data } = await userinstance.put(
-        `http://localhost:5000/notification/viewed/${userData._id}`
+        `/notification/viewed/${userData._id}`
       );
       SetCounts("0");
     } catch (error) {
@@ -105,8 +130,8 @@ function Header() {
               notificationhandle(e);
             }}
           />{
-            notify.length!=0 &&
-          
+            counts!=0 &&
+      
           <span className="absolute top-0 right-0 rounded-full bg-red-500 h-5 w-5 items-center flex justify-center text-white font-bold">
             {counts}
           </span>}

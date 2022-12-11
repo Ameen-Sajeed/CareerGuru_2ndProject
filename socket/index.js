@@ -28,11 +28,13 @@ const io = require("socket.io")(8800, {
     
     // notifications
 
-    socket.on("send-notifications",({senderId,receiverId,type})=>{
-     const user = activeUsers.find((user) => user.userId === receiverId);
-      io.to(user.socketId).emit('getNotification',{
+    socket.on("send-notifications",({senderId,recieverId,desc})=>{
+     const user = activeUsers.find((user) => user.userId === recieverId);
+     console.log(user,"jyuuuu");
+     console.log(senderId,recieverId,desc,"hey");
+      io.to(user?.socketId).emit('getNotification',{
         senderId,
-        type,
+        desc,
       })
     })
   

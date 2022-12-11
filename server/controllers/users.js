@@ -379,6 +379,7 @@ const LikePost = async (req, res) => {
   let details = {
     user: req.body.userId,
     desc: "Liked your post",
+    time: Date.now()
   };
   try {
     const post = await Post.findById(req.params.id);
@@ -1005,7 +1006,7 @@ const findNotications = async (req, res) => {
       if (obj.status == "true") {
         return obj;
       }
-    });
+    }); 
     let countLength = count.length;
     res.status(200).json({ data, countLength });
   } catch (error) {
@@ -1029,6 +1030,34 @@ const ReadNotification = async (req, res) => {
     res.status(500).json(error);
   }
 };
+
+
+/* --------------------------- ACCEPT JOB REQUESTS -------------------------- */
+
+  const acceptJobRequests = async(req,res)=>{
+    console.log(req.body,"details");
+  let details = {
+    JobId: req.body.JobId._id,
+    Company:req.body.JobId.Company,
+    Designation:req.body.JobId.Designation,
+    location:req.body.JobId.location,
+    PostedBy:req.body.PostedBy,
+    time: Date.now()
+  };
+  console.log(req.body.JobId._id,"idddd");
+  try {
+   let recruits =  await User.updateOne(
+      { _id: req.body.Applicant },
+      { $push: { Recruits:details } }
+    );
+   let postedUser = await User.updateOne({
+    _id:req.body.PostedBy
+   },{$push:{Selected:req.body.Applicant}}) 
+    res.status(200).json({recruits,postedUser});    
+  } catch (error) {
+    res.status(500).json(error)
+  }
+}
 
 module.exports = {
   PostSignUp,
@@ -1073,5 +1102,6 @@ module.exports = {
   getMyFollowers,
   getMyFollowings,
   ReadNotification,
-  resendOTP
+  resendOTP,
+  acceptJobRequests
 };

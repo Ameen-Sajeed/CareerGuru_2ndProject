@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import ChatBox from "./ChatBox";
 import { io } from "socket.io-client";
 import userinstance from "../../../../axios";
+import { useContext } from "react";
+import { SocketContext } from "../../../../Store/user/SocketContext";
 function Chat() {
   const user = useSelector((state) => state.user);
   const [chats, setChats] = useState([]);
@@ -20,21 +22,22 @@ function Chat() {
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [recieveMessage, setRecieveMessage] = useState(null);
+  const socket = useContext(SocketContext)
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const socket = useRef();
+  // const socket = useRef();
 
   /* ---------------------- send message to socket server --------------------- */
 
   useEffect(() => {
     if (sendMessage !== null) {
-      socket.current.emit("send-message", sendMessage);
+      socket.emit("send-message", sendMessage);
     }
   }, [sendMessage]);
 
   useEffect(() => {
-    socket.current = io("http://localhost:8800");
-    socket.current.emit("new-user-add", user._id);
-    socket.current.on("get-users", (users) => {
+    // socket.current = io("http://localhost:8800");
+    socket.emit("new-user-add", user._id);
+    socket.on("get-users", (users) => {
       setOnlineUsers(users);
     });
   }, [user]);
@@ -42,7 +45,7 @@ function Chat() {
   /* -------------------- recieve message to socket server -------------------- */
 
   useEffect(() => {
-    socket.current.on("recieve-message", (data) => {
+    socket.on("recieve-message", (data) => {
       setRecieveMessage(data);
     });
   }, []);

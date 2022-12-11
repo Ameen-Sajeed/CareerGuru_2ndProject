@@ -73,7 +73,7 @@ function Feed({ socket }) {
   useEffect(() => {
     const fetchPost = async () => {
       const res = await userinstance.get(
-        `http://localhost:5000/post/timeline/${userId}`
+        `/post/timeline/${userId}`
       );
       setPosts(
         res.data.sort((p1, p2) => {
@@ -86,7 +86,7 @@ function Feed({ socket }) {
 
   useEffect(() => {
     try {
-      userinstance.get("http://localhost:5000/job/getjob").then((response) => {
+      userinstance.get("/job/getjob").then((response) => {
         SetWork(response.data);
       });
     } catch (error) {
