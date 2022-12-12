@@ -45,6 +45,8 @@ const {
   ReadNotification,
   resendOTP,
   acceptJobRequests,
+  ResetPassword,
+  ForgotPassword,
 } = require("../controllers/users");
 const check = require("../middlewares/verify");
 const router = express.Router();
@@ -69,6 +71,8 @@ router.get("/:id", check, getUserPost);
 router.get("/closefriends/:id", check, findCloseUsers);
 router.get("/getUser/:id", check, getUser);
 router.get("/search/users/:id", check, SearchUsers);
+router.put('/resetPassword/:id',ResetPassword)
+router.post('/forgotPassword',ForgotPassword)
 
  /* ------------------------------ CRUD OF POSTS ----------------------------- */
 

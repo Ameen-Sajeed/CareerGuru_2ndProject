@@ -26,6 +26,8 @@ import JobsMan from "./Pages/admin/Job";
 import JobReportsMan from "./Pages/admin/JobReport";
 import FriendProfilePage from "./Pages/user/FriendProfile";
 import { socket, SocketContext } from "./Store/user/SocketContext";
+import ResetPassword from "./Components/User/Login/ResetPassword";
+import ForgotPassword from "./Components/User/Login/ForgotPassword";
 
 function App() {
   return (
@@ -43,7 +45,8 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/SignUp" element={<SignUpPage />} />
                 <Route path="/error" element={<ErrorPage />} />
-
+                <Route path='/password' element={<ForgotPassword/>}/>
+                <Route path='/forgot/:id/:token' element={<ResetPassword/>}/>  
                 <Route element={<ProtectedApi/>}>
                 <Route path="/feed" element={<Feedpg />} />
                 <Route path="/profile" element={<ProfilePage />} />

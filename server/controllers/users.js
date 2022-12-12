@@ -1059,6 +1059,64 @@ const ReadNotification = async (req, res) => {
   }
 }
 
+/* ----------------------------- FORGOT PASSWORD ---------------------------- */
+
+const ForgotPassword = async(req,res)=>{
+  console.log(req.body,"reaching forgotttt");
+  const {email}= req.body
+  !email && res.json("Enter your Email")
+  try {
+  const user = await User.findOne({email:email})
+  const token = jwt.sign({_id:user._id},process.env.JWT_KEY,{
+    expiresIn:"120s"
+  })
+  console.log(user);
+  console.log(token,"uiuiu");
+    const usertoken = await User.findByIdAndUpdate({_id:user._id},{token:token},{new:true})
+    if(usertoken){
+      const mailOptions={
+        from:"jobseekerj010@gmail.com",
+        to:email,
+        subject:"Sending an email for resetting Password",
+        text:`Click this link to reset your password http://localhost:3000/forgot/${user._id}/${token}`
+      }
+    
+    transporter.sendMail(mailOptions,(error,info)=>{
+      if(error){
+        console.log(error);
+        res.json('email not sended properly')
+      }else{
+        console.log('email send',info.response);
+        res.json('Email send successfully')
+
+      }
+    })
+    }
+  } catch (error) {
+
+    res.json(error)
+  }
+}
+
+/* ----------------------------- RESET PASSWORD ----------------------------- */
+
+const ResetPassword = async(req,res)=>{
+  console.log(req.body);
+  const {password} = req.body
+  try {
+    const salt=await bcrypt.genSalt(10)
+    const newpassword=await bcrypt.hash(password,salt)
+    const user=await User.updateOne({_id:req.params.id},{
+      $set:{password:newpassword},
+  })
+  const updatedUser=await User.findById(req.params.id)
+  res.json(updatedUser)
+   } catch (error) {
+    return res.json(error)
+   }
+
+}
+
 module.exports = {
   PostSignUp,
   PostLogin,
@@ -1103,5 +1161,7 @@ module.exports = {
   getMyFollowings,
   ReadNotification,
   resendOTP,
-  acceptJobRequests
+  acceptJobRequests,
+  ResetPassword,
+  ForgotPassword
 };
