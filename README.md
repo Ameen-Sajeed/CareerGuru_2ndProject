@@ -1,12 +1,7 @@
 
-# Harvest (Grocery App)
+# CAREERGURU (Job Portal)
 
-Harvest is a Grocery Ecommerce Web Application with the functionalities
-like login/Signup(Users),OTP(Twilio) with Login,Add to Cart,Wishlist,Wallet,
-Checkout,Payment Gateways(Paypal,RazorPay),Profile,Order Management 
-and all other basic functionalities of an Ecommerce application.
-Also Admin from Other side can manage all the activities in the client 
-side with all required functions,Stats,Graphs,Reports and So on...
+Jobseeker is a Job Portal where User can Register with OTP verification and login. Then he can access to feedpage where user can posts,like and comment . View Live Notifications, Follow and Unfollow Connections , Chat with friends , Profile Settings . Admin can Manage POST,JOB and USER Management.
 
 
 ## API Reference
@@ -16,28 +11,17 @@ side with all required functions,Stats,Graphs,Reports and So on...
 #### Get HomePage
 
 ```http
-  GET /harvestgrocery.tk
+  GET /jobseeker.gq
 ```
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
 | `api_key` | `string` | **Required**. Your API key |
 
-#### Get Login/Register
+#### Get Login
 
 ```http
-  GET /harvestgrocery.tk/login-register
-```
-
-| Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- |
-| `api_key` | `string` | **Required**. Your API key |
-
-
-#### Get all Products
-
-```http
-  GET /harvestgrocery.tk/allproducts
+  GET /jobseeker.gq/login
 ```
 
 | Parameter | Type     | Description                |
@@ -45,11 +29,22 @@ side with all required functions,Stats,Graphs,Reports and So on...
 | `api_key` | `string` | **Required**. Your API key |
 
 
-
-#### Get specified Category of Products
+#### Get feed
 
 ```http
-  GET /harvestgrocery.tk/veg/${id}
+  GET /jobseeker.gq/feed
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `api_key` | `string` | **Required**. Your API key |
+
+
+
+#### Block Users
+
+```http
+  GET /jobseeker.gq/BlockUser/${userId}
 ```
 
 | Parameter | Type     | Description                       |
@@ -57,22 +52,13 @@ side with all required functions,Stats,Graphs,Reports and So on...
 | `id`      | `string` | **Required**. Id of item to fetch |
 
 
-#### Get Product Detail of  each Product
-
-```http
-  GET /harvestgrocery.tk/productdetails/${id}
-```
-
-| Parameter | Type     | Description                       |
-| :-------- | :------- | :-------------------------------- |
-| `id`      | `string` | **Required**. Id of item to fetch |
 
 ## Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://github.com/Ameen-Sajeed/Myharvest
+  git clone https://github.com/Ameen-Sajeed/CareerGuru_2ndProject
 ```
 
 Go to the project directory
