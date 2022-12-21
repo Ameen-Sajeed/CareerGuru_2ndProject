@@ -841,11 +841,12 @@ const JobApply = async (req, res) => {
 /* -------------------------------------------------------------------------- */
 
 const EditProfile = async (req, res) => {
+  console.log(req.body,"details");
   try {
     let editUser = await User.findById(req.params.id);
     let allUser = await User.find({ _id: { $nin: req.params.id } });
     let userNameExists = allUser.map((user) => {
-      console.log(user.username);
+      // console.log(user.username);
       if (user.username == req.body.username) {
         return false;
       }

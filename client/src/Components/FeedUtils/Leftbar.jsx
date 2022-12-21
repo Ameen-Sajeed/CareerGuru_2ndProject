@@ -4,11 +4,8 @@ import { useSelector } from "react-redux";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupIcon from "@mui/icons-material/Group";
 import StreetviewIcon from "@mui/icons-material/Streetview";
-import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
 import WorkIcon from "@mui/icons-material/Work";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
-import { useEffect, useState } from "react";
-import userinstance from "../../axios";
 
 function Leftbar({socket}) {
 // const[notifications,setNotifications]=useState([])

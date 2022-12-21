@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import me from "../../../../assets/images/us.webp";
@@ -31,8 +30,6 @@ function JobRequest() {
     await userinstance
       .put(`/rejectjob/${id}`)
       .then((response) => {
-        // SetCheck(!check)
-
         console.log(response);
         window.location.reload();
       })
@@ -42,9 +39,6 @@ function JobRequest() {
     alert("request  rejected successfully");
   };
 
-  // useEffect(()=>{
-
-  // },[check])
 
   /* --------------------------- ACCEPT JOB REQUESTS -------------------------- */
 
@@ -61,7 +55,6 @@ function JobRequest() {
         window.location.reload();
       })
 
-      // SetCheck(!check)
 
       .catch((error) => {
         console.log(error);
@@ -77,11 +70,13 @@ function JobRequest() {
               return (
                 <div class="bg-white shadow-xl rounded-lg py-2 w-fit ">
                   <div class="photo-wrapper p-2">
-                  <Link to={`/profile/${obj.AppliedBy}`}><img
-                      class="w-20 h-20 rounded-full mx-auto"
-                      src={me}
-                      alt="John Doe"
-                    /></Link>
+                    <Link to={`/profile/${obj.AppliedBy}`}>
+                      <img
+                        class="w-20 h-20 rounded-full mx-auto"
+                        src={me}
+                        alt="John Doe"
+                      />
+                    </Link>
                   </div>
                   <div className=" ">
                     <p className="text-blue-400 text-center font-bold">
@@ -115,8 +110,6 @@ function JobRequest() {
                     <div class="text-center text-gray-400 text-xs font-semibold truncate">
                       <h6></h6>
                     </div>
-                    {/* <a class="text-xs text-indigo-500 italic hover:underline hover:text-indigo-600 font-medium" href="#">View Profile</a> */}
-
                     <div class="text-center p-2">
                       <button
                         className="btn bg-red-500 text-white"

@@ -1,5 +1,5 @@
 
-# CAREERGURU (Job Portal)
+# JOBSEEKER (Job Portal)
 
 Jobseeker is a Job Portal where User can Register with OTP verification and login. Then he can access to feedpage where user can posts,like and comment . View Live Notifications, Follow and Unfollow Connections , Chat with friends , Profile Settings . Admin can Manage POST,JOB and USER Management.
 
