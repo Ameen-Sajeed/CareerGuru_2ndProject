@@ -16,9 +16,9 @@ connectDb();
 app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-app.use("/", userRouter);
-app.use("/admin", adminRouter);
+app.use("/api/images", express.static(path.join(__dirname, "public/images")));
+app.use("/api/", userRouter);
+app.use("/api/admin", adminRouter);
 
 //PORT
 app.listen(5000, () => console.log(`server is running on port 5000`));
