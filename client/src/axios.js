@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseURL = "https://jobseeker.gq/api/";
+const baseURL = "https://jobseeker.gq/api";
 
 const defaultOptions = {
   baseURL: baseURL,

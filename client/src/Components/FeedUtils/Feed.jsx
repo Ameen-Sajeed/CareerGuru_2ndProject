@@ -55,7 +55,7 @@ function Feed({ socket }) {
     console.log("formData");
 
     axios
-      .post("http://localhost:5000/createPost", formData)
+      .post("https://jobseeker.gq/api/createPost", formData)
       .then((response) => {
         if (response.data.status) {
           console.log("post added successfully");

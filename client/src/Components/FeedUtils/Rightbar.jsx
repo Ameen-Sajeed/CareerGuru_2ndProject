@@ -4,7 +4,6 @@ import me from "../../assets/images/us.webp";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import userinstance from "../../axios";
-import TelegramIcon from '@mui/icons-material/Telegram';
 
 function Rightbar() {
   const userData = useSelector((state) => state.user);
@@ -15,7 +14,7 @@ function Rightbar() {
 
   useEffect(() => {
     userinstance
-      .get(`http://localhost:5000/closefriends/${userId}`)
+      .get(`/closefriends/${userId}`)
       .then((response) => {
         if (response.data) {
           setForms(response.data);
@@ -41,7 +40,7 @@ function Rightbar() {
    const createChat = async (Id) => {
     try {
       await userinstance
-        .post("http://localhost:5000/createChat", {
+        .post("/createChat", {
           senderId: userId,
           recieverId: Id,
         })

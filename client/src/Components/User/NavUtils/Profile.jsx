@@ -79,7 +79,7 @@ function Profile() {
       }
       console.log(formData);
       axios
-        .post(`http://localhost:5000/editProfile/${userId}`, formData)
+        .post(`/editProfile/${userId}`, formData)
         .then((response) => {
           console.log(response.data.data, "opopop");
           if (response) {
@@ -97,7 +97,7 @@ function Profile() {
   useEffect(() => {
     const fetchPost = async () => {
       const res = await userinstance.get(
-        `http://localhost:5000/profile/${userId}`
+        `/profile/${userId}`
       );
       setPost(res.data);
     };
@@ -112,7 +112,7 @@ function Profile() {
     setPromodal(!promodal)
     try {
       await userinstance
-        .get(`http://localhost:5000/profile/followers/${userId}`)
+        .get(`/profile/followers/${userId}`)
         .then((response) => {
           console.log(response.data,"poyi");
           setFollow(response.data);
@@ -129,7 +129,7 @@ function Profile() {
     setProfmodal(!profmodal)
     try {
       await userinstance
-        .get(`http://localhost:5000/profile/followings/${userId}`)
+        .get(`/profile/followings/${userId}`)
         .then((response) => {
           console.log(response.data,"poyi");
           setFollowing(response.data);

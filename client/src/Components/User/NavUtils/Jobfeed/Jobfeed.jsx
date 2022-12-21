@@ -45,7 +45,7 @@ function JobFeed() {
 
     try {
       userinstance
-        .post("http://localhost:5000/createJob", { ...Job })
+        .post("/createJob", { ...Job })
         .then((response) => {
           console.log(response);
           window.location.reload();
@@ -61,7 +61,7 @@ function JobFeed() {
 
   useEffect(() => {
     try {
-      userinstance.get("http://localhost:5000/job/getjob").then((response) => {
+      userinstance.get("/job/getjob").then((response) => {
         SetGet(response.data);
       });
     } catch (error) {

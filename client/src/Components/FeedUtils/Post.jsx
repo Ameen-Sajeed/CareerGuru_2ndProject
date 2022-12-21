@@ -55,7 +55,7 @@ function Post({ post,setChange }) {
 
     try {
       userinstance
-        .post(`http://localhost:5000/reportPost/${post._id}`, { ...report })
+        .post(`/reportPost/${post._id}`, { ...report })
         .then((response) => {
           console.log(response);
           setChange(Date.now())
@@ -70,7 +70,7 @@ function Post({ post,setChange }) {
   useEffect(() => {
     const fetchUser = async () => {
       const res = await userinstance.get(
-        `http://localhost:5000/users?userId=${post.userId}`
+        `/users?userId=${post.userId}`
       );
 
       setUser(res.data);
@@ -81,7 +81,7 @@ function Post({ post,setChange }) {
   const likeHandler = async () => {
     try {
       let res = await userinstance.put(
-        `http://localhost:5000/post/like/${post._id} `,
+        `/post/like/${post._id} `,
         { userId: userId }
       );
       console.log(res);
@@ -107,7 +107,7 @@ console.log(post.userId,"posssss");
   const handleComment = async (e) => {
     e.preventDefault();
     const res = await userinstance.post(
-      `http://localhost:5000/addcomment/${post._id}`,
+      `/addcomment/${post._id}`,
       { userId: userId, comment: desc, postId: post._id ,postuserId:post.userId}
     );
     if (res.data) {
@@ -120,7 +120,7 @@ console.log(post.userId,"posssss");
   useEffect(() => {
     const fetchComments = async () => {
       let res = await userinstance.get(
-        `http://localhost:5000/getcomments/${post._id}`
+        `/getcomments/${post._id}`
       );
       SetSeecomments(res.data);
       console.log("update on effect cccoommmeennt");

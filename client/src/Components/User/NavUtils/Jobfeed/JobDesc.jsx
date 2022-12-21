@@ -55,7 +55,7 @@ function JobDesc() {
     console.log(job);
     console.log("formData");
     axios
-      .post("http://localhost:5000/applyJob", formData)
+      .post("https://jobseeker.gq/api/applyJob", formData)
       .then((response) => {
         if (response.data.status) {
           console.log("post added successfully");
@@ -72,7 +72,7 @@ function JobDesc() {
   /* -------------------------------------------------------------------------- */
 
   useEffect(() => {
-    userinstance.get(`http://localhost:5000/findjob/${id}`).then((response) => {
+    userinstance.get(`/findjob/${id}`).then((response) => {
       SetGet(response.data);
     });
   }, []);

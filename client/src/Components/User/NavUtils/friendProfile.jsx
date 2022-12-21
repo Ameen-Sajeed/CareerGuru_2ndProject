@@ -20,13 +20,13 @@ function FriendProfile() {
 
   useEffect(() => {
     userinstance
-      .get(`http://localhost:5000/users?username=${data}`)
+      .get(`/users?username=${data}`)
       .then((res) => {
         console.log(res, "yuyuyu");
         setUser(res.data);
 
         userinstance
-          .get(`http://localhost:5000/profile/${res.data._id}`)
+          .get(`/profile/${res.data._id}`)
           .then((res) => {
             console.log(res.data, "post kittyyyyyyyyyyyyyyyyyy");
             Setdet(res.data);
@@ -40,7 +40,7 @@ function FriendProfile() {
 
   const handleSubmit = async (id) => {
     await userinstance
-      .put(`http://localhost:5000/follow/${userId}`, { id })
+      .put(`/follow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
           SetCheck(!check);
@@ -62,7 +62,7 @@ function FriendProfile() {
     console.log(userData._id);
     console.log(id);
     await userinstance
-      .put(`http://localhost:5000/unfollow/${userId}`, { id })
+      .put(`/unfollow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
           SetCheck(!check);

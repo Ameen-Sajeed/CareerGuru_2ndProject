@@ -5,7 +5,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import { format } from "timeago.js";
-import axios from "axios";
 import { DeleteJob } from "../../../../API/Job";
 import userinstance from "../../../../axios";
 
@@ -41,7 +40,7 @@ function JobBox({ job }) {
 
     try {
       userinstance
-        .post(`http://localhost:5000/reportJob/${job._id}`, { ...report })
+        .post(`/reportJob/${job._id}`, { ...report })
         .then((response) => {
           console.log(response);
           window.location.reload();

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import me from "../../../../assets/images/us.webp";
 import userinstance from "../../../../axios";
-import { userRequest } from "../../../../Constants/Constant";
 
 function Network() {
   const userData = useSelector((state) => state.user);
@@ -17,7 +16,7 @@ function Network() {
 
   useEffect(() => {
     userinstance
-      .get("http://localhost:5000/findUsers")
+      .get("/findUsers")
       .then((response) => {
         if (response.data) {
           setForms(response.data);
@@ -36,7 +35,7 @@ function Network() {
 
   const handleSubmit = async (id) => {
     await userinstance
-      .put(`http://localhost:5000/follow/${userId}`, { id })
+      .put(`/follow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
           SetCheck(!check);
@@ -58,7 +57,7 @@ function Network() {
     console.log(userData._id);
     console.log(id);
     await userinstance
-      .put(`http://localhost:5000/unfollow/${userId}`, { id })
+      .put(`/unfollow/${userId}`, { id })
       .then((result) => {
         if (result.status === 200) {
           SetCheck(!check);
