@@ -1,4 +1,4 @@
-export const adminUrl = "http://localhost:5000/admin/";
-export const userUrl = "http://localhost:5000";
+export const adminUrl = "https://jobseeker.gq/api/admin/";
+export const userUrl = "https://jobseeker.gq/api/";
 
 
