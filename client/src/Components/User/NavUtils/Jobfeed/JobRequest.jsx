@@ -65,7 +65,7 @@ function JobRequest() {
     <div>
       <div class=" h-screen w-full justify-center">
         {get.length !== 0 ? (
-          <div class="w-full grid grid-cols-3 gap-4">
+          <div class="w-full grid lg:grid-cols-3 gap-4 md:flex">
             {get.map((obj) => {
               return (
                 <div class="bg-white shadow-xl rounded-lg py-2 w-fit ">

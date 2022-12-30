@@ -75,7 +75,7 @@ function Network() {
   return (
     <div>
       <div class=" h-screen w-full justify-center">
-        <div class="max-w-full grid grid-cols-3 gap-4">
+        <div class="max-w-full grid lg:grid-cols-3 lg:gap-4 md:grid  gap-2">
           {forms.map((obj) => {
             return (
               <>
