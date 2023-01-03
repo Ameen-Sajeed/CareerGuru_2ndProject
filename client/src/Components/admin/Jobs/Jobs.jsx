@@ -17,7 +17,7 @@ function JobManagement() {
 
   useEffect(() => {
     adminInstance
-      .get("http://localhost:5000/admin/allJobs", {
+      .get("/allJobs", {
         headers: { "x-access-token": localStorage.getItem("token") },
       })
       .then((response) => {

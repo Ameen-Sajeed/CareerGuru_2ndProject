@@ -1,7 +1,8 @@
 import axios from "axios";
+
 // const adminbaseURL = "http://localhost:5000/admin";
 
-const adminbaseURL = "https://jobseeker.gq/api";
+const adminbaseURL = "https://jobseeker.gq/api/admin";
 
 const admindefaultOptions = {
   baseURL: adminbaseURL,

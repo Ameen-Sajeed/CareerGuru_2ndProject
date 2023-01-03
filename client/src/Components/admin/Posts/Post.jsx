@@ -16,7 +16,7 @@ function Post() {
 
   useEffect(() => {
     adminInstance
-      .get("http://localhost:5000/admin/allpost", {
+      .get("/allpost", {
         headers: { "x-access-token": localStorage.getItem("token") },
       })
       .then((response) => {

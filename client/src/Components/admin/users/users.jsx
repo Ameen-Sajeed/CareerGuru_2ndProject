@@ -14,7 +14,7 @@ function Users() {
 
   useEffect(() => {
     adminInstance
-      .get("http://localhost:5000/admin/users")
+      .get("/users")
       .then((response) => {
         if (response.data) {
           // console.log(token);
@@ -33,7 +33,7 @@ function Users() {
 
   const blockUser = (id) => {
     adminInstance
-      .patch("http://localhost:5000/admin/blockUsers/" + id)
+      .patch("/blockUsers/" + id)
       .then((result) => {
         if (result.status == 200) {
           // setStatus(new Date())
@@ -49,7 +49,7 @@ function Users() {
   };
   const UnblockUser = (id) => {
     adminInstance
-      .put("http://localhost:5000/admin/UnblockUsers/" + id)
+      .put("/UnblockUsers/" + id)
       .then((result) => {
         if (result.status == 200) {
           // setStatus(new Date())

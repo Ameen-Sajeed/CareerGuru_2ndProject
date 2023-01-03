@@ -15,7 +15,7 @@ function JobReports() {
 
     useEffect(() => {
         adminInstance
-          .get(`http://localhost:5000/admin/singleJobreport/${id}`,)
+          .get(`/singleJobreport/${id}`,)
           .then((response) => {
             if (response.data) {
               console.log(response.data, "hjj");
